@@ -1,0 +1,1 @@
+- Pasar lo de App.jsx que forma parte de crear partida a un container "ListGames"
