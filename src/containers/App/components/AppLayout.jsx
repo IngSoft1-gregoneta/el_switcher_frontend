@@ -1,34 +1,30 @@
 import "./AppLayout.module.css";
-import { Button } from "@headlessui/react";
-import PropTypes from "prop-types";
+import { Button, Field, Input } from "@headlessui/react";
+import ListGames from "../../ListGames/ListGames.jsx";
+import { WSMessageContext } from "../../WSMessageContext.js";
 
-export default function AppLayout({ gamesList, fetchGames }) {
-  AppLayout.propTypes = {
-    gamesList: PropTypes.array,
-    fetchGames: PropTypes.func.isRequired,
-  };
+
+//TODO: poner addGame donde pertence
+export default function AppLayout({ handleInputChange, lastMessage, addGame }) {
   return (
-    <div className="mx-auto flex flex-col items-center justify-center p-4">
-      <h1 className="mb-8 text-center text-4xl font-bold">El Switcher</h1>
-
-      <div className="container mb-6">
-        <h2 className="mb-4 text-center text-2xl font-semibold">
-          Available Games
-        </h2>
-        <div className="m-8 flex flex-col bg-slate-300 p-8 text-center">
-          {gamesList}
-        </div>
-      </div>
-      <div className="m-6">
-        <Button
-          onClick={fetchGames}
-          className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-[active]:bg-sky-700 data-[hover]:bg-sky-500"
-        >
-          List games (fetch)
-        </Button>
-      </div>
-      <Button className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-[active]:bg-sky-700 data-[hover]:bg-sky-500">
-        Create New Game
+    <div>
+      <WSMessageContext.Provider value={lastMessage}>
+        <ListGames />
+      </WSMessageContext.Provider>
+      <Field>
+        <Input
+          onChange={handleInputChange}
+          className="border-4"
+          name="game_name"
+          type="text"
+        />
+      </Field>
+      <Button
+        className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-[active]:bg-sky-700 data-[hover]:bg-sky-500"
+        name="add_game"
+        onClick={addGame}
+      >
+        Añadir juego
       </Button>
     </div>
   );
