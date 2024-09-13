@@ -1,25 +1,35 @@
 import "./AppLayout.module.css";
-import { useEffect, useState } from "react";
-import { Button } from '@headlessui/react'
+import { Button } from "@headlessui/react";
+import PropTypes from "prop-types";
 
 export default function AppLayout({ gamesList, fetchGames }) {
+  AppLayout.propTypes = {
+    gamesList: PropTypes.array,
+    fetchGames: PropTypes.func.isRequired,
+  };
   return (
-    <div className="flex flex-col items-center justify-center mx-auto p-4">
-      <h1 className="text-4xl font-bold text-center mb-8">El Switcher</h1>
+    <div className="mx-auto flex flex-col items-center justify-center p-4">
+      <h1 className="mb-8 text-center text-4xl font-bold">El Switcher</h1>
 
-      <div className="container  mb-6">
-        <h2 className="text-2xl text-center font-semibold mb-4">Available Games</h2>
-        <div className="flex  bg-slate-300 m-8 p-8	flex-col text-center">
+      <div className="container mb-6">
+        <h2 className="mb-4 text-center text-2xl font-semibold">
+          Available Games
+        </h2>
+        <div className="m-8 flex flex-col bg-slate-300 p-8 text-center">
           {gamesList}
         </div>
       </div>
       <div className="m-6">
-        <Button onClick={fetchGames} className="rounded bg-sky-600 py-2 px-4 text-sm text-white data-[hover]:bg-sky-500 data-[active]:bg-sky-700">
+        <Button
+          onClick={fetchGames}
+          className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-[active]:bg-sky-700 data-[hover]:bg-sky-500"
+        >
           List games (fetch)
         </Button>
       </div>
-      <Button className="rounded bg-sky-600 py-2 px-4 text-sm text-white data-[hover]:bg-sky-500 data-[active]:bg-sky-700">
+      <Button className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-[active]:bg-sky-700 data-[hover]:bg-sky-500">
         Create New Game
       </Button>
-    </div>)
-};
+    </div>
+  );
+}
