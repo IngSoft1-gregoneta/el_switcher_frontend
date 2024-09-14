@@ -1,5 +1,10 @@
 import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/AppLayout.jsx";
+import Lobby from "../Lobby/Lobby.jsx";
+import { LobbyProvider } from "../Lobby/context/LobbyContext.jsx";
+import LobbyLayout from "../Lobby/components/LobbyLayout.jsx";
+import FailedLobby from "../Lobby/components/FailedLobby.jsx";
 
 export default function App() {
   const [games, setGames] = useState(null);
@@ -21,12 +26,32 @@ export default function App() {
     gamesList = games.map((game) => (
       <li
         key={game.id}
-        className="p-4 border-2  m-2 border-dashed border-cyan-700"
+        className="m-2 border-2 border-dashed border-cyan-700 p-4"
       >
         {game.name}
       </li>
     ));
   }
 
-  return <AppLayout gamesList={gamesList} fetchGames={fetchGames} />;
+  return (
+    <LobbyProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <AppLayout
+                gamesList={gamesList}
+                fetchGames={fetchGames}
+                createLobby={() => <Lobby />}
+              />
+            }
+          ></Route>
+          <Route path="/CreateLobby" element={<Lobby />} />
+          <Route path="/Lobby" element={<LobbyLayout />} />
+          <Route path="/FailedLobby" element={<FailedLobby />}/>
+        </Routes>
+      </BrowserRouter>
+    </LobbyProvider>
+  );
 }
