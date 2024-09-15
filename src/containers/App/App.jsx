@@ -11,9 +11,8 @@ export default function App() {
   if (userId === null) {
     fetch("http://127.0.0.1:8000/get_id", { method: "GET" })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setUserId(data);
+      .then((id) => {
+        setUserId(id);
       })
       .catch((err) => {
         console.log(err.message);
@@ -53,6 +52,19 @@ export default function App() {
   }[readyState];
   console.log(connectionStatus);
   console.log(lastMessage);
+  let msg = "nada"
+  if (lastMessage !== null) {
+    msg = lastMessage.data
+  }
 
-  return <AppLayout lastMessage={lastMessage} addGame={addGame} handleInputChange={handleInputChange} />;
+  return (
+    <div>
+      {msg}
+      <AppLayout
+        lastMessage={lastMessage}
+        addGame={addGame}
+        handleInputChange={handleInputChange}
+      />
+    </div>
+  );
 }
