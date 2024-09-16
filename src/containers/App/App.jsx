@@ -1,4 +1,9 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/AppLayout.jsx";
+import Lobby from "../Lobby/Lobby.jsx";
+import { LobbyProvider } from "../Lobby/context/LobbyContext.jsx";
+import LobbyLayout from "../Lobby/components/LobbyLayout.jsx";
+import FailedLobby from "../Lobby/components/FailedLobby.jsx";
 import { useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
@@ -58,13 +63,24 @@ export default function App() {
   }
 
   return (
-    <div>
-      {msg}
-      <AppLayout
-        lastMessage={lastMessage}
-        addGame={addGame}
-        handleInputChange={handleInputChange}
-      />
-    </div>
+    <LobbyProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={
+            <div>
+            {msg}
+            <AppLayout
+              lastMessage={lastMessage}
+              handleInputChange={handleInputChange}
+              createLobby={() => <Lobby />}
+            />
+          </div>
+          }/>
+          <Route path="/CreateLobby" element={<Lobby />} />
+          <Route path="/Lobby" element={<LobbyLayout />} />
+          <Route path="/FailedLobby" element={<FailedLobby />}/>
+        </Routes>
+      </BrowserRouter>
+    </LobbyProvider>
   );
 }

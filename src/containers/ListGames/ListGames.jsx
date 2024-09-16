@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ListGamesLayout from "./components/ListGamesLayout";
-import { useWSMessage } from "../WSMessageContext";
+import { useWSMessage } from "../App/context/WSMessageContext";
 
 export default function ListGames() {
   const [games, setGames] = useState(null);
