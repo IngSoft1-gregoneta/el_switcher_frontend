@@ -2,7 +2,14 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        // transparent: "transparent",
+        // current: "currentColor",
+        // switcher_bg: "#ADD9C6",
+        // switcher_title: "#3F644F",
+      },
+    },
   },
   plugins: [],
 };

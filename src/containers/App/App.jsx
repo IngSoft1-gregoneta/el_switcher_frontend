@@ -11,37 +11,12 @@ export default function App() {
   if (userId === null) {
     fetch("http://127.0.0.1:8000/get_id", { method: "GET" })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setUserId(data);
+      .then((id) => {
+        setUserId(id);
       })
       .catch((err) => {
         console.log(err.message);
       });
-  }
-
-  //TODO: El id del juego lo deberia dar el server, unir alguna manera el de usuario con partida
-  //Que el id de la partida simbolice un websocket para esa partida
-  function addGame() {
-    if (userId !== null) {
-      console.log(userId);
-      fetch("http://127.0.0.1:8000/add_game", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: userId, name: gameName }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    }
-  }
-
-  function handleInputChange(e) {
-    setGameName(e.target.value);
   }
 
   const connectionStatus = {
@@ -54,5 +29,5 @@ export default function App() {
   console.log(connectionStatus);
   console.log(lastMessage);
 
-  return <AppLayout lastMessage={lastMessage} addGame={addGame} handleInputChange={handleInputChange} />;
+  return <AppLayout lastMessage={lastMessage} />;
 }
