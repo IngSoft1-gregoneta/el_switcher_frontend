@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { Button } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
 
+//FOR DEBUG : MAX, MIN and PLAYERS array, should not exist in final build.
+//these values should be provided by the user/server and or be fixxed.
+const MAX_PLAYERS = 4;
+const MIN_PLAYERS = 2;
+
 export default function LobbyConfigLayout({ onSubmit }) {
   const navigate = useNavigate();
   const handleLeave = () => {
@@ -65,8 +70,8 @@ export default function LobbyConfigLayout({ onSubmit }) {
             onChange={handlePlayerCount}
             id="playerCount"
             type="number"
-            min={2}
-            max={4}
+            min={MIN_PLAYERS}
+            max={MAX_PLAYERS}
             value={players}
             className="mt-1 block w-full rounded-md border-gray-300 p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="2-4 players"
@@ -79,6 +84,7 @@ export default function LobbyConfigLayout({ onSubmit }) {
           Create Room
         </Button>
         <Button
+          
           type="button"
           onClick={handleLeave}
           className="w-full rounded-md bg-sky-600 px-4 py-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"

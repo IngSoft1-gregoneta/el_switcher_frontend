@@ -7,10 +7,19 @@ export default function LobbyLayout() {
   const navigate = useNavigate();
   const { lobbyData } = useLobby();
 
+  //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
+  //TODO : kick players out of lobby if lobby owner leaves.
   const handleLeave = () =>{
     navigate('/');
   }
 
+  //TODO : handle game validations before routing to /Game
+  //TODO : connect to server and create a game instance
+  const handleStartGame = () =>{
+    navigate('/Game');
+  }
+
+  //TODO : handle waiting for lobby.
   if (!lobbyData) {
     return <div>Loading...</div>;
   }
@@ -45,6 +54,8 @@ export default function LobbyLayout() {
           Leave Lobby
         </Button>
         <Button
+          type="button"
+          onClick={handleStartGame}
           className="w-full m-4 rounded-md bg-sky-600 px-4 py-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           Start Game

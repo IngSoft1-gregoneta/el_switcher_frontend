@@ -1,6 +1,7 @@
 import LobbyConfigLayout from "./components/LobbyConfigLayout.jsx";
 import { useNavigate } from "react-router-dom";
 import { useLobby } from "./context/LobbyContext.jsx";
+import createRoom from "./services/lobbyService.js";
 
 export default function Lobby() {
   const { setLobbyData } = useLobby();
@@ -8,20 +9,7 @@ export default function Lobby() {
 
   async function handleSubmit(formData) {
     try {
-      const response = await fetch("http://localhost:8000/rooms/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Succes :", data);
+      const data = await createRoom(formData);
 
       setLobbyData({
         name: data.room_name,
