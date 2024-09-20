@@ -3,17 +3,31 @@ import { useRoom } from "../context/RoomContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@headlessui/react";
 
-export default function LobbyLayout() {
-
-  useEffect(()=>{
-    const websocket = new WebSocket("ws://localhost:8000/ws/rooms/2")
-    websocket.onmessage = function (event) {
-      console.log("mensaje del server por ws",event.data);
-    }
-  });
+export default function RoomLayout() {
 
   const navigate = useNavigate();
-  const { RoomData } = useRoom();
+  const { RoomData, setRoomData } = useRoom();
+  const { room_name = '', players_names = [], expected_players = 0, room_id } = RoomData || {};
+
+  useEffect(() => {
+    if (room_id) {
+      const websocket = new WebSocket(`ws://localhost:8000/ws/join/${room_id}`);
+
+      websocket.onmessage = function (event) {
+        const newPlayer = event.data;
+        setRoomData((prevRoomData) => {
+          if (!prevRoomData.players_names.includes(newPlayer)) {
+            return {
+              ...prevRoomData,
+              players_names: [...prevRoomData.players_names, newPlayer],
+            };
+          }
+          return prevRoomData;
+        });
+      };
+      return () => websocket.close();
+    }
+  }, [room_id, setRoomData]);
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
@@ -32,13 +46,13 @@ export default function LobbyLayout() {
     return <div>Loading...</div>;
   }
  
-  const { name, players, expected_players } = RoomData;
+  // const { name, players, expected_players } = RoomData;
 
   return (
     <div className="mx-auto max-w-lg rounded-lg bg-white p-6 shadow-md">
       <h1 className="mb-6 text-center text-3xl font-bold">Lobby</h1>
       <div className="mb-4 border-b pb-4">
-        <h2 className="text-xl font-semibold">Lobby Name: {name}</h2>
+        <h2 className="text-xl font-semibold">Lobby Name: {room_name}</h2>
         <span className="block text-gray-600">
           Expected Players: {expected_players}
         </span>
@@ -46,7 +60,7 @@ export default function LobbyLayout() {
       <div>
         <h4 className="mb-4 text-lg font-medium">Players in Lobby</h4>
         <ul className="list-disc pl-5">
-          {players.map((player, index) => (
+          {players_names.map((player, index) => (
             <li key={index} className="mb-2 text-gray-800">
               {player}
             </li>

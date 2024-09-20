@@ -4,21 +4,21 @@ import { useRoom } from "./context/RoomContext.jsx";
 import  {createRoom, joinRoom } from "./services/RoomService.js";
 
 export default function Lobby() {
-  const { setLobbyData } = useRoom();
+  const { setRoomData } = useRoom();
   const navigate = useNavigate();
 
   async function handleSubmit(formData) {
     try {
       const data = await createRoom(formData);
 
-      setLobbyData({
-        name: data.room_name,
-        players: data.players || [],
-        expected_players : data.players_expected,
+      setRoomData({
+        room_id: data.room_id,
+        room_name: data.room_name,
+        players_expected: data.players_expected,
+        players_names: data.players_names,
+        owner_name: data.owner_name,
+        is_active: data.is_active,
       });
-
-      const r = await joinRoom({room_id : data.room_id, player_name : "pepe"});
-      console.log(r);
 
       navigate("/Room");
 
@@ -27,8 +27,6 @@ export default function Lobby() {
       navigate("/FailedRoom")
     }
   }
-
-
 
   return <RoomConfigLayout onSubmit={handleSubmit}></RoomConfigLayout>;
 }
