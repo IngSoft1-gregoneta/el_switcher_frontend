@@ -32,6 +32,7 @@ export default function LobbyConfigLayout({ onSubmit }) {
     const formData = {
       room_name: name,
       players_expected: players,
+      owner_name: "nico",
     };
 
     if (typeof onSubmit === "function" && formData.name !== "") {

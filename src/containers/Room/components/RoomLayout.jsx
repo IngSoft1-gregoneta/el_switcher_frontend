@@ -1,11 +1,19 @@
-import React from "react";
-import { useLobby } from "../context/LobbyContext";
+import React, { useEffect } from "react";
+import { useRoom } from "../context/RoomContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@headlessui/react";
 
 export default function LobbyLayout() {
+
+  useEffect(()=>{
+    const websocket = new WebSocket("ws://localhost:8000/ws/rooms/2")
+    websocket.onmessage = function (event) {
+      console.log("mensaje del server por ws",event.data);
+    }
+  });
+
   const navigate = useNavigate();
-  const { lobbyData } = useLobby();
+  const { RoomData } = useRoom();
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
@@ -20,11 +28,11 @@ export default function LobbyLayout() {
   }
 
   //TODO : handle waiting for lobby.
-  if (!lobbyData) {
+  if (!RoomData) {
     return <div>Loading...</div>;
   }
  
-  const { name, players, expected_players } = lobbyData;
+  const { name, players, expected_players } = RoomData;
 
   return (
     <div className="mx-auto max-w-lg rounded-lg bg-white p-6 shadow-md">

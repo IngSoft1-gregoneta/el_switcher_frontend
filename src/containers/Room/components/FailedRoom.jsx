@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@headlessui/react";
 
-export default function LobbyCreationFailed() {
+export default function RoomCreationFailed() {
   const navigate = useNavigate();
 
   function handleRetry() {
-    navigate("/CreateLobby");
+    navigate("/CreateRoom");
   }
 
   function handleLeave() {

@@ -7,10 +7,10 @@ import {
     vi,
 } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import createRoom from "./services/lobbyService.js"
-import LobbyConfigLayout from "./components/LobbyConfigLayout";
+import createRoom from "./services/RoomService.js"
+import LobbyConfigLayout from "./components/RoomConfigLayout.jsx";
 import { MemoryRouter, useNavigate } from "react-router-dom";
-import LobbyCreationFailed from "./components/FailedLobby.jsx";
+import LobbyCreationFailed from "./components/FailedRoom.jsx";
 
 vi.mock("react-router-dom", async ()=>{
     const actual = await vi.importActual('react-router-dom');

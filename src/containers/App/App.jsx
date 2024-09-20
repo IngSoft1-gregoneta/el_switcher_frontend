@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/AppLayout.jsx";
-import Lobby from "../Lobby/Lobby.jsx";
-import { LobbyProvider } from "../Lobby/context/LobbyContext.jsx";
-import LobbyLayout from "../Lobby/components/LobbyLayout.jsx";
-import FailedLobby from "../Lobby/components/FailedLobby.jsx";
+import Room from "../Room/Room.jsx";
+import { RoomProvider } from "../Room/context/RoomContext.jsx";
+import RoomLayout from "../Room/components/RoomLayout.jsx";
 import { useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import Game from "../Game/Game.jsx";
+import RoomCreationFailed from "../Room/components/FailedRoom.jsx";
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState("ws://localhost:8000/ws");
@@ -23,7 +23,7 @@ export default function App() {
   //     .catch((err) => {
   //       console.log(err.message);
   //     });
-  // }
+  // } 
 
   // //TODO: El id del juego lo deberia dar el server, unir alguna manera el de usuario con partida
   // //Que el id de la partida simbolice un websocket para esa partida
@@ -64,7 +64,7 @@ export default function App() {
   // }
 
   return (
-    <LobbyProvider>
+    <RoomProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={
@@ -77,12 +77,12 @@ export default function App() {
             />
           </div>
           }/>
-          <Route path="/CreateLobby" element={<Lobby />} />
-          <Route path="/Lobby" element={<LobbyLayout />} />
-          <Route path="/FailedLobby" element={<FailedLobby />}/>
+          <Route path="/CreateRoom" element={<Room />} />
+          <Route path="/Room" element={<RoomLayout />} />
+          <Route path="/FailedRoom" element={<RoomCreationFailed />}/>
           <Route path="/Game" element={<Game />}/>
         </Routes>
       </BrowserRouter>
-    </LobbyProvider>
+    </RoomProvider>
   );
 }
