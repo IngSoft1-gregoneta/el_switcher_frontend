@@ -11,8 +11,13 @@ export default function AppLayout({ lastMessage }) {
   };
 
   return (
-    <WSMessageContext.Provider value={lastMessage}>
-      <ListRooms />
-    </WSMessageContext.Provider>
+    <div className="mx-auto flex max-w-screen-lg flex-col items-center justify-center p-4">
+      <h1 className="m-8 text-center font-serif text-4xl font-bold text-emerald-900">
+        EL SWITCHER
+      </h1>
+      <WSMessageContext.Provider value={lastMessage}>
+        <ListRooms />
+      </WSMessageContext.Provider>
+    </div>
   );
 }

@@ -25,9 +25,5 @@ export default function ListRooms() {
       });
   }
 
-  return (
-    <>
-      <ListRoomsLayout rooms={rooms} />;
-    </>
-  );
+  return <ListRoomsLayout rooms={rooms} />;
 }
