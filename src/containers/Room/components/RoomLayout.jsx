@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useRoom } from "../context/RoomContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@headlessui/react";
+import { leaveRoom } from "../services/RoomService";
 
 export default function RoomLayout() {
 
@@ -31,7 +32,14 @@ export default function RoomLayout() {
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
+  //TODO : name?? we need a name somewhere
+  //TODO : handle exceptions
   const handleLeave = () =>{
+    try {
+      leaveRoom(room_id,"nico")
+    } catch (err) {
+      console.log(err);
+    }
     navigate('/');
   }
 

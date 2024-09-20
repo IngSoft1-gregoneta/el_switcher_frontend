@@ -30,3 +30,21 @@ export async function joinRoom(roomData){
 
   return response.json();
 }
+
+export async function leaveRoom(room_id, player_name){
+  const roomId = encodeURIComponent(room_id);
+  const playerName = encodeURIComponent(player_name);
+  const response = await fetch(`http://127.0.0.1:8000/rooms/leave/?room_id=${roomId}&player_name=${playerName}`,
+    {
+      method : "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  
+    return response.json();
+}
