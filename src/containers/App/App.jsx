@@ -5,7 +5,6 @@ import { RoomProvider } from "../Room/context/RoomContext.jsx";
 import RoomLayout from "../Room/components/RoomLayout.jsx";
 import { useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import Game from "../Game/Game.jsx";
 import RoomCreationFailed from "../Room/components/FailedRoom.jsx";
 
 export default function App() {
@@ -14,54 +13,26 @@ export default function App() {
   const [gameName, setGameName] = useState(null);
   const [userId, setUserId] = useState(null);
 
-  // if (userId === null) {
-  //   fetch("http://127.0.0.1:8000/get_id", { method: "GET" })
-  //     .then((response) => response.json())
-  //     .then((id) => {
-  //       setUserId(id);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.message);
-  //     });
-  // } 
-
-  // //TODO: El id del juego lo deberia dar el server, unir alguna manera el de usuario con partida
-  // //Que el id de la partida simbolice un websocket para esa partida
-  // function addGame() {
-  //   if (userId !== null) {
-  //     console.log(userId);
-  //     fetch("http://127.0.0.1:8000/add_game", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ id: userId, name: gameName }),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         console.log(data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err.message);
-  //       });
-  //   }
-  // }
-
-  function handleInputChange(e) {
-    setGameName(e.target.value);
+  if (userId === null) {
+    fetch("http://127.0.0.1:8000/get_id", { method: "GET" })
+      .then((response) => response.json())
+      .then((id) => {
+        setUserId(id);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
-  // const connectionStatus = {
-  //   [ReadyState.CONNECTING]: "Connecting",
-  //   [ReadyState.OPEN]: "Open",
-  //   [ReadyState.CLOSING]: "Closing",
-  //   [ReadyState.CLOSED]: "Closed",
-  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  // }[readyState];
-  // console.log(connectionStatus);
-  // console.log(lastMessage);
-  let msg = "nada"
-  // if (lastMessage !== null) {
-  //   msg = lastMessage.data
-  // }
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+  console.log(connectionStatus);
+  console.log(lastMessage);
 
   return (
     <RoomProvider>
@@ -69,10 +40,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={
             <div>
-            {msg}
             <AppLayout
               lastMessage={lastMessage}
-              handleInputChange={handleInputChange}
               createLobby={() => <Lobby />}
             />
           </div>
@@ -80,7 +49,6 @@ export default function App() {
           <Route path="/CreateRoom" element={<Room />} />
           <Route path="/Room" element={<RoomLayout />} />
           <Route path="/FailedRoom" element={<RoomCreationFailed />}/>
-          <Route path="/Game" element={<Game />}/>
         </Routes>
       </BrowserRouter>
     </RoomProvider>

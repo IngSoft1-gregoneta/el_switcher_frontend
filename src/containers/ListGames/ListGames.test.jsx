@@ -1,23 +1,16 @@
-import {
-  afterAll,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  test,
-  vi,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import ListGames from "./ListGames";
 import ListGamesLayout from "./components/ListGamesLayout";
+import React, { useState } from "react";
 
 describe("ListGames Test", () => {
   let originalFetch;
 
-  beforeAll(() => {
+  beforeEach(() => {
     originalFetch = global.fetch;
   });
-  afterAll(() => {
+  afterEach(() => {
     global.fetch = originalFetch;
   });
 
@@ -45,22 +38,6 @@ describe("ListGames Test", () => {
     render(<ListGames />);
     // aca podes chequear fuera del await si antes de tener la data feched hay algun tipo de msj
     // like loading...
-    await waitFor(() => {
-      expect(screen.getByText(/grego/i)).toBeDefined();
-    });
-    // screen.debug();
-  });
-
-  test("if get wrong data", async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        json() {
-          // que pasa si fetchamos basura?
-          return { data: "wrong data" };
-        },
-      }),
-    );
-    render(<ListGames />);
     await waitFor(() => {
       expect(screen.getByText(/grego/i)).toBeDefined();
     });

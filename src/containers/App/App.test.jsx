@@ -1,30 +1,24 @@
-import { describe, expect, test, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { render, waitFor } from "@testing-library/react";
 import App from "./App";
-import AppLayout from "./components/AppLayout";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import ListGames from "../ListGames/ListGames";
+import useWebSocket from "react-use-websocket";
 
-const mockWebSocket = {
-  sendMessage: vi.fn(),
-  lastMessage: null,
-  readyState: 1,
-  setLastMessage: function (message) {
-    this.lastMessage = message;
-  },
-};
-
-vi.mock(import("react-use-websocket"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    __esModule: true,
-    default: () => mockWebSocket,
-    // your mocked methods
-  };
-});
+vi.mock("react-use-websocket", { spy: true });
 
 describe("Websocket test", () => {
+  let originalFetch;
+  beforeEach(() => {
+    originalFetch = global.fetch;
+  });
+  afterEach(() => {
+    global.fetch = originalFetch;
+  });
+
+  test("correct calling on url with useWebSocket", () => {
+    render(<App />);
+    expect(useWebSocket).toHaveBeenCalledWith("ws://localhost:8000/ws");
+  });
+
   test("should fetch user ID on mount and call setUserId", async () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
@@ -33,6 +27,7 @@ describe("Websocket test", () => {
         },
       }),
     );
+
     render(<App />);
 
     await waitFor(() => {
@@ -40,7 +35,5 @@ describe("Websocket test", () => {
         method: "GET",
       });
     });
-
-    // screen.debug();
   });
 });

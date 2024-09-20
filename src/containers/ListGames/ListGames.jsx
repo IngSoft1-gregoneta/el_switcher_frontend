@@ -7,18 +7,18 @@ export default function ListGames() {
   const WSMessageContext = useWSMessage();
 
   //Esta effect hace un fetch cada vez que llega un mensaje desde el WS
-  //Habria que ver si puede venir alguno mensaje el cual no sea pertinente
-  //en ese caso usar un if ?
+  //TODO: Verificar que sea un mensaje de agregar partida
   useEffect(() => {
     fetchGames();
   }, [WSMessageContext]);
 
   function fetchGames() {
-    fetch("http://127.0.0.1:8000/list_games", { method: "GET" })
+    fetch("http://127.0.0.1:8000/create_room", { method: "GET" })
       .then((response) => response.json())
       .then((data) => {
         //TODO: Actualizar para la API correcta
-        if (Array.isArray(data) && data.every(item => item.id && item.name)) {
+        if (Array.isArray(data) && data.every((item) => item.id && item.name)) {
+          console.log(data);
           setGames(data);
         }
       })
@@ -27,5 +27,9 @@ export default function ListGames() {
       });
   }
 
-  return <ListGamesLayout games={games} />;
+  return (
+    <>
+      <ListGamesLayout games={games} />;
+    </>
+  );
 }

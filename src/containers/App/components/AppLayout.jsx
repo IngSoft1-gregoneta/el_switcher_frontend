@@ -5,24 +5,18 @@ import ListGames from "../../ListGames/ListGames.jsx";
 import { WSMessageContext } from "../context/WSMessageContext.jsx";
 import PropTypes from "prop-types";
 
-export default function AppLayout({ handleInputChange, lastMessage, createLobby }) {
+//TODO: poner addGame donde pertence
+export default function AppLayout({ lastMessage, createLobby }) {
   AppLayout.propTypes = {
     handleInputChange: PropTypes.func,
     lastMessage: PropTypes.string,
   };
+
   return (
     <div className="bg-emerald-200">
       <WSMessageContext.Provider value={lastMessage}>
         <ListGames />
       </WSMessageContext.Provider>
-      <Field>
-        <Input
-          onChange={handleInputChange}
-          className="border-4"
-          name="game_name"
-          type="text"
-        />
-      </Field>
       <Link to="/CreateRoom" onClick={createLobby}>
         <Button
           className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-[active]:bg-sky-700 data-[hover]:bg-sky-500"

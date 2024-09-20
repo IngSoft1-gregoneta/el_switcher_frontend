@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest --ui"
+    "test": "vitest --ui",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest --disable-console-intercept"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.8",
