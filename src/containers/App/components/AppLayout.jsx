@@ -1,6 +1,5 @@
 import "./AppLayout.module.css";
-import { Button, Field, Input } from "@headlessui/react";
-import ListGames from "../../ListGames/ListGames.jsx";
+import ListRooms from "../../ListRooms/ListRooms.jsx";
 import { WSMessageContext } from "../../WSMessageContext.js";
 import PropTypes from "prop-types";
 
@@ -13,7 +12,7 @@ export default function AppLayout({ lastMessage }) {
 
   return (
     <WSMessageContext.Provider value={lastMessage}>
-      <ListGames />
+      <ListRooms />
     </WSMessageContext.Provider>
   );
 }

@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import ListGames from "./ListGames";
-import ListGamesLayout from "./components/ListGamesLayout";
+import ListRooms from "./ListRooms";
+import ListRoomsLayout from "./components/ListRoomsLayout";
 import React, { useState } from "react";
 
-describe("ListGames Test", () => {
+describe("ListRooms Test", () => {
   let originalFetch;
 
   beforeEach(() => {
@@ -18,16 +18,16 @@ describe("ListGames Test", () => {
     vi.resetAllMocks();
   });
   test("test correct username of table is render", () => {
-    let games = [
+    let rooms = [
       { id: 1, name: "estenombredeusuario" },
       { id: 2, name: "Juego de pepe" },
     ];
-    render(<ListGamesLayout games={games} />);
+    render(<ListRoomsLayout rooms={rooms} />);
     expect(screen.getByText(/estenombredeusuario/i)).toBeDefined();
     expect(screen.getByText(/juego de pepe/i)).toBeDefined();
   });
 
-  test("renders the list of games after fetching", async () => {
+  test("renders the list of rooms after fetching", async () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         json() {
@@ -35,7 +35,7 @@ describe("ListGames Test", () => {
         },
       }),
     );
-    render(<ListGames />);
+    render(<ListRooms />);
     // aca podes chequear fuera del await si antes de tener la data feched hay algun tipo de msj
     // like loading...
     await waitFor(() => {

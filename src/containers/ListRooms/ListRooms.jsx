@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
-import ListGamesLayout from "./components/ListGamesLayout";
+import ListRoomsLayout from "./components/ListRoomsLayout";
 import { useWSMessage } from "../WSMessageContext";
 
-export default function ListGames() {
-  const [games, setGames] = useState(null);
+export default function ListRooms() {
+  const [rooms, setRooms] = useState(null);
   const WSMessageContext = useWSMessage();
 
   //Esta effect hace un fetch cada vez que llega un mensaje desde el WS
   //TODO: Verificar que sea un mensaje de agregar partida
   useEffect(() => {
-    fetchGames();
+    fetchRooms();
   }, [WSMessageContext]);
 
-  function fetchGames() {
-    fetch("http://127.0.0.1:8000/create_room", { method: "GET" })
+  function fetchRooms() {
+    fetch("http://127.0.0.1:8000/rooms", { method: "GET" })
       .then((response) => response.json())
       .then((data) => {
-        //TODO: Actualizar para la API correcta
-        if (Array.isArray(data) && data.every((item) => item.id && item.name)) {
-          console.log(data);
-          setGames(data);
+        if (Array.isArray(data) && data.every((item) => item.room_id)) {
+          setRooms(data);
         }
       })
       .catch((err) => {
@@ -29,7 +27,7 @@ export default function ListGames() {
 
   return (
     <>
-      <ListGamesLayout games={games} />;
+      <ListRoomsLayout rooms={rooms} />;
     </>
   );
 }
