@@ -54,10 +54,8 @@ export default function RoomLayout() {
     return <div>Loading...</div>;
   }
  
-  // const { name, players, expected_players } = RoomData;
-
   return (
-    <div className="mx-auto max-w-lg rounded-lg bg-white p-6 shadow-md">
+    <div className="mx-auto max-w-lg rounded-lg bg-emerald-200 p-6 shadow-md">
       <h1 className="mb-6 text-center text-3xl font-bold">Lobby</h1>
       <div className="mb-4 border-b pb-4">
         <h2 className="text-xl font-semibold">Lobby Name: {room_name}</h2>
@@ -67,7 +65,7 @@ export default function RoomLayout() {
       </div>
       <div>
         <h4 className="mb-4 text-lg font-medium">Players in Lobby</h4>
-        <ul className="list-disc pl-5">
+        <ul className="list-disc pl-5 bg-lime-100 rounded p-4">
           {players_names.map((player, index) => (
             <li key={index} className="mb-2 text-gray-800">
               {player}

@@ -42,9 +42,9 @@ export default function LobbyConfigLayout({ onSubmit }) {
   };
 
   return (
-    <div className="mx-auto max-w-md items-center justify-center rounded-lg bg-white p-4 shadow-md">
+    <div className="mx-auto max-w-md items-center justify-center rounded-lg bg-emerald-200 p-4 shadow-md">
       <h1 className="mb-8 text-center text-4xl font-bold">Create Lobby</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 bg-lime-100 rounded p-4">
         <div>
           <label
             htmlFor="name"
