@@ -38,17 +38,18 @@ export default function App() {
     <RoomProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={
-            <div>
-            <AppLayout
-              lastMessage={lastMessage}
-              createLobby={() => <Lobby />}
-            />
-          </div>
-          }/>
+          <Route
+            path="/"
+            element={
+              <AppLayout
+                lastMessage={lastMessage}
+                createRoom={() => <Room />}
+              />
+            }
+          />
           <Route path="/CreateRoom" element={<Room />} />
           <Route path="/Room" element={<RoomLayout />} />
-          <Route path="/FailedRoom" element={<RoomCreationFailed />}/>
+          <Route path="/FailedRoom" element={<RoomCreationFailed />} />
         </Routes>
       </BrowserRouter>
     </RoomProvider>

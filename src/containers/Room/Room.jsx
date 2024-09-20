@@ -1,9 +1,9 @@
 import RoomConfigLayout from "./components/RoomConfigLayout.jsx";
 import { useNavigate } from "react-router-dom";
 import { useRoom } from "./context/RoomContext.jsx";
-import  {createRoom, joinRoom } from "./services/RoomService.js";
+import { createRoom, joinRoom } from "./services/RoomService.js";
 
-export default function Lobby() {
+export default function Room() {
   const { setRoomData } = useRoom();
   const navigate = useNavigate();
 
@@ -21,10 +21,9 @@ export default function Lobby() {
       });
 
       navigate("/Room");
-
     } catch (error) {
       console.log(error);
-      navigate("/FailedRoom")
+      navigate("/FailedRoom");
     }
   }
 

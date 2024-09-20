@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const MAX_PLAYERS = 4;
 const MIN_PLAYERS = 2;
 
-export default function LobbyConfigLayout({ onSubmit }) {
+export default function RoomConfigLayout({ onSubmit }) {
   const navigate = useNavigate();
   const handleLeave = () => {
     navigate("/");
@@ -43,14 +43,17 @@ export default function LobbyConfigLayout({ onSubmit }) {
 
   return (
     <div className="mx-auto max-w-md items-center justify-center rounded-lg bg-emerald-200 p-4 shadow-md">
-      <h1 className="mb-8 text-center text-4xl font-bold">Create Lobby</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 bg-lime-100 rounded p-4">
+      <h1 className="mb-8 text-center text-4xl font-bold">Create Room</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 rounded bg-lime-100 p-4"
+      >
         <div>
           <label
             htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
-            Lobby Name
+            Room Name
           </label>
           <input
             onChange={handleRoomName}
@@ -85,7 +88,6 @@ export default function LobbyConfigLayout({ onSubmit }) {
           Create Room
         </Button>
         <Button
-          
           type="button"
           onClick={handleLeave}
           className="w-full rounded-md bg-sky-600 px-4 py-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
