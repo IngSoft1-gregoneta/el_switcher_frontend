@@ -9,6 +9,9 @@ import {
 } from "@headlessui/react";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { joinRoom } from "../../Room/services/RoomService";
+import { useRoom } from "../../Room/context/RoomContext";
+import { useNavigate } from "react-router-dom";
 
 export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
   JoinRoomModalLayout.propTypes = {
@@ -17,35 +20,23 @@ export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
     setOpen: PropTypes.func,
   };
   const [userName, setUserName] = useState(null);
+  const { setRoomData } = useRoom();
+  const navigate = useNavigate();
 
   function handleChange(e) {
     setUserName(e.target.value);
   }
 
-  function handleClickAceptar() {
-    joinRoom({ room_id: roomId, player_name: userName });
+  async function handleClickAceptar() {
     setOpen(false);
-  }
-
-  // TODO: Sacar esto a otro archivo es logica de negocios
-  async function joinRoom({ room_id: roomId, player_name: userName }) {
-    const roomIdEnc = encodeURIComponent(roomId);
-    const userNameEnc = encodeURIComponent(userName);
-    const response = await fetch(
-      `http://localhost:8000/rooms/join/?room_id=${roomIdEnc}&player_name=${userNameEnc}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      const data = await joinRoom({ room_id: roomId, player_name: userName });
+      setRoomData(data);
+      navigate("/Room");
+    } catch (error) {
+      console.log(error);
+      navigate("/FailedRoom");
     }
-
-    return response.json();
   }
 
   return (

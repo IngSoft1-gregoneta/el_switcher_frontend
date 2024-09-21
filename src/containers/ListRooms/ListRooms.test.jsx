@@ -1,8 +1,17 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { MemoryRouter, useNavigate } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import ListRooms from "./ListRooms";
 import ListRoomsLayout from "./components/ListRoomsLayout";
 import React, { useState } from "react";
+
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+  };
+});
 
 describe("ListRooms Test", () => {
   let originalFetch;
@@ -19,8 +28,22 @@ describe("ListRooms Test", () => {
   });
   test("test correct username of table is render", () => {
     let rooms = [
-      { id: 1, name: "estenombredeusuario" },
-      { id: 2, name: "Juego de pepe" },
+      {
+        room_id: 1,
+        room_name: "famaf",
+        players_expected: 3,
+        players_names: [],
+        owner_name: "estenombredeusuario",
+        is_active: true,
+      },
+      {
+        room_id: 2,
+        room_name: "famaf",
+        players_expected: 3,
+        players_names: [],
+        owner_name: "Juego de pepe",
+        is_active: true,
+      },
     ];
     render(<ListRoomsLayout rooms={rooms} />);
     expect(screen.getByText(/estenombredeusuario/i)).toBeDefined();
@@ -31,7 +54,16 @@ describe("ListRooms Test", () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         json() {
-          return [{ id: 1, name: "grego" }];
+          return [
+            {
+              room_id: 2,
+              room_name: "famaf",
+              players_expected: 3,
+              players_names: ["grego"],
+              owner_name: "grego",
+              is_active: true,
+            },
+          ];
         },
       }),
     );

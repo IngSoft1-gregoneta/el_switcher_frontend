@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ListRoomsLayout from "./components/ListRoomsLayout";
-import { useWSMessage } from "../WSMessageContext";
+import { useWSMessage } from "../App/context/WSMessageContext";
 
 export default function ListRooms() {
   const [rooms, setRooms] = useState(null);

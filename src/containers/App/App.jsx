@@ -1,6 +1,11 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/AppLayout.jsx";
+import Room from "../Room/Room.jsx";
+import { RoomProvider } from "../Room/context/RoomContext.jsx";
+import RoomLayout from "../Room/components/RoomLayout.jsx";
 import { useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import RoomCreationFailed from "../Room/components/FailedRoom.jsx";
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState("ws://localhost:8000/ws");
@@ -28,5 +33,24 @@ export default function App() {
   console.log(connectionStatus);
   console.log(lastMessage);
 
-  return <AppLayout lastMessage={lastMessage} />;
+  return (
+    <RoomProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <AppLayout
+                lastMessage={lastMessage}
+                createRoom={() => <Room />}
+              />
+            }
+          />
+          <Route path="/CreateRoom" element={<Room />} />
+          <Route path="/Room" element={<RoomLayout />} />
+          <Route path="/FailedRoom" element={<RoomCreationFailed />} />
+        </Routes>
+      </BrowserRouter>
+    </RoomProvider>
+  );
 }
