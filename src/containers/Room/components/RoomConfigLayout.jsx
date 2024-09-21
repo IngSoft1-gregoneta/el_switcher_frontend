@@ -36,6 +36,7 @@ export default function RoomConfigLayout({ onSubmit }) {
     };
 
     if (typeof onSubmit === "function" && formData.name !== "") {
+      // Como me mareaste nico jajaja
       onSubmit(formData);
     } else if (formData.name === "") {
     }

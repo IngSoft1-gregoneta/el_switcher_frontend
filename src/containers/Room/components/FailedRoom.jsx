@@ -5,7 +5,7 @@ export default function RoomCreationFailed() {
   const navigate = useNavigate();
 
   function handleRetry() {
-    navigate("/CreateRoom");
+    navigate("/create_room");
   }
 
   function handleLeave() {

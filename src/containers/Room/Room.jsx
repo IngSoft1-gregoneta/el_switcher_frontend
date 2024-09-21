@@ -1,20 +1,17 @@
 import RoomConfigLayout from "./components/RoomConfigLayout.jsx";
 import { useNavigate } from "react-router-dom";
-import { useRoom } from "./context/RoomContext.jsx";
 import { createRoom } from "./services/RoomService.js";
 
-export default function Room() {
-  const { setRoomData } = useRoom();
+export default function RoomConfig() {
   const navigate = useNavigate();
 
   async function handleSubmit(formData) {
     try {
       const data = await createRoom(formData);
-      setRoomData(data);
-      navigate("/Room");
+      navigate(`/room/${data.room_id}/nico`);
     } catch (error) {
       console.log(error);
-      navigate("/FailedRoom");
+      navigate("/failed_room");
     }
   }
 

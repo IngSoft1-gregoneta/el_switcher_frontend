@@ -201,7 +201,7 @@ describe("Room tests", () => {
 
     const tryAgainButton = screen.getByText("Try Again");
     +fireEvent.click(tryAgainButton);
-    expect(mockNavigate).toHaveBeenCalledWith("/CreateRoom");
+    expect(mockNavigate).toHaveBeenCalledWith("/create_room");
     expect(mockNavigate).toHaveBeenCalledTimes(1);
 
     cleanup();

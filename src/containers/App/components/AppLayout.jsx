@@ -6,9 +6,8 @@ import ListRooms from "../../ListRooms/ListRooms.jsx";
 import PropTypes from "prop-types";
 
 //TODO: poner addGame donde pertence
-export default function AppLayout({ lastMessage, createRoom }) {
+export default function AppLayout({ lastMessage }) {
   AppLayout.propTypes = {
-    createRoom: PropTypes.func,
     lastMessage: PropTypes.string,
   };
 
@@ -20,12 +19,12 @@ export default function AppLayout({ lastMessage, createRoom }) {
       <WSMessageContext.Provider value={lastMessage}>
         <ListRooms />
       </WSMessageContext.Provider>
-      <Link to="/CreateRoom" onClick={createRoom}>
+      <Link to="/create_room">
         <Button
           className="mb-2 me-2 border border-cyan-600 bg-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-50 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-white"
           name="add_game"
         >
-          Create Room
+          Crear Partida
         </Button>
       </Link>
     </div>
