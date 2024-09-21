@@ -42,59 +42,54 @@ export default function RoomConfigLayout({ onSubmit }) {
   };
 
   return (
-    <div className="mx-auto max-w-md items-center justify-center rounded-lg bg-emerald-200 p-4 shadow-md">
-      <h1 className="mb-8 text-center text-4xl font-bold">Create Room</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 rounded bg-lime-100 p-4"
-      >
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Room Name
-          </label>
-          <input
-            onChange={handleRoomName}
-            id="name"
-            type="text"
-            className="mt-1 block w-full rounded-md border-gray-300 p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            value={name}
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="playerCount"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Player Count
-          </label>
-          <input
-            onChange={handlePlayerCount}
-            id="playerCount"
-            type="number"
-            min={MIN_PLAYERS}
-            max={MAX_PLAYERS}
-            value={players}
-            className="mt-1 block w-full rounded-md border-gray-300 p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="2-4 players"
-          />
-        </div>
-        <Button
-          type="submit"
-          className="w-full rounded-md bg-sky-600 px-4 py-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
+    <div className="mx-auto mt-10 flex max-w-screen-lg flex-col items-center justify-center p-4">
+      <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
+        <h1 className="mb-8 mt-4 text-center font-serif text-4xl font-bold">
           Create Room
-        </Button>
-        <Button
-          type="button"
-          onClick={handleLeave}
-          className="w-full rounded-md bg-sky-600 px-4 py-2 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          Leave
-        </Button>
-      </form>
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-4 bg-lime-100 p-4">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium">
+              Room Name
+            </label>
+            <input
+              onChange={handleRoomName}
+              id="name"
+              type="text"
+              className="mt-1 block w-full border-gray-600 bg-cyan-50 p-3 shadow-sm focus:border-emerald-100 focus:ring-emerald-200 sm:text-sm"
+              value={name}
+            />
+          </div>
+          <div>
+            <label htmlFor="playerCount" className="block text-sm font-medium">
+              Player Count
+            </label>
+            <input
+              onChange={handlePlayerCount}
+              id="playerCount"
+              type="number"
+              min={MIN_PLAYERS}
+              max={MAX_PLAYERS}
+              value={players}
+              className="mt-1 block w-full border-gray-600 bg-cyan-50 p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              placeholder="2-4 players"
+            />
+          </div>
+          <Button
+            type="submit"
+            className="mb-2 me-2 w-full border border-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-700 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
+          >
+            Create Room
+          </Button>
+          <Button
+            type="button"
+            onClick={handleLeave}
+            className="mb-2 me-2 w-full border border-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-700 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
+          >
+            Leave
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }

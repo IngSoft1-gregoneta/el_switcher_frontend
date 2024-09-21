@@ -119,7 +119,9 @@ describe("Room tests", () => {
       </MemoryRouter>,
     );
 
-    const create_room_button = screen.getByText("Create Room");
+    const create_room_button = screen.getByRole("button", {
+      name: /Create Room/i,
+    });
     const room_name_label = screen.getByLabelText("Room Name");
     const player_count_label = screen.getByLabelText("Player Count");
 

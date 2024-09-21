@@ -10,7 +10,6 @@ import RoomCreationFailed from "../Room/components/FailedRoom.jsx";
 export default function App() {
   const [socketUrl, setSocketUrl] = useState("ws://localhost:8000/ws");
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
-  const [gameName, setGameName] = useState(null);
   const [userId, setUserId] = useState(null);
 
   if (userId === null) {
