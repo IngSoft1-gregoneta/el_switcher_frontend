@@ -3,29 +3,13 @@ import { useRoom } from "../context/RoomContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
 import { leaveRoom } from "../services/RoomService";
-import useWebSocket, { ReadyState } from "react-use-websocket";
 import Spinner from "../../../components/Spinner";
 
 export default function RoomLayout() {
-  const { room_id, user_name } = useParams();
+  const { room_id, user_name, user_id } = useParams();
   const navigate = useNavigate();
   const { RoomData, setRoomData } = useRoom();
 
-  const [socketUrl, setSocketUrl] = useState(
-    `ws://localhost:8000/ws/join_room/${encodeURIComponent(room_id)}`,
-  );
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
-  console.log("status ws room " + connectionStatus);
-  if (lastMessage !== undefined && lastMessage !== null) {
-    console.log("lastMessage room " + lastMessage.data);
-  }
   useEffect(() => {
     if (room_id) {
       fetch(`http://127.0.0.1:8000/room/${encodeURIComponent(room_id)}`, {
@@ -42,15 +26,14 @@ export default function RoomLayout() {
           console.log(err.message);
         });
     }
-  }, [room_id, lastMessage, setRoomData]);
+  }, [room_id, setRoomData]);
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
   //TODO : handle exceptions
   const handleLeave = () => {
     try {
-      setSocketUrl(null);
-      leaveRoom(room_id, user_name);
+      leaveRoom(room_id, user_name, user_id);
     } catch (err) {
       console.log(err);
     }

@@ -8,7 +8,7 @@ export default function RoomConfig() {
   async function handleSubmit(formData) {
     try {
       const data = await createRoom(formData);
-      navigate(`/room/${data.room_id}/nico`);
+      navigate(`/room/${data.room_id}/nico/${data.user_id}`);
     } catch (error) {
       console.log(error);
       navigate("/failed_room");

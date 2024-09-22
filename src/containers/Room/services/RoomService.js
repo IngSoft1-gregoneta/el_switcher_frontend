@@ -17,8 +17,9 @@ export async function createRoom(formData) {
 export async function joinRoom(roomData) {
   const roomId = encodeURIComponent(roomData.room_id);
   const playerName = encodeURIComponent(roomData.player_name);
+  const userId = encodeURIComponent(roomData.user_id);
   const response = await fetch(
-    `http://localhost:8000/rooms/join/${roomId}/${playerName}`,
+    `http://localhost:8000/rooms/join/${roomId}/${playerName}/${userId}`,
     {
       method: "PUT",
       headers: {
@@ -34,11 +35,12 @@ export async function joinRoom(roomData) {
   return response.json();
 }
 
-export async function leaveRoom(room_id, player_name) {
+export async function leaveRoom(room_id, player_name, user_id) {
   const roomId = encodeURIComponent(room_id);
   const playerName = encodeURIComponent(player_name);
+  const userId = encodeURIComponent(user_id);
   const response = await fetch(
-    `http://127.0.0.1:8000/rooms/leave/${roomId}/${playerName}`,
+    `http://127.0.0.1:8000/rooms/leave/${roomId}/${playerName}/${userId}`,
     {
       method: "PUT",
       headers: {
@@ -53,4 +55,3 @@ export async function leaveRoom(room_id, player_name) {
 
   return response.json();
 }
-
