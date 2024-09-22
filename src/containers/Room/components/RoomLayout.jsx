@@ -49,6 +49,7 @@ export default function RoomLayout() {
   //TODO : handle exceptions
   const handleLeave = () => {
     try {
+      setSocketUrl(null);
       leaveRoom(room_id, user_name);
     } catch (err) {
       console.log(err);
