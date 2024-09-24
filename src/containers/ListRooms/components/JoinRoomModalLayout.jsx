@@ -11,7 +11,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { joinRoom } from "../../Room/services/RoomService";
 import { useNavigate } from "react-router-dom";
-import { useIdStore } from "../../App/App";
+import { useIdStore } from "../../../services/state";
 
 export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
   JoinRoomModalLayout.propTypes = {

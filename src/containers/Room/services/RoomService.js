@@ -1,11 +1,14 @@
-export async function createRoom(formData) {
-  const response = await fetch("http://localhost:8000/rooms/create_room", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+export async function createRoom(formData, userId) {
+  const response = await fetch(
+    `http://localhost:8000/rooms/create_room/${userId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
     },
-    body: JSON.stringify(formData),
-  });
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

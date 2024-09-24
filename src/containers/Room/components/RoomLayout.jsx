@@ -4,11 +4,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
 import { leaveRoom } from "../services/RoomService";
 import Spinner from "../../../components/Spinner";
+import { useUpdateStore, useIdStore } from "../../../services/state.js";
 
 export default function RoomLayout() {
   const { room_id, user_name, user_id } = useParams();
   const navigate = useNavigate();
   const { RoomData, setRoomData } = useRoom();
+  const userId = useIdStore((state) => state.userId);
+  const setId = useIdStore((state) => state.setId);
+  if (!userId) {
+    setId(user_id);
+  }
+  const updateRoom = useUpdateStore((state) => state.updateRoom);
 
   useEffect(() => {
     if (room_id) {
@@ -26,7 +33,7 @@ export default function RoomLayout() {
           console.log(err.message);
         });
     }
-  }, [room_id, setRoomData]);
+  }, [room_id, setRoomData, updateRoom]);
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
@@ -37,7 +44,7 @@ export default function RoomLayout() {
     } catch (err) {
       console.log(err);
     }
-    navigate("/");
+    navigate(`/id/${user_id}`);
   };
 
   //TODO : handle game validations before routing to /Game
