@@ -10,8 +10,8 @@ import {
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { joinRoom } from "../../Room/services/RoomService";
-import { useRoom } from "../../Room/context/RoomContext";
 import { useNavigate } from "react-router-dom";
+import { useIdStore } from "../../../services/state";
 
 export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
   JoinRoomModalLayout.propTypes = {
@@ -19,8 +19,8 @@ export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
     open: PropTypes.bool,
     setOpen: PropTypes.func,
   };
+  const userId = useIdStore((state) => state.userId);
   const [userName, setUserName] = useState(null);
-  const { setRoomData } = useRoom();
   const navigate = useNavigate();
 
   function handleChange(e) {
@@ -30,12 +30,15 @@ export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
   async function handleClickAceptar() {
     setOpen(false);
     try {
-      const data = await joinRoom({ room_id: roomId, player_name: userName });
-      setRoomData(data);
-      navigate("/Room");
+      await joinRoom({
+        room_id: roomId,
+        player_name: userName,
+        user_id: userId,
+      });
+      navigate(`/room/${roomId}/${userName}/${userId}`);
     } catch (error) {
       console.log(error);
-      navigate("/FailedRoom");
+      navigate("/failed_room");
     }
   }
 

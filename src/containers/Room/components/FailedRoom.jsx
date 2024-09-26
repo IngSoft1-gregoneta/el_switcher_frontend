@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@headlessui/react";
+import { useIdStore } from "../../../services/state";
 
 export default function RoomCreationFailed() {
+  const userId = useIdStore((state) => state.userId);
   const navigate = useNavigate();
 
   function handleRetry() {
-    navigate("/CreateRoom");
+    navigate("/create_room");
   }
 
   function handleLeave() {
-    navigate("/");
+    navigate(`/id/${userId}`);
   }
 
   return (

@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
+import { useIdStore } from "../../../services/state";
 
 //FOR DEBUG : MAX, MIN and PLAYERS array, should not exist in final build.
 //these values should be provided by the user/server and or be fixxed.
 const MAX_PLAYERS = 4;
 const MIN_PLAYERS = 2;
 
-export default function RoomConfigLayout({ onSubmit }) {
+export default function CreateRoomLayout({ onSubmit }) {
+  const userId = useIdStore((state) => state.userId);
   const navigate = useNavigate();
   const handleLeave = () => {
-    navigate("/");
+    navigate(`/id/${userId}`);
   };
 
   const [name, setName] = useState("");
@@ -36,8 +38,10 @@ export default function RoomConfigLayout({ onSubmit }) {
     };
 
     if (typeof onSubmit === "function" && formData.name !== "") {
+      // Como me mareaste nico jajaja
       onSubmit(formData);
     } else if (formData.name === "") {
+      alert("Empty name");
     }
   };
 
