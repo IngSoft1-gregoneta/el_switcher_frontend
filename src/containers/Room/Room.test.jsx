@@ -4,20 +4,38 @@ import {
   fireEvent,
   render,
   screen,
-  waitFor,
+  act,
 } from "@testing-library/react";
 import { createRoom } from "./services/RoomService.js";
-import RoomConfigLayout from "./components/RoomConfigLayout.jsx";
+import CreateRoomLayout from "./components/CreateRoomLayout.jsx";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import RoomCreationFailed from "./components/FailedRoom.jsx";
 import RoomLayout from "./components/RoomLayout.jsx";
-import { RoomProvider } from "./context/RoomContext.jsx";
+import * as zustand from "zustand";
+import { useIdStore } from "../../services/state.js";
 
+const uuid = crypto.randomUUID();
+vi.mock("../../services/state.js", () => ({
+  useUpdateStore: vi.fn(() => ({
+    updateList: false,
+    updateRoom: false,
+    setUpdateList: vi.fn(),
+    setUpdateRoom: vi.fn(),
+  })),
+  useIdStore: (state) => {
+    const data = {
+      userId: uuid,
+      setId: vi.fn(),
+    };
+    return state(data);
+  },
+}));
+const mockedUseNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
+  const mod = await vi.importActual("react-router-dom");
   return {
-    ...actual,
-    useNavigate: vi.fn(),
+    ...mod,
+    useNavigate: () => mockedUseNavigate,
   };
 });
 
@@ -45,10 +63,10 @@ describe("Room tests", () => {
 
     const formData = { room_name: "Test Room", players_expected: 4 };
 
-    const result = await createRoom(formData);
+    const result = await createRoom(formData, uuid);
 
     expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8000/rooms/create_room",
+      `http://localhost:8000/rooms/create_room/${uuid}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,7 +85,7 @@ describe("Room tests", () => {
 
     const formData = { room_name: "Test Room", players_expected: 4 };
 
-    await expect(createRoom(formData)).rejects.toThrow(
+    await expect(createRoom(formData, uuid)).rejects.toThrow(
       "HTTP error! status: 400",
     );
     cleanup();
@@ -115,7 +133,7 @@ describe("Room tests", () => {
 
     render(
       <MemoryRouter>
-        <RoomConfigLayout onSubmit={mockOnSubmit} />
+        <CreateRoomLayout onSubmit={mockOnSubmit} />
       </MemoryRouter>,
     );
 
@@ -142,27 +160,21 @@ describe("Room tests", () => {
 
   test("Navigate to root on leave button click(RoomConfigLayout)", () => {
     const mockOnSubmit = vi.fn();
-    const mockNavigate = vi.fn();
-
-    useNavigate.mockReturnValue(mockNavigate);
 
     render(
       <MemoryRouter>
-        <RoomConfigLayout onSubmit={mockOnSubmit} />
+        <CreateRoomLayout onSubmit={mockOnSubmit} />
       </MemoryRouter>,
     );
 
     const leaveButton = screen.getByText("Leave");
     fireEvent.click(leaveButton);
-    expect(mockNavigate).toHaveBeenCalledWith("/");
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
+    expect(mockedUseNavigate).toHaveBeenCalledWith(`/id/${uuid}`);
+    expect(mockedUseNavigate).toHaveBeenCalledTimes(1);
     cleanup();
   });
 
   test("Render FailedRoom, nav. try agan, nav. leave", () => {
-    const mockNavigate = vi.fn();
-    useNavigate.mockReturnValue(mockNavigate);
-
     render(
       <MemoryRouter>
         <RoomCreationFailed />
@@ -172,9 +184,6 @@ describe("Room tests", () => {
   });
 
   test("Navigate to root on leave button click(RoomCreationFailed)", () => {
-    const mockNavigate = vi.fn();
-    useNavigate.mockReturnValue(mockNavigate);
-
     render(
       <MemoryRouter>
         <RoomCreationFailed />
@@ -183,16 +192,13 @@ describe("Room tests", () => {
 
     const leaveButton = screen.getByText("Leave");
     fireEvent.click(leaveButton);
-    expect(mockNavigate).toHaveBeenCalledWith("/");
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
+    expect(mockedUseNavigate).toHaveBeenCalledWith(`/id/${uuid}`);
+    expect(mockedUseNavigate).toHaveBeenCalledTimes(1);
 
     cleanup();
   });
 
   test("Navigate to RoomConfigLayout on try again button click(RoomCreationFailed)", () => {
-    const mockNavigate = vi.fn();
-    useNavigate.mockReturnValue(mockNavigate);
-
     render(
       <MemoryRouter>
         <RoomCreationFailed />
@@ -201,8 +207,8 @@ describe("Room tests", () => {
 
     const tryAgainButton = screen.getByText("Try Again");
     +fireEvent.click(tryAgainButton);
-    expect(mockNavigate).toHaveBeenCalledWith("/create_room");
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
+    expect(mockedUseNavigate).toHaveBeenCalledWith("/create_room");
+    expect(mockedUseNavigate).toHaveBeenCalledTimes(1);
 
     cleanup();
   });

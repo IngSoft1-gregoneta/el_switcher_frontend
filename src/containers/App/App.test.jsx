@@ -3,6 +3,23 @@ import { render, waitFor } from "@testing-library/react";
 import App from "./App";
 import useWebSocket from "react-use-websocket";
 
+const uuid = crypto.randomUUID();
+vi.mock("../../services/state.js", () => ({
+  useUpdateStore: vi.fn(() => ({
+    updateList: false,
+    updateRoom: false,
+    setUpdateList: vi.fn(),
+    setUpdateRoom: vi.fn(),
+  })),
+  useIdStore: (state) => {
+    const data = {
+      userId: uuid,
+      setId: vi.fn(),
+    };
+    return state(data);
+  },
+}));
+
 vi.mock("react-use-websocket", { spy: true });
 
 describe("Websocket test", () => {
@@ -16,7 +33,7 @@ describe("Websocket test", () => {
 
   test("correct calling on url with useWebSocket", () => {
     render(<App />);
-    expect(useWebSocket).toHaveBeenCalledWith("ws://localhost:8000/ws");
+    expect(useWebSocket).toHaveBeenCalledWith(`ws://localhost:8000/ws/${uuid}`);
   });
 
   test("should fetch user ID on mount and call setUserId", async () => {
