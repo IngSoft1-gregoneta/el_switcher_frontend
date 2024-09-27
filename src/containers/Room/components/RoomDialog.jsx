@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Dialog, Transition, TransitionChild, DialogTitle, Description } from '@headlessui/react';
-import { Field } from '@headlessui/react';
 
 export default function RoomDialog({ isOpen, onClose, onOwnerName }) {
   const [playerName, setPlayerName] = useState('');
 
-  const handleSubmitDialog = (e) =>{
+  const handleSubmitDialog = () =>{
     onClose(false);
     onOwnerName(playerName);
   }
