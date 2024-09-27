@@ -128,7 +128,7 @@ describe("Room tests", () => {
     expect(setRoomDataMock).toBeCalledTimes(1);
   });
 
-  test("render RoomConfigLayout", () => {
+  test("Name dialog accepted and render RoomConfigLayout", () => {
     const mockOnSubmit = vi.fn();
 
     render(
@@ -136,6 +136,15 @@ describe("Room tests", () => {
         <CreateRoomLayout onSubmit={mockOnSubmit} />
       </MemoryRouter>,
     );
+
+    const nameInput = screen.getByRole("textbox", {
+      name: /name-input/,
+    });
+    const submit_button = screen.getByRole("button", {
+      name: /Submit/i,
+    });
+    fireEvent.change(nameInput, { target: { value: "Sakalomo" } });
+    fireEvent.click(submit_button);
 
     const create_room_button = screen.getByRole("button", {
       name: /Create Room/i,
@@ -149,7 +158,7 @@ describe("Room tests", () => {
     fireEvent.click(create_room_button);
 
     expect(mockOnSubmit).toHaveBeenCalledWith({
-      owner_name: "nico",
+      owner_name: "Sakalomo",
       room_name: "Test Room",
       players_expected: 2,
     });

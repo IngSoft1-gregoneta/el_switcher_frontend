@@ -1,17 +1,26 @@
-import { useState } from 'react';
-import { Dialog, Transition, TransitionChild, DialogTitle, Description } from '@headlessui/react';
+import { useState } from "react";
+import {
+  Dialog,
+  Transition,
+  TransitionChild,
+  DialogTitle,
+  Description,
+} from "@headlessui/react";
 
 export default function RoomDialog({ isOpen, onClose, onOwnerName }) {
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState("");
 
-  const handleSubmitDialog = () =>{
+  const handleSubmitDialog = () => {
     onClose(false);
     onOwnerName(playerName);
-  }
+  };
 
   return (
     <Transition show={isOpen} as="div" className="relative z-10">
-      <Dialog onClose={onClose} className="fixed inset-0 flex items-center justify-center p-4 bg-gray-900 bg-opacity-50">
+      <Dialog
+        onClose={onClose}
+        className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4"
+      >
         <TransitionChild
           as="div"
           enter="ease-out duration-300"
@@ -20,7 +29,7 @@ export default function RoomDialog({ isOpen, onClose, onOwnerName }) {
           leave="ease-in duration-200"
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
-          className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto"
+          className="mx-auto max-w-md rounded-lg bg-white p-6 shadow-lg"
         >
           <DialogTitle className="text-lg font-semibold text-gray-900">
             Please Enter a Player Name
@@ -29,17 +38,18 @@ export default function RoomDialog({ isOpen, onClose, onOwnerName }) {
             Provide the name for the player to join the game.
           </Description>
           <input
+            aria-label="name-input"
             type="text"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
             placeholder="Enter player name"
-            className="mt-4 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+            className="mt-4 w-full rounded-md border px-3 py-2 focus:border-blue-300 focus:outline-none focus:ring"
           />
           <div className="mt-4 flex justify-end">
             <button
-            type='submit'
+              type="submit"
               onClick={handleSubmitDialog}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             >
               Submit
             </button>

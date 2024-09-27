@@ -87,6 +87,7 @@ export default function CreateRoomLayout({ onSubmit }) {
             />
           </div>
           <Button
+            aria-label="Create Room"
             type="submit"
             className="mb-2 me-2 w-full border border-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-700 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
           >
