@@ -9,6 +9,7 @@ import GetId from "./GetId.jsx";
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useUpdateStore, useIdStore } from "../../services/state.js";
+import Game from "../Game/Game.jsx";
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(null);
@@ -68,6 +69,7 @@ export default function App() {
             element={<RoomLayout />}
           />
           <Route path="/failed_room" element={<RoomCreationFailed />} />
+          <Route path="/Game" element={<Game />} />
           <Route path="*" element={<NotFoundPageLayout />} />
         </Routes>
       </BrowserRouter>

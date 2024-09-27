@@ -11,3 +11,5 @@ export const useIdStore = create((set) => ({
   userId: null,
   setId: (newId) => set({ userId: newId }),
 }));
+
+//TODO: create state for cards(queue?) and movements
