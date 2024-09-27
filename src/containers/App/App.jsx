@@ -15,7 +15,7 @@ export default function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
   const userId = useIdStore((state) => state.userId);
   const setUpdateList = useUpdateStore((state) => state.setUpdateList);
-  const setUpdateRoom = useUpdateStore((state) => state.setUpdateRoom);
+  const setStateRoom = useUpdateStore((state) => state.setStateRoom);
 
   // El socketUrl debe estar en el tope de la app si no se desconecta
   useEffect(() => {
@@ -33,19 +33,28 @@ export default function App() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
+  useEffect(() => {
+    if (connectionStatus == ReadyState.CLOSED) {
+      setSocketUrl(null);
+    }
+  }, [setSocketUrl, connectionStatus]);
+
   console.log(connectionStatus);
   console.log(lastMessage);
   useEffect(() => {
     if (lastMessage) {
-      // Estos podrian ser ENUMUMS
+      // Estos podrian ser ENUMS?
       if (lastMessage.data === "LISTA") {
         setUpdateList();
       }
       if (lastMessage.data == "ROOM") {
-        setUpdateRoom();
+        setStateRoom("CHANGE");
+      }
+      if (lastMessage.data == "DELETE_ROOM") {
+        setStateRoom("DELETED");
       }
     }
-  }, [lastMessage, setUpdateRoom, setUpdateList]);
+  }, [lastMessage, setStateRoom, setUpdateList]);
 
   return (
     <RoomProvider>

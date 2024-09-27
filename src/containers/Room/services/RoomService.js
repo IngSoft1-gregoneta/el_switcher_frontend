@@ -55,6 +55,4 @@ export async function leaveRoom(room_id, player_name, user_id) {
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-
-  return response.json();
 }

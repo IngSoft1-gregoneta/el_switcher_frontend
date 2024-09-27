@@ -18,9 +18,9 @@ const uuid = crypto.randomUUID();
 vi.mock("../../services/state.js", () => ({
   useUpdateStore: vi.fn(() => ({
     updateList: false,
-    updateRoom: false,
+    stateRoom: false,
     setUpdateList: vi.fn(),
-    setUpdateRoom: vi.fn(),
+    setStateRoom: vi.fn(),
   })),
   useIdStore: (state) => {
     const data = {

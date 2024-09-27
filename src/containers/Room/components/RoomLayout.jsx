@@ -12,13 +12,16 @@ export default function RoomLayout() {
   const { RoomData, setRoomData } = useRoom();
   const userId = useIdStore((state) => state.userId);
   const setId = useIdStore((state) => state.setId);
+
   if (!userId) {
     setId(user_id);
   }
-  const updateRoom = useUpdateStore((state) => state.updateRoom);
+  const stateRoom = useUpdateStore((state) => state.stateRoom);
 
   useEffect(() => {
-    if (room_id) {
+    if (stateRoom == "DELETED") {
+      navigate(`/id/${userId}`);
+    } else if (room_id) {
       fetch(`http://127.0.0.1:8000/room/${encodeURIComponent(room_id)}`, {
         method: "GET",
       })
@@ -33,7 +36,7 @@ export default function RoomLayout() {
           console.log(err.message);
         });
     }
-  }, [room_id, setRoomData, updateRoom]);
+  }, [room_id, setRoomData, stateRoom, userId, navigate]);
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.

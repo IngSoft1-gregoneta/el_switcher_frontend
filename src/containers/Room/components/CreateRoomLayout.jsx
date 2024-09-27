@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
 import { useIdStore } from "../../../services/state";
+import RoomDialog from "./RoomDialog.jsx";
 
 //FOR DEBUG : MAX, MIN and PLAYERS array, should not exist in final build.
 //these values should be provided by the user/server and or be fixxed.
@@ -10,6 +11,9 @@ const MIN_PLAYERS = 2;
 
 export default function CreateRoomLayout({ onSubmit }) {
   const userId = useIdStore((state) => state.userId);
+  if (!userId) {
+    navigate("/");
+  }
   const navigate = useNavigate();
   const handleLeave = () => {
     navigate(`/id/${userId}`);
@@ -17,6 +21,8 @@ export default function CreateRoomLayout({ onSubmit }) {
 
   const [name, setName] = useState("");
   const [players, setPlayers] = useState(2);
+  const [dialogIsOpen, setDialog] = useState(true);
+  const [owner_name, setOwnerName] = useState("");
 
   const handleRoomName = (event) => {
     let name = event.target.value;
@@ -34,7 +40,7 @@ export default function CreateRoomLayout({ onSubmit }) {
     const formData = {
       room_name: name,
       players_expected: players,
-      owner_name: "nico",
+      owner_name: owner_name,
     };
 
     if (typeof onSubmit === "function" && formData.name !== "") {
@@ -47,11 +53,22 @@ export default function CreateRoomLayout({ onSubmit }) {
 
   return (
     <div className="mx-auto mt-10 flex max-w-screen-lg flex-col items-center justify-center p-4">
-      <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
+      <div className="center mx-auto w-full max-w-md items-center justify-center rounded bg-lime-200 p-4 shadow-md">
+        <RoomDialog
+          isOpen={dialogIsOpen}
+          onClose={setDialog}
+          onOwnerName={setOwnerName}
+        />
         <h1 className="mb-8 mt-4 text-center font-serif text-4xl font-bold">
           Create Room
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-4 bg-lime-100 p-4">
+        <h3 className="mb-8 mt-4 text-center font-serif text-2xl">
+          Owner : {owner_name}
+        </h3>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 rounded bg-lime-100 p-4"
+        >
           <div>
             <label htmlFor="name" className="block text-sm font-medium">
               Room Name

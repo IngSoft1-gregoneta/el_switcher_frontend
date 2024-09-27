@@ -7,7 +7,7 @@ export default function ListRooms() {
   const updateList = useUpdateStore((state) => state.updateList);
 
   //Esta effect hace un fetch cada vez que llega un mensaje desde el WS
-  //TODO: Verificar que sea un mensaje de agregar partida
+  //TODO: Creo que esto se llama de mas... pero no afecta el funcionamiento
   useEffect(() => {
     fetchRooms();
     console.log("LISTROOMS ", updateList);

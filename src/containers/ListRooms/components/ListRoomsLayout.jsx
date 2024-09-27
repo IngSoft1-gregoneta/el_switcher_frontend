@@ -22,7 +22,7 @@ export default function ListRoomsLayout({ rooms }) {
       if (room !== undefined) {
         return (
           <tr
-            key={room.id}
+            key={room.room_id}
             className="border-b border-r border-emerald-200 bg-lime-100 text-cyan-950 hover:bg-cyan-100"
           >
             <td scope="row" className="center px-6 py-4">
