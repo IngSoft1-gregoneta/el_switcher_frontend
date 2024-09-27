@@ -21,8 +21,8 @@ export default function CreateRoomLayout({ onSubmit }) {
 
   const [name, setName] = useState("");
   const [players, setPlayers] = useState(2);
-  const [dialogIsOpen, setDialog] = useState(true);
-  const [owner_name, setOwnerName] = useState("");
+  const [isOpen, setIsOpen] = useState(true);
+  const [ownerName, setOwnerName] = useState('');
 
   const handleRoomName = (event) => {
     let name = event.target.value;
@@ -40,7 +40,7 @@ export default function CreateRoomLayout({ onSubmit }) {
     const formData = {
       room_name: name,
       players_expected: players,
-      owner_name: owner_name,
+      owner_name: ownerName,
     };
 
     if (typeof onSubmit === "function" && formData.name !== "") {
@@ -53,22 +53,12 @@ export default function CreateRoomLayout({ onSubmit }) {
 
   return (
     <div className="mx-auto mt-10 flex max-w-screen-lg flex-col items-center justify-center p-4">
-      <div className="center mx-auto w-full max-w-md items-center justify-center rounded bg-lime-200 p-4 shadow-md">
-        <RoomDialog
-          isOpen={dialogIsOpen}
-          onClose={setDialog}
-          onOwnerName={setOwnerName}
-        />
+      <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
+        <RoomDialog isOpen={isOpen} onClose={setIsOpen} onOwnerName={setOwnerName}></RoomDialog>
         <h1 className="mb-8 mt-4 text-center font-serif text-4xl font-bold">
           Create Room
         </h1>
-        <h3 className="mb-8 mt-4 text-center font-serif text-2xl">
-          Owner : {owner_name}
-        </h3>
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4 rounded bg-lime-100 p-4"
-        >
+        <form onSubmit={handleSubmit} className="space-y-4 bg-lime-100 p-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium">
               Room Name
