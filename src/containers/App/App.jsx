@@ -9,6 +9,7 @@ import GetId from "./GetId.jsx";
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useUpdateStore, useIdStore } from "../../services/state.js";
+import Match from "../Match/Match.jsx";
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(null);
@@ -16,6 +17,7 @@ export default function App() {
   const userId = useIdStore((state) => state.userId);
   const setUpdateList = useUpdateStore((state) => state.setUpdateList);
   const setStateRoom = useUpdateStore((state) => state.setStateRoom);
+  const setStateMatch = useUpdateStore((state) => state.setStateMatch);
 
   // El socketUrl debe estar en el tope de la app si no se desconecta
   useEffect(() => {
@@ -44,6 +46,7 @@ export default function App() {
   useEffect(() => {
     if (lastMessage) {
       // Estos podrian ser ENUMS?
+      // No existen los ENUMS, la mejor opcion es un objeto inmutable(object.freeze({...}))
       if (lastMessage.data === "LISTA") {
         setUpdateList();
       }
@@ -52,6 +55,9 @@ export default function App() {
       }
       if (lastMessage.data == "DELETE_ROOM") {
         setStateRoom("DELETED");
+      }
+      if (lastMessage.data == "MATCH_STARTED") {
+        setStateMatch(true);
       }
     }
   }, [lastMessage, setStateRoom, setUpdateList]);
@@ -66,6 +72,10 @@ export default function App() {
           <Route
             path="/room/:room_id/:user_name/:user_id"
             element={<RoomLayout />}
+          />
+          <Route
+            path="match/:match_id/:user_name/:user_id"
+            element={<Match/>}
           />
           <Route path="/failed_room" element={<RoomCreationFailed />} />
           <Route path="*" element={<NotFoundPageLayout />} />
