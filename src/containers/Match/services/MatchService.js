@@ -14,12 +14,12 @@ export async function createMatch(roomId){
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return response;
+    return response.json();
 }
 
 export async function fetchMatch(roomId){
     const room_id = encodeURIComponent(roomId);
-    const response = await fetch(`http:localhost:8000/matchs/?match_id=${room_id}`,{
+    const response = await fetch(`http://localhost:8000/matchs/${room_id}`,{
         method : "GET",
         headers : {
             "Content-Type": "application/json",            
@@ -30,5 +30,5 @@ export async function fetchMatch(roomId){
         throw new Error(`HTTP error! status: ${response.status}`);        
     }
 
-    return response;
+    return response.json();
 }

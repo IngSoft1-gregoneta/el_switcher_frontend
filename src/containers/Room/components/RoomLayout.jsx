@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
 import { leaveRoom } from "../services/RoomService";
 import Spinner from "../../../components/Spinner";
-import { useUpdateStore, useIdStore } from "../../../services/state.js";
+import { useUpdateStore, useIdStore, useBoardStore } from "../../../services/state.js";
 import { createMatch, fetchMatch } from "../../Match/services/MatchService.js";
 
 export default function RoomLayout() {
@@ -18,7 +18,7 @@ export default function RoomLayout() {
     setId(user_id);
   }
   const stateRoom = useUpdateStore((state) => state.stateRoom);
-  const stateMatch = useUpdateStore((state) => state.stateMatch);
+  
 
   useEffect(() => {
     if (stateRoom == "DELETED") {
@@ -43,12 +43,20 @@ export default function RoomLayout() {
 
   //TODO : handle reconections???? 
   //        if >=2 players are in the same room sometimes not all of them redirect to match
+  
+  const stateMatch = useUpdateStore((state) => state.stateMatch);
+  const stateBoard = useBoardStore((state) => state.stateBoard);
+  const setStateBoard = useBoardStore((state) => state.setStateBoard);
   useEffect(() => {
     if (stateMatch) {
       const fetchData = async () => {
         try {
           const matchData = await fetchMatch(room_id);
-          console.log(matchData);
+
+          if (!stateBoard){
+            setStateBoard(matchData.board.tiles);
+          }
+
           navigate(`/match/${matchData.match_id}/${user_id}/${user_id}`);
         } catch (error) {
           console.log(error);
@@ -71,10 +79,12 @@ export default function RoomLayout() {
   };
 
   //TODO : handle game validations before routing to /Game
-  //TODO : connect to server and create a game instance
+  //        some validation is done within parser and board logic modules
+  //        if !stateBoard then Board component reirects to root, maybe handle that case better????
   const handleStartMatch = async () => {
     try{
       const matchData = await createMatch(room_id);
+      setStateBoard(matchData.board.tiles);
       navigate(`/match/${matchData.match_id}/${user_name}/${user_id}`);
 
     } catch(error){
