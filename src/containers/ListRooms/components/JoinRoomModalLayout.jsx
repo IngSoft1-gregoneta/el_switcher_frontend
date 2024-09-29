@@ -35,7 +35,7 @@ export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
         player_name: userName,
         user_id: userId,
       });
-      navigate(`/room/${roomId}/${userName}/${userId}`);
+      navigate(`/room/${userId}/${roomId}/${userName}`);
     } catch (error) {
       console.log(error);
       navigate("/failed_room");

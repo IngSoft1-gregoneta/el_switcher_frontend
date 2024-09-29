@@ -2,9 +2,9 @@ import { create } from "zustand";
 
 export const useUpdateStore = create((set) => ({
   updateList: false,
-  stateRoom: null,
+  updateRoom: false,
   setUpdateList: () => set((state) => ({ updateList: !state.updateList })),
-  setStateRoom: (new_state) => set(() => ({ stateRoom: new_state })),
+  setUpdateRoom: () => set((state) => ({ updateRoom: !state.updateRoom })),
 }));
 
 export const useIdStore = create((set) => ({

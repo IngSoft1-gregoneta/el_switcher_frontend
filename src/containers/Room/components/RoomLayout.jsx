@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRoom } from "../context/RoomContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
@@ -16,27 +16,38 @@ export default function RoomLayout() {
   if (!userId) {
     setId(user_id);
   }
-  const stateRoom = useUpdateStore((state) => state.stateRoom);
+  const updateRoom = useUpdateStore((state) => state.updateRoom);
 
   useEffect(() => {
-    if (stateRoom == "DELETED") {
-      navigate(`/id/${userId}`);
-    } else if (room_id) {
-      fetch(`http://127.0.0.1:8000/room/${encodeURIComponent(room_id)}`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if ("room_id" in data) {
+    async function doFetch() {
+      if (room_id) {
+        try {
+          const resp = await fetch(
+            `http://127.0.0.1:8000/room/${encodeURIComponent(room_id)}`,
+            {
+              method: "GET",
+            },
+          );
+
+          if (resp.ok) {
+            const data = await resp.json();
             console.log(data);
-            setRoomData(data);
+            if ("room_id" in data) {
+              setRoomData(data);
+            }
+          } else {
+            if (resp.status === 404) throw new Error("404, Not found");
+            if (resp.status === 500)
+              throw new Error("500, internal server error");
           }
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
+        } catch (error) {
+          console.error("Fetch", error);
+          navigate(`/id/${userId}`);
+        }
+      }
     }
-  }, [room_id, setRoomData, stateRoom, userId, navigate]);
+    doFetch();
+  }, [room_id, setRoomData, updateRoom, userId, navigate]);
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
@@ -53,7 +64,7 @@ export default function RoomLayout() {
   //TODO : handle game validations before routing to /Game
   //TODO : connect to server and create a game instance
   const handleStartGame = () => {
-    navigate("/Game");
+    navigate(`/match/${user_id}/${room_id}/${user_name}`);
   };
 
   //TODO : handle waiting for lobby.

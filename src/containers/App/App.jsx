@@ -9,19 +9,24 @@ import GetId from "./GetId.jsx";
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useUpdateStore, useIdStore } from "../../services/state.js";
-import Game from "../Game/Game.jsx";
+import Match from "../Match/Match.jsx";
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(null);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
   const userId = useIdStore((state) => state.userId);
   const setUpdateList = useUpdateStore((state) => state.setUpdateList);
-  const setStateRoom = useUpdateStore((state) => state.setStateRoom);
+  const setUpdateRoom = useUpdateStore((state) => state.setUpdateRoom);
 
   // El socketUrl debe estar en el tope de la app si no se desconecta
   useEffect(() => {
     if (userId) {
-      setSocketUrl(`ws://localhost:8000/ws/${userId}`);
+      setSocketUrl(`ws://localhost:8000/ws/${userId}`, {
+        shouldReconnect: (closeEvent) => true,
+        reconnectAttempts: 10,
+        reconnectInterval: (attemptNumber) =>
+          Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
+      });
     }
   }, [setSocketUrl, userId]);
   console.log(socketUrl);
@@ -34,14 +39,8 @@ export default function App() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
-  useEffect(() => {
-    if (connectionStatus == ReadyState.CLOSED) {
-      setSocketUrl(null);
-    }
-  }, [setSocketUrl, connectionStatus]);
-
   console.log(connectionStatus);
-  console.log(lastMessage);
+  console.log("Este es lastmessage " + lastMessage);
   useEffect(() => {
     if (lastMessage) {
       // Estos podrian ser ENUMS?
@@ -49,13 +48,10 @@ export default function App() {
         setUpdateList();
       }
       if (lastMessage.data == "ROOM") {
-        setStateRoom("CHANGE");
-      }
-      if (lastMessage.data == "DELETE_ROOM") {
-        setStateRoom("DELETED");
+        setUpdateRoom();
       }
     }
-  }, [lastMessage, setStateRoom, setUpdateList]);
+  }, [lastMessage, setUpdateRoom, setUpdateList]);
 
   return (
     <RoomProvider>
@@ -65,11 +61,14 @@ export default function App() {
           <Route path="/id/:user_id" element={<AppLayout />} />
           <Route path="/create_room" element={<CreateRoom />} />
           <Route
-            path="/room/:room_id/:user_name/:user_id"
+            path="/room/:user_id/:room_id/:user_name"
             element={<RoomLayout />}
           />
           <Route path="/failed_room" element={<RoomCreationFailed />} />
-          <Route path="/Game" element={<Game />} />
+          <Route
+            path="/match/:user_id/:room_id/:user_name"
+            element={<Match />}
+          />
           <Route path="*" element={<NotFoundPageLayout />} />
         </Routes>
       </BrowserRouter>
