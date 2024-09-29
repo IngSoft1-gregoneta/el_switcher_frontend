@@ -42,10 +42,11 @@ describe("MatchService tests", ()=>{
         });
     
         const roomId = 1;
+        const owner = "Owner"
     
-        const result = await createMatch(roomId);
+        const result = await createMatch(roomId,owner);
     
-        expect(fetch).toHaveBeenCalledWith("http://localhost:8000/matchs/create_match",{
+        expect(fetch).toHaveBeenCalledWith(`http://localhost:8000/matchs/create_match/${owner}`,{
             method : "POST",
             headers : {
                 "Content-Type": "application/json",
