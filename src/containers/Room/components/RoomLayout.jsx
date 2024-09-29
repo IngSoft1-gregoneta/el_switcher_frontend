@@ -78,9 +78,11 @@ export default function RoomLayout() {
     navigate(`/id/${user_id}`);
   };
 
+
   //TODO : handle game validations before routing to /Game
   //        some validation is done within parser and board logic modules
   //        if !stateBoard then Board component reirects to root, maybe handle that case better????
+  //TODO : also, why are we using matchservices inside room??
   const handleStartMatch = async () => {
     try{
       const matchData = await createMatch(room_id);

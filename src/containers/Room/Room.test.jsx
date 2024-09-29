@@ -12,15 +12,17 @@ import { MemoryRouter, useNavigate } from "react-router-dom";
 import RoomCreationFailed from "./components/FailedRoom.jsx";
 import RoomLayout from "./components/RoomLayout.jsx";
 import * as zustand from "zustand";
-import { useIdStore } from "../../services/state.js";
+import { useBoardStore, useIdStore } from "../../services/state.js";
 
 const uuid = crypto.randomUUID();
 vi.mock("../../services/state.js", () => ({
   useUpdateStore: vi.fn(() => ({
     updateList: false,
     stateRoom: false,
+    stateMatch : false,
     setUpdateList: vi.fn(),
     setStateRoom: vi.fn(),
+    setStateMatch: vi.fn(),
   })),
   useIdStore: (state) => {
     const data = {
@@ -29,6 +31,10 @@ vi.mock("../../services/state.js", () => ({
     };
     return state(data);
   },
+  useBoardStore: vi.fn(()=>({
+    stateBoard : null,
+    setStateBoard : vi.fn(),
+  })),
 }));
 const mockedUseNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
@@ -38,6 +44,7 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockedUseNavigate,
   };
 });
+
 
 describe("Room tests", () => {
   beforeEach(() => {

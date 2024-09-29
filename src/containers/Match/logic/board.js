@@ -3,6 +3,7 @@ import "./tile.js";
 
 export default class BoardClass{
     constructor(boardFromServer){
+        if (boardFromServer === null) throw new Error("Expected a board got : ",boardFromServer);
         if (boardFromServer.length > 36) throw new Error("The board cannot have over 36 tiles!!!!");
 
         this.tiles = Array.from({ length: 6 }, () => Array.from({length: 6},()=> null));

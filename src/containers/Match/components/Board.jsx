@@ -4,6 +4,8 @@ import "../styles/styles.css";
 import { useBoardStore } from "../../../services/state";
 import { useNavigate } from "react-router-dom";
 
+//TODO : is this even a good implementation??
+//       should this even be here??
 const COLORS = Object.freeze({
     YELLOW: "bg-yellow-600",
     GREEN: "bg-green-600",
@@ -38,7 +40,7 @@ export default function Board() {
                     row.map((ficha, colIndex) => {
                         let tileColor;
                         //TODO : maybe this way of matching colors is prone to breaking
-                        //       how we solve it?? a mistery for humand kind to solve
+                        //       how do we solve it?? a mistery for humand kind to wonder
                         switch (ficha.color) {
                             case "Yellow":
                                 tileColor = COLORS.YELLOW;
