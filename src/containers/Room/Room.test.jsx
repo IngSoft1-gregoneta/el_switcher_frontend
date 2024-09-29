@@ -15,27 +15,31 @@ import * as zustand from "zustand";
 import { useBoardStore, useIdStore } from "../../services/state.js";
 
 const uuid = crypto.randomUUID();
-vi.mock("../../services/state.js", () => ({
-  useUpdateStore: vi.fn(() => ({
-    updateList: false,
-    stateRoom: false,
-    stateMatch : false,
-    setUpdateList: vi.fn(),
-    setStateRoom: vi.fn(),
-    setStateMatch: vi.fn(),
-  })),
-  useIdStore: (state) => {
-    const data = {
-      userId: uuid,
-      setId: vi.fn(),
-    };
-    return state(data);
-  },
-  useBoardStore: vi.fn(()=>({
-    stateBoard : null,
-    setStateBoard : vi.fn(),
-  })),
-}));
+vi.mock("../../services/state.js", async () => {
+  const mod = await vi.importActual("../../services/state.js");
+  return {
+    ...mod,
+    useUpdateStore: vi.fn(() => ({
+      updateList: false,
+      stateRoom: false,
+      stateMatch : false,
+      setUpdateList: vi.fn(),
+      setStateRoom: vi.fn(),
+      setStateMatch: vi.fn(),
+    })),
+    useIdStore: (state) => {
+      const data = {
+        userId: uuid,
+        setId: vi.fn(),
+      };
+      return state(data);
+    },
+    useBoardStore: vi.fn(()=>({
+      stateBoard : null,
+      setStateBoard : vi.fn(),
+    })),
+  }
+});
 const mockedUseNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
   const mod = await vi.importActual("react-router-dom");
