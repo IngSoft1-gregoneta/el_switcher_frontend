@@ -17,6 +17,7 @@ export default function App() {
   const userId = useIdStore((state) => state.userId);
   const setUpdateList = useUpdateStore((state) => state.setUpdateList);
   const setUpdateRoom = useUpdateStore((state) => state.setUpdateRoom);
+  const setStateMatch = useUpdateStore((state) => state.setStateMatch);
 
   // El socketUrl debe estar en el tope de la app si no se desconecta
   useEffect(() => {
@@ -44,14 +45,18 @@ export default function App() {
   useEffect(() => {
     if (lastMessage) {
       // Estos podrian ser ENUMS?
+      // No existen los ENUMS, la mejor opcion es un objeto inmutable(object.freeze({...}))
       if (lastMessage.data === "LISTA") {
         setUpdateList();
       }
       if (lastMessage.data == "ROOM") {
         setUpdateRoom();
       }
+      if (lastMessage.data == "MATCH_STARTED") {
+        setStateMatch(true);
+      }
     }
-  }, [lastMessage, setUpdateRoom, setUpdateList]);
+  }, [setStateMatch, lastMessage, setUpdateRoom, setUpdateList]);
 
   return (
     <RoomProvider>
@@ -63,6 +68,10 @@ export default function App() {
           <Route
             path="/room/:user_id/:room_id/:user_name"
             element={<RoomLayout />}
+          />
+          <Route
+            path="match/:match_id/:user_name/:user_id"
+            element={<Match />}
           />
           <Route path="/failed_room" element={<RoomCreationFailed />} />
           <Route
