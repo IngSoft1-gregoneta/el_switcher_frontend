@@ -85,7 +85,7 @@ export default function RoomLayout() {
   //TODO : also, why are we using matchservices inside room??
   const handleStartMatch = async () => {
     try{
-      const matchData = await createMatch(room_id);
+      const matchData = await createMatch(room_id,user_name);
       setStateBoard(matchData.board.tiles);
       navigate(`/match/${matchData.match_id}/${user_name}/${user_id}`);
 
