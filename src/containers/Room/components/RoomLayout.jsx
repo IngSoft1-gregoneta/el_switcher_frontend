@@ -8,8 +8,9 @@ import {
   useUpdateStore,
   useIdStore,
   useBoardStore,
+  useMatchStore,
 } from "../../../services/state.js";
-import { createMatch, fetchMatch } from "../../Match/services/MatchService.js";
+import { createMatch } from "../../Match/services/MatchService.js";
 
 export default function RoomLayout() {
   const { room_id, user_name, user_id } = useParams();
@@ -17,6 +18,7 @@ export default function RoomLayout() {
   const { RoomData, setRoomData } = useRoom();
   const userId = useIdStore((state) => state.userId);
   const setId = useIdStore((state) => state.setId);
+  const matchStarted = useMatchStore((state) => state.matchStarted);
 
   if (!userId) {
     setId(user_id);
@@ -24,7 +26,7 @@ export default function RoomLayout() {
   const updateRoom = useUpdateStore((state) => state.updateRoom);
 
   useEffect(() => {
-    async function doFetch() {
+    async function fetchRoom() {
       if (room_id) {
         try {
           const resp = await fetch(
@@ -51,33 +53,17 @@ export default function RoomLayout() {
         }
       }
     }
-    doFetch();
+    fetchRoom();
   }, [room_id, setRoomData, updateRoom, userId, navigate]);
 
   //TODO : handle reconections????
   //        if >=2 players are in the same room sometimes not all of them redirect to match
 
-  const stateMatch = useUpdateStore((state) => state.stateMatch);
-  const stateBoard = useBoardStore((state) => state.stateBoard);
-  const setStateBoard = useBoardStore((state) => state.setStateBoard);
   useEffect(() => {
-    if (stateMatch) {
-      const fetchData = async () => {
-        try {
-          const matchData = await fetchMatch(room_id);
-
-          if (!stateBoard) {
-            setStateBoard(matchData.board.tiles);
-          }
-
-          navigate(`/match/${matchData.match_id}/${user_id}/${user_id}`);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchData();
+    if (matchStarted) {
+      navigate(`/match/${user_id}/${room_id}/${user_name}`);
     }
-  }, [stateMatch, room_id, user_id]);
+  }, [matchStarted, navigate, user_name, room_id, user_id]);
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
@@ -98,7 +84,6 @@ export default function RoomLayout() {
   const handleStartMatch = async () => {
     try {
       const matchData = await createMatch(room_id, user_name);
-      setStateBoard(matchData.board.tiles);
       navigate(`/match/${user_id}/${matchData.match_id}/${user_name}`);
     } catch (error) {
       console.log(error);
