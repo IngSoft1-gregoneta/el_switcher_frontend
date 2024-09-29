@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
 import { leaveRoom } from "../services/RoomService";
 import Spinner from "../../../components/Spinner";
-import { useUpdateStore, useIdStore } from "../../../services/state.js";
+import { useUpdateStore, useIdStore, useBoardStore } from "../../../services/state.js";
+import { createMatch, fetchMatch } from "../../Match/services/MatchService.js";
 
 export default function RoomLayout() {
   const { room_id, user_name, user_id } = useParams();
@@ -17,6 +18,7 @@ export default function RoomLayout() {
     setId(user_id);
   }
   const stateRoom = useUpdateStore((state) => state.stateRoom);
+  
 
   useEffect(() => {
     if (stateRoom == "DELETED") {
@@ -38,6 +40,32 @@ export default function RoomLayout() {
     }
   }, [room_id, setRoomData, stateRoom, userId, navigate]);
 
+
+  //TODO : handle reconections???? 
+  //        if >=2 players are in the same room sometimes not all of them redirect to match
+  
+  const stateMatch = useUpdateStore((state) => state.stateMatch);
+  const stateBoard = useBoardStore((state) => state.stateBoard);
+  const setStateBoard = useBoardStore((state) => state.setStateBoard);
+  useEffect(() => {
+    if (stateMatch) {
+      const fetchData = async () => {
+        try {
+          const matchData = await fetchMatch(room_id);
+
+          if (!stateBoard){
+            setStateBoard(matchData.board.tiles);
+          }
+
+          navigate(`/match/${matchData.match_id}/${user_id}/${user_id}`);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }
+  }, [stateMatch, room_id, user_id]);
+
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
   //TODO : handle exceptions
@@ -50,10 +78,20 @@ export default function RoomLayout() {
     navigate(`/id/${user_id}`);
   };
 
+
   //TODO : handle game validations before routing to /Game
-  //TODO : connect to server and create a game instance
-  const handleStartGame = () => {
-    navigate("/Game");
+  //        some validation is done within parser and board logic modules
+  //        if !stateBoard then Board component reirects to root, maybe handle that case better????
+  //TODO : also, why are we using matchservices inside room??
+  const handleStartMatch = async () => {
+    try{
+      const matchData = await createMatch(room_id,user_name);
+      setStateBoard(matchData.board.tiles);
+      navigate(`/match/${matchData.match_id}/${user_name}/${user_id}`);
+
+    } catch(error){
+      console.log(error);
+    }
   };
 
   //TODO : handle waiting for lobby.
@@ -97,7 +135,7 @@ export default function RoomLayout() {
           </Button>
           <Button
             type="button"
-            onClick={handleStartGame}
+            onClick={handleStartMatch}
             className="mb-2 me-2 w-full border border-cyan-700 bg-cyan-700 px-5 py-2.5 text-center text-sm font-semibold text-white data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
           >
             Start Game
