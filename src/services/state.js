@@ -2,7 +2,12 @@ import { create } from "zustand";
 
 export const useBoardStore = create((set) => ({
   stateBoard : null,
-  setStateBoard: (new_state) => set(()=>({stateBoard: new_state})),
+  setStateBoard: (new_state) => set(()=>({stateBoard : new_state})),
+}));
+
+export const useOwnerStore = create((set) => ({
+  stateOwner : false,
+  setStateOwner : () => set((state)=>({stateOwner : !state.stateOwner}))
 }));
 
 export const useUpdateStore = create((set) => ({

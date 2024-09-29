@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRoom } from "../context/RoomContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
 import { leaveRoom } from "../services/RoomService";
 import Spinner from "../../../components/Spinner";
-import { useUpdateStore, useIdStore, useBoardStore } from "../../../services/state.js";
+import { useUpdateStore, useIdStore, useBoardStore, useOwnerStore } from "../../../services/state.js";
 import { createMatch, fetchMatch } from "../../Match/services/MatchService.js";
 
 export default function RoomLayout() {
@@ -13,12 +13,12 @@ export default function RoomLayout() {
   const { RoomData, setRoomData } = useRoom();
   const userId = useIdStore((state) => state.userId);
   const setId = useIdStore((state) => state.setId);
+  const stateOwner = useOwnerStore((state) => state.stateOwner);
 
   if (!userId) {
     setId(user_id);
   }
   const stateRoom = useUpdateStore((state) => state.stateRoom);
-  
 
   useEffect(() => {
     if (stateRoom == "DELETED") {
@@ -108,9 +108,12 @@ export default function RoomLayout() {
       <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
         <h1 className="mb-6 text-center font-serif text-3xl font-bold">Room</h1>
         <div className="mb-4 border-b pb-4">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-x2 font-semibold">
             Room Name: {RoomData.room_name}
           </h2>
+          <h4 className="text=x2">
+            Room Owner : {RoomData.owner_name}
+          </h4>
           <span className="block">
             Expected Players: {RoomData.players_expected}
           </span>
@@ -133,13 +136,16 @@ export default function RoomLayout() {
           >
             Leave Room
           </Button>
-          <Button
-            type="button"
-            onClick={handleStartMatch}
-            className="mb-2 me-2 w-full border border-cyan-700 bg-cyan-700 px-5 py-2.5 text-center text-sm font-semibold text-white data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
-          >
-            Start Game
-          </Button>
+          {
+            stateOwner && 
+            <Button
+              type="button"
+              onClick={handleStartMatch}
+              className="mb-2 me-2 w-full border border-cyan-700 bg-cyan-700 px-5 py-2.5 text-center text-sm font-semibold text-white data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
+            >
+              Start Game
+            </Button>
+          }
         </div>
       </div>
     </div>
