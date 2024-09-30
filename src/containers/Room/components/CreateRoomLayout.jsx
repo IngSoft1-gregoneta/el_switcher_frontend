@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { Button } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { useIdStore } from "../../../services/state";
+import { useIdStore, useOwnerStore } from "../../../services/state";
 import RoomDialog from "./RoomDialog.jsx";
-
-//FOR DEBUG : MAX, MIN and PLAYERS array, should not exist in final build.
-//these values should be provided by the user/server and or be fixxed.
-const MAX_PLAYERS = 4;
-const MIN_PLAYERS = 2;
 
 export default function CreateRoomLayout({ onSubmit }) {
   const userId = useIdStore((state) => state.userId);
   const navigate = useNavigate();
+  const setStateOwner = useOwnerStore((state) => state.setStateOwner);
 
   if (!userId) {
     navigate("/");
@@ -43,6 +39,9 @@ export default function CreateRoomLayout({ onSubmit }) {
       players_expected: players,
       owner_name: ownerName,
     };
+
+    // set owner state to true, puede ser tan facil??
+    setStateOwner();
 
     if (typeof onSubmit === "function" && formData.name !== "") {
       // Como me mareaste nico jajaja
@@ -84,8 +83,8 @@ export default function CreateRoomLayout({ onSubmit }) {
               onChange={handlePlayerCount}
               id="playerCount"
               type="number"
-              min={MIN_PLAYERS}
-              max={MAX_PLAYERS}
+              min={2}
+              max={4}
               value={players}
               className="mt-1 block w-full border-gray-600 bg-cyan-50 p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               placeholder="2-4 players"

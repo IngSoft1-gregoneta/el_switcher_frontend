@@ -38,5 +38,40 @@ export async function fetchMatch(roomId, userName) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  return response.json();
+    return response.json();
+}
+
+export async function passTurn(matchId) {
+
+    const match_id = encodeURIComponent(matchId);
+    const response = await fetch(`http://localhost:8000/matchs/${match_id}/endturn`,{
+        method : "PUT",
+        headers : {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+}
+
+export async function playerData(matchId, playerName){
+    const player_name = encodeURIComponent(playerName);
+    const match_id = encodeURIComponent(matchId);
+
+    const response = await fetch(`/matchs/visible_match/${match_id}/${player_name}`,{
+        method : "GET",
+        headers : {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
 }

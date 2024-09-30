@@ -1,17 +1,19 @@
 import { create } from "zustand";
 
-export const useBoardStore = create((set) => ({
-  stateBoard: null,
-  setStateBoard: (new_state) => set(() => ({ stateBoard: new_state })),
-}));
-
 export const useMatchStore = create((set) => ({
   stateMatch: null,
   matchStarted: false,
   updateMatch: false,
+  stateBoard: null,
   setStateMatch: (new_state) => set(() => ({ stateMatch: new_state })),
   setMatchStarted: (new_state) => set(() => ({ matchStarted: new_state })),
   setUpdateMatch: () => set((state) => ({ updateMatch: !state.updateMatch })),
+  setStateBoard: (new_state) => set(() => ({ stateBoard: new_state })),
+}));
+
+export const useOwnerStore = create((set) => ({
+  stateOwner: false,
+  setStateOwner: () => set((state) => ({ stateOwner: !state.stateOwner })),
 }));
 
 export const useUpdateStore = create((set) => ({
@@ -25,5 +27,3 @@ export const useIdStore = create((set) => ({
   userId: null,
   setId: (newId) => set({ userId: newId }),
 }));
-
-//TODO: create state for cards(queue?) and movements

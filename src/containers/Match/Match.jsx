@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  useBoardStore,
-  useIdStore,
-  useMatchStore,
-} from "../../services/state.js";
+import { useMatchStore } from "../../services/state.js";
 import Board from "./components/Board.jsx";
 import { Button } from "@headlessui/react";
 import { fetchMatch } from "./services/MatchService.js";
@@ -12,8 +8,8 @@ import Spinner from "../../components/Spinner.jsx";
 import image from "./files/fig01.svg";
 
 export default function Match() {
-  const stateBoard = useBoardStore((state) => state.stateBoard);
-  const setStateBoard = useBoardStore((state) => state.setStateBoard);
+  const stateBoard = useMatchStore((state) => state.stateBoard);
+  const setStateBoard = useMatchStore((state) => state.setStateBoard);
   const [stateMatch, setStateMatch] = useState(null);
   const updateMatch = useMatchStore((state) => state.updateMatch);
   const { room_id, user_name, user_id } = useParams();

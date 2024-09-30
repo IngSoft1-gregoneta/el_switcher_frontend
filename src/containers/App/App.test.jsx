@@ -17,9 +17,18 @@ vi.mock("../../services/state.js", () => ({
       stateMatch: null,
       matchStarted: false,
       updateMatch: false,
+      stateBoard: null,
       setStateMatch: vi.fn(),
       setMatchStarted: vi.fn(),
       setUpdateMatch: vi.fn(),
+      setStateBoard: vi.fn(),
+    };
+    return state(data);
+  },
+  useOwnerStore: (state) => {
+    const data = {
+      stateOwner: false,
+      setStateOwner: () => set((state) => ({ stateOwner: !state.stateOwner })),
     };
     return state(data);
   },
@@ -30,10 +39,6 @@ vi.mock("../../services/state.js", () => ({
     };
     return state(data);
   },
-  useBoardStore: vi.fn(() => ({
-    stateBoard: null,
-    setStateBoard: vi.fn(),
-  })),
 }));
 
 vi.mock("react-use-websocket", { spy: true });
