@@ -1,7 +1,7 @@
 import CreateRoomLayout from "./components/CreateRoomLayout.jsx";
 import { useNavigate } from "react-router-dom";
 import { createRoom } from "./services/RoomService.js";
-import { useIdStore } from "../../services/state.js";
+import { useIdStore, useOwnerStore } from "../../services/state.js";
 
 export default function CreateRoom() {
   const userId = useIdStore((state) => state.userId);

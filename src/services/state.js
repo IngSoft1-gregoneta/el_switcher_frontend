@@ -13,7 +13,7 @@ export const useMatchStore = create((set) => ({
 
 export const useOwnerStore = create((set) => ({
   stateOwner: false,
-  setStateOwner: () => set((state) => ({ stateOwner: !state.stateOwner })),
+  setStateOwner: (new_state) => set(() => ({ stateOwner: new_state })),
 }));
 
 export const useWinnerStore = create((set)=>({

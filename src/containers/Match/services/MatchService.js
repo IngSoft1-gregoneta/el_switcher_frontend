@@ -14,11 +14,9 @@ export async function createMatch(roomId, ownerName) {
       body: JSON.stringify(roomData),
     },
   );
-
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-
   return response.json();
 }
 
@@ -42,7 +40,7 @@ export async function fetchMatch(roomId, userName) {
   return response.json();
 }
 
-export async function passTurn(matchId,playerName) {
+export async function passTurn(matchId, playerName) {
   const match_id = encodeURIComponent(matchId);
   const player_name = encodeURI(playerName);
   const response = await fetch(
@@ -83,23 +81,24 @@ export async function playerData(matchId, playerName) {
   return response.json();
 }
 
-export async function leaveMatch(matchId,playerName,userId){
-    const match_id = encodeURIComponent(matchId);
-    const player_name = encodeURIComponent(playerName);
-    const user_id = encodeURIComponent(userId);
-    const response = await fetch(
-        `http://localhost:8000/matchs/leave_match/${match_id}/${player_name}/${user_id}`,
-        {
-            method : "PUT",
-            headers : {
-                "Content-Type": "application/json",
-            }
-        }
-    );
+export async function leaveMatch(matchId, playerName, userId) {
+  const match_id = encodeURIComponent(matchId);
+  const player_name = encodeURIComponent(playerName);
+  const user_id = encodeURIComponent(userId);
+  const response = await fetch(
+    `http://localhost:8000/matchs/leave_match/${match_id}/${player_name}/${user_id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
 
-    if(!response.ok){
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
 
-    return response.json();
+  return response.json();
 }
+

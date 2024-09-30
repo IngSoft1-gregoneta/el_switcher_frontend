@@ -28,8 +28,9 @@ export default function App() {
   useEffect(() => {
     if (userId) {
       setSocketUrl(`ws://localhost:8000/ws/${userId}`, {
+        // onClose: () => console.log("HOLAAA"),
         shouldReconnect: (closeEvent) => true,
-        reconnectAttempts: 10,
+        reconnectAttempts: 100,
         reconnectInterval: (attemptNumber) =>
           Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
       });
@@ -46,9 +47,9 @@ export default function App() {
   }[readyState];
 
   console.log(connectionStatus);
-  console.log("Este es lastmessage " + lastMessage);
   useEffect(() => {
     if (lastMessage) {
+      console.log("Este es lastmessage " + lastMessage.data);
       // Estos podrian ser ENUMS?
       // No existen los ENUMS, la mejor opcion es un objeto inmutable(object.freeze({...}))
       if (lastMessage.data === "LISTA") {
@@ -69,7 +70,6 @@ export default function App() {
     setUpdateRoom,
     setUpdateList,
   ]);
-
   return (
     <RoomProvider>
       <BrowserRouter>

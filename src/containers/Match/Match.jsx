@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useMatchStore, useWinnerStore } from "../../services/state.js";
+import { useIdStore, useMatchStore, useWinnerStore } from "../../services/state.js";
 import Board from "./components/Board.jsx";
 import { fetchMatch, leaveMatch, passTurn } from "./services/MatchService.js";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,7 +13,9 @@ export default function Match() {
   const [stateMatch, setStateMatch] = useState(null);
   const updateMatch = useMatchStore((state) => state.updateMatch);
   const setStateWinner = useWinnerStore((state) => state.setStateWinner);
+  const setUserId = useIdStore((state) => state.setId)
   const { room_id, user_name, user_id } = useParams();
+  setUserId(user_id)
   const navigate = useNavigate();
 
   const handlePassTurn = async () => {

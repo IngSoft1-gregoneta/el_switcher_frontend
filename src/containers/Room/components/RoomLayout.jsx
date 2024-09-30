@@ -20,12 +20,12 @@ export default function RoomLayout() {
   const setId = useIdStore((state) => state.setId);
   const matchStarted = useMatchStore((state) => state.matchStarted);
   const stateOwner = useOwnerStore((state) => state.stateOwner);
+  const setStateOwner = useOwnerStore((state) => state.setStateOwner);
+  const updateRoom = useUpdateStore((state) => state.updateRoom);
 
   if (!userId) {
     setId(user_id);
   }
-  const updateRoom = useUpdateStore((state) => state.updateRoom);
-  const stateRoom = useUpdateStore((state) => state.stateRoom);
 
   useEffect(() => {
     async function fetchRoom() {
@@ -43,6 +43,11 @@ export default function RoomLayout() {
             console.log(data);
             if ("room_id" in data) {
               setRoomData(data);
+              if (data.owner_name == user_name) {
+                setStateOwner(true);
+              } else {
+                setStateOwner(false);
+              }
             }
           } else {
             if (resp.status === 404) throw new Error("404, Not found");
@@ -56,7 +61,16 @@ export default function RoomLayout() {
       }
     }
     fetchRoom();
-  }, [room_id, setRoomData, updateRoom, userId, navigate]);
+  }, [
+    user_name,
+    user_id,
+    room_id,
+    setStateOwner,
+    setRoomData,
+    updateRoom,
+    userId,
+    navigate,
+  ]);
 
   //TODO : handle reconections????
   //        if >=2 players are in the same room sometimes not all of them redirect to match
@@ -79,16 +93,18 @@ export default function RoomLayout() {
     navigate(`/id/${user_id}`);
   };
 
-  //TODO : handle game validations before routing to /Game
-  //        some validation is done within parser and board logic modules
-  //        if !stateBoard then Board component reirects to root, maybe handle that case better????
-  //TODO : also, why are we using matchservices inside room??
   const handleStartMatch = async () => {
-    try {
-      const matchData = await createMatch(room_id, user_name);
-      navigate(`/match/${user_id}/${matchData.match_id}/${user_name}`);
-    } catch (error) {
-      console.log(error);
+    if (RoomData.players_names.length < RoomData.players_expected) {
+      alert("No hay suficientes jugadores");
+    } else {
+      try {
+        const matchData = await createMatch(room_id, user_name);
+        console.log(matchData);
+        navigate(`/match/${user_id}/${matchData.match_id}/${user_name}`);
+      } catch (error) {
+        alert("Hubo un problema");
+        console.log(error);
+      }
     }
   };
 

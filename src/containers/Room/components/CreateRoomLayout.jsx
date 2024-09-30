@@ -7,7 +7,6 @@ import RoomDialog from "./RoomDialog.jsx";
 export default function CreateRoomLayout({ onSubmit }) {
   const userId = useIdStore((state) => state.userId);
   const navigate = useNavigate();
-  const setStateOwner = useOwnerStore((state) => state.setStateOwner);
 
   if (!userId) {
     navigate("/");
@@ -39,10 +38,6 @@ export default function CreateRoomLayout({ onSubmit }) {
       players_expected: players,
       owner_name: ownerName,
     };
-
-    // set owner state to true, puede ser tan facil?? por ahi se buggea
-    setStateOwner();
-
     if (typeof onSubmit === "function" && formData.name !== "") {
       // Como me mareaste nico jajaja
       onSubmit(formData);
