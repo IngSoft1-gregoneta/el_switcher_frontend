@@ -14,7 +14,9 @@ const COLORS = Object.freeze({
 });
 
 function Tile({ color }) {
-  return <div className={`tile ${color} m-1 rounded`}></div>;
+  return (
+    <div className={`tile ${color} m-1 rounded min-w-[50px] min-h-[50px]`}></div>
+  );
 }
 
 export default function Board() {
