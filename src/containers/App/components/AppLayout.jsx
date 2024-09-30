@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
 import ListRooms from "../../ListRooms/ListRooms.jsx";
 import { useIdStore } from "../../../services/state.js";
+import { ButtonFilled } from "../../../components/Buttons.jsx";
 
 export default function AppLayout() {
   // I dont like this
@@ -20,12 +21,7 @@ export default function AppLayout() {
       </h1>
       <ListRooms />
       <Link to="/create_room">
-        <Button
-          className="mb-2 me-2 border border-cyan-600 bg-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-50 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-white"
-          name="add_game"
-        >
-          Crear Partida
-        </Button>
+        <ButtonFilled>Crear Partida</ButtonFilled>
       </Link>
     </div>
   );

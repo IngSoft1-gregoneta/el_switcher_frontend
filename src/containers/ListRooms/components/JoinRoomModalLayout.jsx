@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import { joinRoom } from "../../Room/services/RoomService";
 import { useNavigate } from "react-router-dom";
 import { useIdStore } from "../../../services/state";
+import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 
 export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
   JoinRoomModalLayout.propTypes = {
@@ -78,21 +79,12 @@ export default function JoinRoomModalLayout({ roomId, open, setOpen }) {
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <button
-                type="button"
-                onClick={() => handleClickAceptar()}
-                className="inline-flex w-full justify-center bg-cyan-700 px-3 py-2 text-sm font-semibold text-cyan-50 shadow-sm hover:bg-cyan-600 sm:ml-3 sm:w-auto"
-              >
+              <ButtonFilled onClick={() => handleClickAceptar()}>
                 Aceptar
-              </button>
-              <button
-                type="button"
-                data-autofocus
-                onClick={() => setOpen(false)}
-                className="mt-3 inline-flex w-full justify-center bg-white px-3 py-2 text-sm font-semibold text-cyan-950 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-              >
+              </ButtonFilled>
+              <ButtonUnfilled onClick={() => setOpen(false)}>
                 Cancelar
-              </button>
+              </ButtonUnfilled>
             </div>
           </DialogPanel>
         </div>

@@ -2,6 +2,7 @@ import { Button } from "@headlessui/react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import JoinRoomModalLayout from "./JoinRoomModalLayout";
+import { ButtonUnfilled } from "../../../components/Buttons";
 
 export default function ListRoomsLayout({ rooms }) {
   ListRoomsLayout.propTypes = {
@@ -34,12 +35,9 @@ export default function ListRoomsLayout({ rooms }) {
             </td>
             <td className="px-6 py-4">{room.owner_name}</td>
             <td className="px-6 py-4 text-right">
-              <Button
-                onClick={() => handleClickUnirse(room.room_id)}
-                className="mb-2 me-2 border border-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-700 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
-              >
+              <ButtonUnfilled onClick={() => handleClickUnirse(room.room_id)}>
                 Unirse
-              </Button>
+              </ButtonUnfilled>
             </td>
           </tr>
         );
