@@ -1,45 +1,47 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  act,
-} from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createRoom } from "./services/RoomService.js";
 import CreateRoomLayout from "./components/CreateRoomLayout.jsx";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import RoomCreationFailed from "./components/FailedRoom.jsx";
 import RoomLayout from "./components/RoomLayout.jsx";
-import * as zustand from "zustand";
-import { useBoardStore, useIdStore } from "../../services/state.js";
 
 const uuid = crypto.randomUUID();
-vi.mock("../../services/state.js", async () => {
-  const mod = await vi.importActual("../../services/state.js");
-  return {
-    ...mod,
-    useUpdateStore: vi.fn(() => ({
-      updateList: false,
-      stateRoom: false,
-      stateMatch : false,
-      setUpdateList: vi.fn(),
-      setStateRoom: vi.fn(),
+vi.mock("../../services/state.js", () => ({
+  useUpdateStore: vi.fn(() => ({
+    updateList: false,
+    updateRoom: false,
+    setUpdateList: vi.fn(),
+    setUpdateRoom: vi.fn(),
+  })),
+  useMatchStore: (state) => {
+    const data = {
+      stateMatch: null,
+      matchStarted: false,
+      updateMatch: false,
+      stateBoard: null,
       setStateMatch: vi.fn(),
-    })),
-    useIdStore: (state) => {
-      const data = {
-        userId: uuid,
-        setId: vi.fn(),
-      };
-      return state(data);
-    },
-    useBoardStore: vi.fn(()=>({
-      stateBoard : null,
-      setStateBoard : vi.fn(),
-    })),
-  }
-});
+      setMatchStarted: vi.fn(),
+      setUpdateMatch: vi.fn(),
+      setStateBoard: vi.fn(),
+    };
+    return state(data);
+  },
+  useOwnerStore: (state) => {
+    const data = {
+      stateOwner: false,
+      setStateOwner: vi.fn(),
+    };
+    return state(data);
+  },
+  useIdStore: (state) => {
+    const data = {
+      userId: uuid,
+      setId: vi.fn(),
+    };
+    return state(data);
+  },
+}));
 const mockedUseNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
   const mod = await vi.importActual("react-router-dom");
@@ -48,7 +50,6 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockedUseNavigate,
   };
 });
-
 
 describe("Room tests", () => {
   beforeEach(() => {

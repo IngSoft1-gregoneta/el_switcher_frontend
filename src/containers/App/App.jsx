@@ -8,7 +8,11 @@ import NotFoundPageLayout from "../../components/NotFoundPageLayout.jsx";
 import GetId from "./GetId.jsx";
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { useUpdateStore, useIdStore } from "../../services/state.js";
+import {
+  useUpdateStore,
+  useIdStore,
+  useMatchStore,
+} from "../../services/state.js";
 import Match from "../Match/Match.jsx";
 
 export default function App() {
@@ -16,13 +20,19 @@ export default function App() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
   const userId = useIdStore((state) => state.userId);
   const setUpdateList = useUpdateStore((state) => state.setUpdateList);
-  const setStateRoom = useUpdateStore((state) => state.setStateRoom);
-  const setStateMatch = useUpdateStore((state) => state.setStateMatch);
+  const setUpdateRoom = useUpdateStore((state) => state.setUpdateRoom);
+  const setUpdateMatch = useMatchStore((state) => state.setUpdateMatch);
+  const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
 
   // El socketUrl debe estar en el tope de la app si no se desconecta
   useEffect(() => {
     if (userId) {
-      setSocketUrl(`ws://localhost:8000/ws/${userId}`);
+      setSocketUrl(`ws://localhost:8000/ws/${userId}`, {
+        shouldReconnect: (closeEvent) => true,
+        reconnectAttempts: 10,
+        reconnectInterval: (attemptNumber) =>
+          Math.min(Math.pow(2, attemptNumber) * 1000, 10000),
+      });
     }
   }, [setSocketUrl, userId]);
   console.log(socketUrl);
@@ -35,14 +45,8 @@ export default function App() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
-  useEffect(() => {
-    if (connectionStatus == ReadyState.CLOSED) {
-      setSocketUrl(null);
-    }
-  }, [setSocketUrl, connectionStatus]);
-
   console.log(connectionStatus);
-  console.log(lastMessage);
+  console.log("Este es lastmessage " + lastMessage);
   useEffect(() => {
     if (lastMessage) {
       // Estos podrian ser ENUMS?
@@ -51,16 +55,20 @@ export default function App() {
         setUpdateList();
       }
       if (lastMessage.data == "ROOM") {
-        setStateRoom("CHANGE");
+        setUpdateRoom();
       }
-      if (lastMessage.data == "DELETE_ROOM") {
-        setStateRoom("DELETED");
-      }
-      if (lastMessage.data == "MATCH_STARTED") {
-        setStateMatch(true);
+      if (lastMessage.data == "MATCH") {
+        setMatchStarted(true);
+        setUpdateMatch();
       }
     }
-  }, [lastMessage, setStateRoom, setUpdateList]);
+  }, [
+    setMatchStarted,
+    setUpdateMatch,
+    lastMessage,
+    setUpdateRoom,
+    setUpdateList,
+  ]);
 
   return (
     <RoomProvider>
@@ -70,14 +78,14 @@ export default function App() {
           <Route path="/id/:user_id" element={<AppLayout />} />
           <Route path="/create_room" element={<CreateRoom />} />
           <Route
-            path="/room/:room_id/:user_name/:user_id"
+            path="/room/:user_id/:room_id/:user_name"
             element={<RoomLayout />}
           />
-          <Route
-            path="match/:match_id/:user_name/:user_id"
-            element={<Match/>}
-          />
           <Route path="/failed_room" element={<RoomCreationFailed />} />
+          <Route
+            path="/match/:user_id/:room_id/:user_name"
+            element={<Match />}
+          />
           <Route path="*" element={<NotFoundPageLayout />} />
         </Routes>
       </BrowserRouter>

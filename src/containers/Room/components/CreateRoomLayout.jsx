@@ -6,12 +6,12 @@ import RoomDialog from "./RoomDialog.jsx";
 
 export default function CreateRoomLayout({ onSubmit }) {
   const userId = useIdStore((state) => state.userId);
+  const navigate = useNavigate();
   const setStateOwner = useOwnerStore((state) => state.setStateOwner);
 
   if (!userId) {
     navigate("/");
   }
-  const navigate = useNavigate();
   const handleLeave = () => {
     navigate(`/id/${userId}`);
   };
@@ -19,7 +19,7 @@ export default function CreateRoomLayout({ onSubmit }) {
   const [name, setName] = useState("");
   const [players, setPlayers] = useState(2);
   const [isOpen, setIsOpen] = useState(true);
-  const [ownerName, setOwnerName] = useState('');
+  const [ownerName, setOwnerName] = useState("");
 
   const handleRoomName = (event) => {
     let name = event.target.value;
@@ -40,7 +40,7 @@ export default function CreateRoomLayout({ onSubmit }) {
       owner_name: ownerName,
     };
 
-    // set owner state to true, puede ser tan facil??
+    // set owner state to true, puede ser tan facil?? por ahi se buggea
     setStateOwner();
 
     if (typeof onSubmit === "function" && formData.name !== "") {
@@ -54,7 +54,11 @@ export default function CreateRoomLayout({ onSubmit }) {
   return (
     <div className="mx-auto mt-10 flex max-w-screen-lg flex-col items-center justify-center p-4">
       <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
-        <RoomDialog isOpen={isOpen} onClose={setIsOpen} onOwnerName={setOwnerName}></RoomDialog>
+        <RoomDialog
+          isOpen={isOpen}
+          onClose={setIsOpen}
+          onOwnerName={setOwnerName}
+        ></RoomDialog>
         <h1 className="mb-8 mt-4 text-center font-serif text-4xl font-bold">
           Create Room
         </h1>

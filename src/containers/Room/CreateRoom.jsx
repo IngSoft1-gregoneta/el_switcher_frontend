@@ -10,7 +10,7 @@ export default function CreateRoom() {
   async function handleSubmit(formData) {
     try {
       const data = await createRoom(formData, userId);
-      navigate(`/room/${data.room_id}/${data.owner_name}/${userId}`);
+      navigate(`/room/${userId}/${data.room_id}/${data.owner_name}`);
     } catch (error) {
       console.log(error);
       navigate("/failed_room");

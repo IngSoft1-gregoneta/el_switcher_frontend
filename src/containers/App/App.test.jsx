@@ -3,14 +3,35 @@ import { render, waitFor } from "@testing-library/react";
 import App from "./App";
 import useWebSocket from "react-use-websocket";
 
+// quizas poner esto en un archivo global
 const uuid = crypto.randomUUID();
 vi.mock("../../services/state.js", () => ({
   useUpdateStore: vi.fn(() => ({
     updateList: false,
-    stateRoom: false,
+    updateRoom: false,
     setUpdateList: vi.fn(),
-    setStateRoom: vi.fn(),
+    setUpdateRoom: vi.fn(),
   })),
+  useMatchStore: (state) => {
+    const data = {
+      stateMatch: null,
+      matchStarted: false,
+      updateMatch: false,
+      stateBoard: null,
+      setStateMatch: vi.fn(),
+      setMatchStarted: vi.fn(),
+      setUpdateMatch: vi.fn(),
+      setStateBoard: vi.fn(),
+    };
+    return state(data);
+  },
+  useOwnerStore: (state) => {
+    const data = {
+      stateOwner: false,
+      setStateOwner: vi.fn(),
+    };
+    return state(data);
+  },
   useIdStore: (state) => {
     const data = {
       userId: uuid,

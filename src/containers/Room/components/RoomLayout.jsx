@@ -4,8 +4,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
 import { leaveRoom } from "../services/RoomService";
 import Spinner from "../../../components/Spinner";
-import { useUpdateStore, useIdStore, useBoardStore, useOwnerStore } from "../../../services/state.js";
-import { createMatch, fetchMatch } from "../../Match/services/MatchService.js";
+import {
+  useUpdateStore,
+  useIdStore,
+  useMatchStore,
+  useOwnerStore,
+} from "../../../services/state.js";
+import { createMatch } from "../../Match/services/MatchService.js";
 
 export default function RoomLayout() {
   const { room_id, user_name, user_id } = useParams();
@@ -13,58 +18,54 @@ export default function RoomLayout() {
   const { RoomData, setRoomData } = useRoom();
   const userId = useIdStore((state) => state.userId);
   const setId = useIdStore((state) => state.setId);
+  const matchStarted = useMatchStore((state) => state.matchStarted);
   const stateOwner = useOwnerStore((state) => state.stateOwner);
 
   if (!userId) {
     setId(user_id);
   }
+  const updateRoom = useUpdateStore((state) => state.updateRoom);
   const stateRoom = useUpdateStore((state) => state.stateRoom);
 
   useEffect(() => {
-    if (stateRoom == "DELETED") {
-      navigate(`/id/${userId}`);
-    } else if (room_id) {
-      fetch(`http://127.0.0.1:8000/room/${encodeURIComponent(room_id)}`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if ("room_id" in data) {
-            console.log(data);
-            setRoomData(data);
-          }
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    }
-  }, [room_id, setRoomData, stateRoom, userId, navigate]);
-
-
-  //TODO : handle reconections???? 
-  //        if >=2 players are in the same room sometimes not all of them redirect to match
-  
-  const stateMatch = useUpdateStore((state) => state.stateMatch);
-  const stateBoard = useBoardStore((state) => state.stateBoard);
-  const setStateBoard = useBoardStore((state) => state.setStateBoard);
-  useEffect(() => {
-    if (stateMatch) {
-      const fetchData = async () => {
+    async function fetchRoom() {
+      if (room_id) {
         try {
-          const matchData = await fetchMatch(room_id);
+          const resp = await fetch(
+            `http://127.0.0.1:8000/room/${encodeURIComponent(room_id)}`,
+            {
+              method: "GET",
+            },
+          );
 
-          if (!stateBoard){
-            setStateBoard(matchData.board.tiles);
+          if (resp.ok) {
+            const data = await resp.json();
+            console.log(data);
+            if ("room_id" in data) {
+              setRoomData(data);
+            }
+          } else {
+            if (resp.status === 404) throw new Error("404, Not found");
+            if (resp.status === 500)
+              throw new Error("500, internal server error");
           }
-
-          navigate(`/match/${matchData.match_id}/${user_id}/${user_id}`);
         } catch (error) {
-          console.log(error);
+          console.error("Fetch", error);
+          navigate(`/id/${userId}`);
         }
-      };
-      fetchData();
+      }
     }
-  }, [stateMatch, room_id, user_id]);
+    fetchRoom();
+  }, [room_id, setRoomData, updateRoom, userId, navigate]);
+
+  //TODO : handle reconections????
+  //        if >=2 players are in the same room sometimes not all of them redirect to match
+
+  useEffect(() => {
+    if (matchStarted) {
+      navigate(`/match/${user_id}/${room_id}/${user_name}`);
+    }
+  }, [matchStarted, navigate, user_name, room_id, user_id]);
 
   //TODO : handle destroying lobby on server when owner leaves/lobby is empty.
   //TODO : kick players out of lobby if lobby owner leaves.
@@ -78,18 +79,15 @@ export default function RoomLayout() {
     navigate(`/id/${user_id}`);
   };
 
-
   //TODO : handle game validations before routing to /Game
   //        some validation is done within parser and board logic modules
   //        if !stateBoard then Board component reirects to root, maybe handle that case better????
   //TODO : also, why are we using matchservices inside room??
   const handleStartMatch = async () => {
-    try{
-      const matchData = await createMatch(room_id,user_name);
-      setStateBoard(matchData.board.tiles);
-      navigate(`/match/${matchData.match_id}/${user_name}/${user_id}`);
-
-    } catch(error){
+    try {
+      const matchData = await createMatch(room_id, user_name);
+      navigate(`/match/${user_id}/${matchData.match_id}/${user_name}`);
+    } catch (error) {
       console.log(error);
     }
   };
@@ -111,9 +109,7 @@ export default function RoomLayout() {
           <h2 className="text-x2 font-semibold">
             Room Name: {RoomData.room_name}
           </h2>
-          <h4 className="text=x2">
-            Room Owner : {RoomData.owner_name}
-          </h4>
+          <h4 className="text=x2">Room Owner : {RoomData.owner_name}</h4>
           <span className="block">
             Expected Players: {RoomData.players_expected}
           </span>
@@ -136,8 +132,7 @@ export default function RoomLayout() {
           >
             Leave Room
           </Button>
-          {
-            stateOwner && 
+          {stateOwner && (
             <Button
               type="button"
               onClick={handleStartMatch}
@@ -145,7 +140,7 @@ export default function RoomLayout() {
             >
               Start Game
             </Button>
-          }
+          )}
         </div>
       </div>
     </div>
