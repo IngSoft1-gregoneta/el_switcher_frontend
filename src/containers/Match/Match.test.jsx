@@ -4,6 +4,7 @@ import { screen, cleanup, render, waitFor } from "@testing-library/react";
 import { createMatch, fetchMatch } from "./services/MatchService.js";
 import Match from "./Match";
 import match_response from "./testResponses.json";
+import { MemoryRouter } from "react-router-dom";
 
 describe("MatchService tests", () => {
   beforeEach(() => {
@@ -60,7 +61,11 @@ describe("MatchService tests", () => {
     expect(mockedFetchMatch()).resolves.toBe(response);
     // expect(mockedFetchMatch()).toBe(response);
 
-    render(<Match />);
+    render(
+      <MemoryRouter>
+        <Match />
+      </MemoryRouter>
+      );
 
     // await waitFor(() => {
     //   const nameInput = screen.getByText(playerName);

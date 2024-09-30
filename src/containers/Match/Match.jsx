@@ -1,19 +1,40 @@
 import { useEffect, useState } from "react";
-import { useMatchStore } from "../../services/state.js";
+import { useMatchStore, useWinnerStore } from "../../services/state.js";
 import Board from "./components/Board.jsx";
-import { Button } from "@headlessui/react";
-import { fetchMatch } from "./services/MatchService.js";
-import { useParams } from "react-router-dom";
+import { fetchMatch, leaveMatch, passTurn } from "./services/MatchService.js";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
 import images from "./logic/bindImage.js";
 import { ButtonFilled, ButtonUnfilled } from "../../components/Buttons.jsx";
+import Winner from "./components/Winner.jsx";
 
 export default function Match() {
-  const stateBoard = useMatchStore((state) => state.stateBoard);
   const setStateBoard = useMatchStore((state) => state.setStateBoard);
   const [stateMatch, setStateMatch] = useState(null);
   const updateMatch = useMatchStore((state) => state.updateMatch);
+  const setStateWinner = useWinnerStore((state) => state.setStateWinner);
   const { room_id, user_name, user_id } = useParams();
+  const navigate = useNavigate();
+
+  const handlePassTurn = async () => {
+    try{
+      const response = await passTurn(room_id,user_name);
+      console.log(response);
+    } catch (error) {
+      console.log("No es el turno de este jugador.");
+    }
+  }
+
+  const handleLeaveMatch = async () =>{
+    try {
+      const response = await leaveMatch(room_id,user_name,user_id);
+      navigate('/');
+      console.log(response);
+      
+    } catch (error){
+      console.log(error);
+    }
+  }
 
   const mapCard = (cards, is_rotated) => {
     const className = is_rotated
@@ -117,7 +138,13 @@ export default function Match() {
     updateMatch, // este hace q se actualice con ws
   ]);
 
-  if (stateMatch) {
+  if (stateMatch && stateMatch.other_players[0] == undefined){
+    setStateWinner(user_name);
+    return <Winner/>
+  } else if (!stateMatch) {
+    return <Spinner />;
+  } else if (stateMatch) {
+    const hasTurn = stateMatch.me.has_turn;
     const playerMe = stateMatch.me;
     const playerTop = stateMatch.other_players[0];
     const playerRight =
@@ -194,13 +221,11 @@ export default function Match() {
 
         <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <div className="flex flex-col">
-            <ButtonFilled>Pasar turno</ButtonFilled>
-            <ButtonUnfilled>Abandonar</ButtonUnfilled>
+            {hasTurn && <ButtonFilled onClick={handlePassTurn}>Pasar turno</ButtonFilled>}
+            <ButtonUnfilled onClick={handleLeaveMatch}>Abandonar</ButtonUnfilled>
           </div>
         </div>
       </div>
     );
-  } else {
-    return <Spinner />;
   }
 }

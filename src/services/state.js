@@ -16,6 +16,11 @@ export const useOwnerStore = create((set) => ({
   setStateOwner: () => set((state) => ({ stateOwner: !state.stateOwner })),
 }));
 
+export const useWinnerStore = create((set)=>({
+  stateWinner: null,
+  setStateWinner: (new_winner) => set(() => ({stateWinner: new_winner})),
+}));
+
 export const useUpdateStore = create((set) => ({
   updateList: false,
   updateRoom: false,
