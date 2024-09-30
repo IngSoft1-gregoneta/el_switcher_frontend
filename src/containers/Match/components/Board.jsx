@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import BoardClass from "../logic/board";
 import "../styles/styles.css";
-import { useBoardStore } from "../../../services/state";
+import { useMatchStore } from "../../../services/state";
 import { useNavigate } from "react-router-dom";
 
 //TODO : is this even a good implementation??
@@ -14,15 +14,11 @@ const COLORS = Object.freeze({
 });
 
 function Tile({ color }) {
-  return (
-    <div className={`tile ${color} m-1 rounded`}>
-      <p>ficha</p>
-    </div>
-  );
+  return <div className={`tile ${color} m-1 rounded`}></div>;
 }
 
 export default function Board() {
-  const stateBoard = useBoardStore((state) => state.stateBoard);
+  const stateBoard = useMatchStore((state) => state.stateBoard);
   const navigate = useNavigate();
 
   //TODO : maybe redirecting to root is not the best solution???

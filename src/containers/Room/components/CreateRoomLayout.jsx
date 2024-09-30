@@ -40,7 +40,7 @@ export default function CreateRoomLayout({ onSubmit }) {
       owner_name: ownerName,
     };
 
-    // set owner state to true, puede ser tan facil??
+    // set owner state to true, puede ser tan facil?? por ahi se buggea
     setStateOwner();
 
     if (typeof onSubmit === "function" && formData.name !== "") {

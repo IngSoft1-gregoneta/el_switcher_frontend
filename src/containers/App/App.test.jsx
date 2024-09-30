@@ -28,7 +28,7 @@ vi.mock("../../services/state.js", () => ({
   useOwnerStore: (state) => {
     const data = {
       stateOwner: false,
-      setStateOwner: () => set((state) => ({ stateOwner: !state.stateOwner })),
+      setStateOwner: vi.fn(),
     };
     return state(data);
   },

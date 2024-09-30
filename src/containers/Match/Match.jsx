@@ -5,7 +5,8 @@ import { Button } from "@headlessui/react";
 import { fetchMatch } from "./services/MatchService.js";
 import { useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
-import image from "./files/fig01.svg";
+import images from "./logic/bindImage.js";
+import { ButtonFilled, ButtonUnfilled } from "../../components/Buttons.jsx";
 
 export default function Match() {
   const stateBoard = useMatchStore((state) => state.stateBoard);
@@ -16,14 +17,11 @@ export default function Match() {
 
   const mapCard = (cards, is_rotated) => {
     const className = is_rotated
-      ? "aspect-[5/3] w-24 rounded-sm bg-red-500 shadow-lg md:w-32 lg:w-44"
-      : "aspect-[3/5] h-24 rounded-sm bg-red-500 shadow-lg md:h-32 lg:h-44";
+      ? "aspect-[5/3] w-24 rounded-sm   md:w-32 lg:w-44"
+      : "aspect-[3/5] h-24 rounded-sm   md:h-32 lg:h-44";
     return cards.map((card, i) => {
       return (
-        <div key={i} className={className}>
-          {card.fig_type}
-          <img className="object-fill" src={image} />
-        </div>
+        <img key={i} className={className} src={images[`${card.fig_type}`]} />
       );
     });
   };
@@ -54,7 +52,7 @@ export default function Match() {
           {cardsDiv}
         </div>
         <div className="flex basis-1/12 flex-col md:flex-row">
-          <div className="basis-1/6">{name}</div>
+          <div className="basis-1/6 font-bold">{name}</div>
           <div className="basis-4/6" id="separator"></div>
           <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
             Tarjetas Figura: {deckLen}
@@ -71,7 +69,7 @@ export default function Match() {
           {cardsDiv}
         </div>
         <div className="flex basis-1/12 flex-col md:rotate-180 md:flex-row md:gap-14 md:[writing-mode:vertical-lr] lg:gap-32">
-          <div className="basis-1/6">{name}</div>
+          <div className="basis-1/6 font-bold">{name}</div>
           <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
             Tarjetas Figura: {deckLen}
           </div>
@@ -85,7 +83,7 @@ export default function Match() {
     return (
       <div className="flex flex-col items-center gap-2 md:flex-row md:gap-6">
         <div className="flex basis-1/12 flex-col md:flex-row md:gap-14 md:[writing-mode:vertical-lr] lg:gap-32">
-          <div className="basis-1/6">{name}</div>
+          <div className="basis-1/6 font-bold">{name}</div>
           <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
             Tarjetas Figura: {deckLen}
           </div>
@@ -129,22 +127,21 @@ export default function Match() {
 
     const movCards = playerMe.mov_cards.map((card, i) => {
       return (
-        <div
+        <img
+          src={images[`${card.mov_type}`]}
           key={i}
-          className="aspect-[3/5] h-16 rounded-sm bg-red-500 shadow-lg md:h-32 lg:h-44"
-        >
-          {card.mov_type}
-        </div>
+          className="aspect-[3/5] h-16 rounded-sm md:h-32 lg:h-44"
+        />
       );
     });
     return (
       <div className="grid h-screen w-screen grid-cols-4 grid-rows-4">
-        <div className="container col-span-1 row-span-1 flex flex-col items-center justify-center border bg-gray-50 text-center">
+        <div className="container col-span-1 row-span-1 flex flex-col items-center justify-center text-center">
           <h3 className="font-bold md:text-2xl">Tiempo restante</h3>
           <p className="text-2xl md:text-7xl">00:42</p>
         </div>
 
-        <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center overflow-hidden border bg-gray-500 text-center">
+        <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <PlayerTop
             name={playerTop.player_name}
             cards={playerTop.visible_fig_cards}
@@ -152,11 +149,9 @@ export default function Match() {
           />
         </div>
 
-        <div className="container col-span-1 row-span-1 border bg-gray-50">
-          COLOR PROHIBIDO
-        </div>
+        <div className="container col-span-1 row-span-1">COLOR PROHIBIDO</div>
 
-        <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center overflow-hidden border bg-gray-500 text-center">
+        <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
           {playerLeft && (
             <PlayerLeft
               name={playerLeft.player_name}
@@ -166,13 +161,13 @@ export default function Match() {
           )}
         </div>
 
-        <div className="align-center col-span-2 row-span-2 flex items-center justify-center overflow-hidden border">
+        <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
           <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
             <Board />
           </div>
         </div>
 
-        <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center overflow-hidden border bg-gray-500 text-center">
+        <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
           {playerRight && (
             <PlayerRight
               name={playerRight.player_name}
@@ -183,13 +178,13 @@ export default function Match() {
         </div>
 
         {/* MOVIMIENTO */}
-        <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center overflow-hidden border bg-gray-500 text-center">
+        <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
             {movCards}
           </div>
         </div>
 
-        <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center overflow-hidden border bg-gray-500 text-center">
+        <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <PlayerMe
             name={playerMe.player_name}
             cards={playerMe.visible_fig_cards}
@@ -197,13 +192,11 @@ export default function Match() {
           />
         </div>
 
-        <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center overflow-hidden border bg-gray-500 text-center">
-          <Button
-            className="mb-2 me-2 border border-cyan-600 bg-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-50 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-white"
-            name="add_game"
-          >
-            Pasar turno
-          </Button>
+        <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
+          <div className="flex flex-col">
+            <ButtonFilled>Pasar turno</ButtonFilled>
+            <ButtonUnfilled>Abandonar</ButtonUnfilled>
+          </div>
         </div>
       </div>
     );

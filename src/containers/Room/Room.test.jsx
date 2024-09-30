@@ -1,18 +1,10 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  act,
-} from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createRoom } from "./services/RoomService.js";
 import CreateRoomLayout from "./components/CreateRoomLayout.jsx";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import RoomCreationFailed from "./components/FailedRoom.jsx";
 import RoomLayout from "./components/RoomLayout.jsx";
-import * as zustand from "zustand";
-import { useBoardStore, useIdStore } from "../../services/state.js";
 
 const uuid = crypto.randomUUID();
 vi.mock("../../services/state.js", () => ({
@@ -27,9 +19,18 @@ vi.mock("../../services/state.js", () => ({
       stateMatch: null,
       matchStarted: false,
       updateMatch: false,
+      stateBoard: null,
       setStateMatch: vi.fn(),
       setMatchStarted: vi.fn(),
       setUpdateMatch: vi.fn(),
+      setStateBoard: vi.fn(),
+    };
+    return state(data);
+  },
+  useOwnerStore: (state) => {
+    const data = {
+      stateOwner: false,
+      setStateOwner: vi.fn(),
     };
     return state(data);
   },
@@ -40,10 +41,6 @@ vi.mock("../../services/state.js", () => ({
     };
     return state(data);
   },
-  useBoardStore: vi.fn(() => ({
-    stateBoard: null,
-    setStateBoard: vi.fn(),
-  })),
 }));
 const mockedUseNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
