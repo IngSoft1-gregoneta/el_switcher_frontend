@@ -3,14 +3,26 @@ import { render, waitFor } from "@testing-library/react";
 import App from "./App";
 import useWebSocket from "react-use-websocket";
 
+// quizas poner esto en un archivo global
 const uuid = crypto.randomUUID();
 vi.mock("../../services/state.js", () => ({
   useUpdateStore: vi.fn(() => ({
     updateList: false,
-    stateRoom: false,
+    updateRoom: false,
     setUpdateList: vi.fn(),
-    setStateRoom: vi.fn(),
+    setUpdateRoom: vi.fn(),
   })),
+  useMatchStore: (state) => {
+    const data = {
+      stateMatch: null,
+      matchStarted: false,
+      updateMatch: false,
+      setStateMatch: vi.fn(),
+      setMatchStarted: vi.fn(),
+      setUpdateMatch: vi.fn(),
+    };
+    return state(data);
+  },
   useIdStore: (state) => {
     const data = {
       userId: uuid,
@@ -18,6 +30,10 @@ vi.mock("../../services/state.js", () => ({
     };
     return state(data);
   },
+  useBoardStore: vi.fn(() => ({
+    stateBoard: null,
+    setStateBoard: vi.fn(),
+  })),
 }));
 
 vi.mock("react-use-websocket", { spy: true });

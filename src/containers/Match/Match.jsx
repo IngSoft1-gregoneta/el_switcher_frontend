@@ -14,10 +14,7 @@ import image from "./files/fig01.svg";
 export default function Match() {
   const stateBoard = useBoardStore((state) => state.stateBoard);
   const setStateBoard = useBoardStore((state) => state.setStateBoard);
-  // const stateMatch = useMatchStore((state) => state.stateMatch);
-  // const setStateMatch = useMatchStore((state) => state.setStateMatch);
   const [stateMatch, setStateMatch] = useState(null);
-  // const userName = useIdStore((state) => state.userName);
   const updateMatch = useMatchStore((state) => state.updateMatch);
   const { room_id, user_name, user_id } = useParams();
 
@@ -134,9 +131,12 @@ export default function Match() {
     const playerLeft =
       stateMatch.other_players.length > 2 && stateMatch.other_players[2];
 
-    const movCards = playerMe.mov_cards.map((card,i) => {
+    const movCards = playerMe.mov_cards.map((card, i) => {
       return (
-        <div key={i} className="aspect-[3/5] h-16 rounded-sm bg-red-500 shadow-lg md:h-32 lg:h-44">
+        <div
+          key={i}
+          className="aspect-[3/5] h-16 rounded-sm bg-red-500 shadow-lg md:h-32 lg:h-44"
+        >
           {card.mov_type}
         </div>
       );

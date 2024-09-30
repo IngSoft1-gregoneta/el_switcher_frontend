@@ -18,12 +18,21 @@ const uuid = crypto.randomUUID();
 vi.mock("../../services/state.js", () => ({
   useUpdateStore: vi.fn(() => ({
     updateList: false,
-    stateRoom: false,
-    stateMatch : false,
+    updateRoom: false,
     setUpdateList: vi.fn(),
-    setStateRoom: vi.fn(),
-    setStateMatch: vi.fn(),
+    setUpdateRoom: vi.fn(),
   })),
+  useMatchStore: (state) => {
+    const data = {
+      stateMatch: null,
+      matchStarted: false,
+      updateMatch: false,
+      setStateMatch: vi.fn(),
+      setMatchStarted: vi.fn(),
+      setUpdateMatch: vi.fn(),
+    };
+    return state(data);
+  },
   useIdStore: (state) => {
     const data = {
       userId: uuid,
@@ -31,9 +40,9 @@ vi.mock("../../services/state.js", () => ({
     };
     return state(data);
   },
-  useBoardStore: vi.fn(()=>({
-    stateBoard : null,
-    setStateBoard : vi.fn(),
+  useBoardStore: vi.fn(() => ({
+    stateBoard: null,
+    setStateBoard: vi.fn(),
   })),
 }));
 const mockedUseNavigate = vi.fn();
@@ -44,7 +53,6 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockedUseNavigate,
   };
 });
-
 
 describe("Room tests", () => {
   beforeEach(() => {

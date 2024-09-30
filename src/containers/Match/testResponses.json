@@ -1,0 +1,265 @@
+{
+  "match_response": {
+    "match_id": 3,
+    "me": {
+      "match_id": 3,
+      "player_name": "41695233",
+      "visible_fig_cards": [
+        {
+          "match_id": 3,
+          "player_name": "41695233",
+          "card_color": "White",
+          "fig_type": "T",
+          "is_visible": true
+        },
+        {
+          "match_id": 3,
+          "player_name": "41695233",
+          "card_color": "White",
+          "fig_type": "T",
+          "is_visible": true
+        },
+        {
+          "match_id": 3,
+          "player_name": "41695233",
+          "card_color": "White",
+          "fig_type": "Z",
+          "is_visible": true
+        }
+      ],
+      "deck_len": 25,
+      "mov_cards": [
+        {
+          "match_id": 3,
+          "player_name": "41695233",
+          "mov_type": "Side"
+        },
+        {
+          "match_id": 3,
+          "player_name": "41695233",
+          "mov_type": "Left chess horse"
+        },
+        {
+          "match_id": 3,
+          "player_name": "41695233",
+          "mov_type": "Side"
+        }
+      ]
+    },
+    "other_players": [
+      {
+        "match_id": 3,
+        "player_name": "sdfsd",
+        "visible_fig_cards": [
+          {
+            "match_id": 3,
+            "player_name": "sdfsd",
+            "card_color": "White",
+            "fig_type": "L",
+            "is_visible": true
+          },
+          {
+            "match_id": 3,
+            "player_name": "sdfsd",
+            "card_color": "White",
+            "fig_type": "S",
+            "is_visible": true
+          },
+          {
+            "match_id": 3,
+            "player_name": "sdfsd",
+            "card_color": "White",
+            "fig_type": "T",
+            "is_visible": true
+          }
+        ],
+        "deck_len": 25
+      }
+    ],
+    "board": {
+      "match_id": 3,
+      "tiles": [
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 0,
+          "tile_pos_y": 0
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 1,
+          "tile_pos_y": 0
+        },
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 2,
+          "tile_pos_y": 0
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 3,
+          "tile_pos_y": 0
+        },
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 4,
+          "tile_pos_y": 0
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 5,
+          "tile_pos_y": 0
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 0,
+          "tile_pos_y": 1
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 1,
+          "tile_pos_y": 1
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 2,
+          "tile_pos_y": 1
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 3,
+          "tile_pos_y": 1
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 4,
+          "tile_pos_y": 1
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 5,
+          "tile_pos_y": 1
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 0,
+          "tile_pos_y": 2
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 1,
+          "tile_pos_y": 2
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 2,
+          "tile_pos_y": 2
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 3,
+          "tile_pos_y": 2
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 4,
+          "tile_pos_y": 2
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 5,
+          "tile_pos_y": 2
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 0,
+          "tile_pos_y": 3
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 1,
+          "tile_pos_y": 3
+        },
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 2,
+          "tile_pos_y": 3
+        },
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 3,
+          "tile_pos_y": 3
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 4,
+          "tile_pos_y": 3
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 5,
+          "tile_pos_y": 3
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 0,
+          "tile_pos_y": 4
+        },
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 1,
+          "tile_pos_y": 4
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 2,
+          "tile_pos_y": 4
+        },
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 3,
+          "tile_pos_y": 4
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 4,
+          "tile_pos_y": 4
+        },
+        {
+          "tile_color": "Yellow",
+          "tile_pos_x": 5,
+          "tile_pos_y": 4
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 0,
+          "tile_pos_y": 5
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 1,
+          "tile_pos_y": 5
+        },
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 2,
+          "tile_pos_y": 5
+        },
+        {
+          "tile_color": "Green",
+          "tile_pos_x": 3,
+          "tile_pos_y": 5
+        },
+        {
+          "tile_color": "Red",
+          "tile_pos_x": 4,
+          "tile_pos_y": 5
+        },
+        {
+          "tile_color": "Blue",
+          "tile_pos_x": 5,
+          "tile_pos_y": 5
+        }
+      ]
+    }
+  }
+}
