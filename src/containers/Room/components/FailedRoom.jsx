@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@headlessui/react";
-import { useIdStore } from "../../../services/state";
+import { useIdStore } from "../../../zustand/store";
 
 export default function RoomCreationFailed() {
   const userId = useIdStore((state) => state.userId);

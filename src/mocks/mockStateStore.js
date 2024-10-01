@@ -22,17 +22,10 @@ export const mockStateStore = () => {
       };
       return state(data);
     },
-    useOwnerStore: (state) => {
-      const data = {
-        stateOwner: false,
-        setStateOwner: vi.fn(),
-      };
-      return state(data);
-    },
     useIdStore: (state) => {
       const data = {
         userId: uuid,
-        setId: vi.fn(),
+        setUserId: vi.fn(),
       };
       return state(data);
     },

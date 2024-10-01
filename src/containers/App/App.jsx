@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/AppLayout.jsx";
-import CreateRoom from "../Room/CreateRoom.jsx";
+import CreateRoom from "../CreateRoom/CreateRoom.jsx";
 import { RoomProvider } from "../Room/context/RoomContext.jsx";
-import RoomLayout from "../Room/components/RoomLayout.jsx";
 import RoomCreationFailed from "../Room/components/FailedRoom.jsx";
 import NotFoundPageLayout from "../../components/NotFoundPageLayout.jsx";
 import GetId from "./GetId.jsx";
@@ -12,8 +11,9 @@ import {
   useUpdateStore,
   useIdStore,
   useMatchStore,
-} from "../../services/state.js";
+} from "../../zustand/store.js";
 import Match from "../Match/Match.jsx";
+import Room from "../Room/Room.jsx";
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(null);
@@ -21,14 +21,12 @@ export default function App() {
   const userId = useIdStore((state) => state.userId);
   const setUpdateList = useUpdateStore((state) => state.setUpdateList);
   const setUpdateRoom = useUpdateStore((state) => state.setUpdateRoom);
-  const setUpdateMatch = useMatchStore((state) => state.setUpdateMatch);
+  const setUpdateMatch = useUpdateStore((state) => state.setUpdateMatch);
   const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
 
-  // El socketUrl debe estar en el tope de la app si no se desconecta
   useEffect(() => {
     if (userId) {
       setSocketUrl(`ws://localhost:8000/ws/${userId}`, {
-        // onClose: () => console.log("HOLAAA"),
         shouldReconnect: (closeEvent) => true,
         reconnectAttempts: 100,
         reconnectInterval: (attemptNumber) =>
@@ -50,8 +48,6 @@ export default function App() {
   useEffect(() => {
     if (lastMessage) {
       console.log("Este es lastmessage " + lastMessage.data);
-      // Estos podrian ser ENUMS?
-      // No existen los ENUMS, la mejor opcion es un objeto inmutable(object.freeze({...}))
       if (lastMessage.data === "LISTA") {
         setUpdateList();
       }
@@ -77,10 +73,7 @@ export default function App() {
           <Route path="/" element={<GetId />} />
           <Route path="/id/:user_id" element={<AppLayout />} />
           <Route path="/create_room" element={<CreateRoom />} />
-          <Route
-            path="/room/:user_id/:room_id/:user_name"
-            element={<RoomLayout />}
-          />
+          <Route path="/room/:user_id/:room_id/:user_name" element={<Room />} />
           <Route path="/failed_room" element={<RoomCreationFailed />} />
           <Route
             path="/match/:user_id/:room_id/:user_name"

@@ -1,4 +1,3 @@
-import { Button } from "@headlessui/react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import JoinRoomModalLayout from "./JoinRoomModalLayout";
@@ -9,12 +8,12 @@ export default function ListRoomsLayout({ rooms }) {
     rooms: PropTypes.array,
   };
 
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [roomId, setRoomId] = useState(null);
 
   function handleClickUnirse(id) {
     setRoomId(id);
-    setOpen(true);
+    setIsOpen(true);
   }
 
   let roomsList;
@@ -47,7 +46,11 @@ export default function ListRoomsLayout({ rooms }) {
 
   return (
     <>
-      <JoinRoomModalLayout roomId={roomId} open={open} setOpen={setOpen} />
+      <JoinRoomModalLayout
+        roomId={roomId}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
       <div className="container mb-6 pb-4 pt-4">
         <div className="relative overflow-x-auto shadow-md">
           <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">

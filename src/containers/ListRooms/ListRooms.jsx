@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ListRoomsLayout from "./components/ListRoomsLayout";
-import { useUpdateStore } from "../../services/state";
+import { useUpdateStore } from "../../zustand/store";
 
 export default function ListRooms() {
   const [rooms, setRooms] = useState(null);
