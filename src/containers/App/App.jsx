@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, redirect } from "react-router-dom";
 import AppLayout from "./components/AppLayout.jsx";
 import CreateRoom from "../CreateRoom/CreateRoom.jsx";
 import { RoomProvider } from "../Room/context/RoomContext.jsx";
@@ -70,6 +70,13 @@ export default function App() {
     <RoomProvider>
       <BrowserRouter>
         <Routes>
+          {/* TODO: Remove GetId and load de userId with loaders */}
+          {/* <Route path="/" loader={ */}
+          {/*   fetchUserId */}
+          {/* } action={ () => { */}
+          {/*     const userId = fetchUserId(); */}
+          {/*     return {redirect: `/id/${userId}`} */}
+          {/*   }} element={<GetId />} /> */}
           <Route path="/" element={<GetId />} />
           <Route path="/id/:user_id" element={<AppLayout />} />
           <Route path="/create_room" element={<CreateRoom />} />

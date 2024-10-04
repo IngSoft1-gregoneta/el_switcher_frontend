@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIdStore } from "../../../zustand/store.js";
 import PropTypes from "prop-types";
@@ -12,9 +12,12 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
   const userId = useIdStore((state) => state.userId);
   const navigate = useNavigate();
 
-  if (!userId) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (!userId) {
+      navigate("/");
+    }
+  }, [userId, navigate]);
+
   const handleLeave = () => {
     navigate(`/id/${userId}`);
   };
