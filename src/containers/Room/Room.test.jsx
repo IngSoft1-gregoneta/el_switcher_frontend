@@ -1,3 +1,80 @@
+import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
+import Room from "./Room";
+import RoomLayout from "./components/RoomLayout";
+
+const mockedRoomData = {
+  room_id: 1,
+  room_name: "famaf",
+  players_expected: 3,
+  players_names: ["yamil", "facu"],
+  owner_name: "yamil",
+  is_active: true,
+};
+
+describe("Room testing", () => {
+  it("Button start game should appear given user isOwner", () => {
+    render(
+      <MemoryRouter>
+        <RoomLayout
+          roomData={mockedRoomData}
+          isOwner={true}
+          handleLeaveRoom={() => void 0}
+          handleStartMatch={() => void 0}
+        />
+      </MemoryRouter>,
+    );
+
+    const buttonStart = screen.getByText(/Empezar/i);
+    expect(buttonStart).toBeInTheDocument();
+  });
+  it("Button start game shouldn't appear given user in not the owner", () => {
+    render(
+      <MemoryRouter>
+        <RoomLayout
+          roomData={mockedRoomData}
+          isOwner={false}
+          handleLeaveRoom={() => void 0}
+          handleStartMatch={() => void 0}
+        />
+      </MemoryRouter>,
+    );
+
+    const buttonStart = screen.queryByText(/Empezar/i);
+    expect(buttonStart).not.toBeInTheDocument();
+  });
+
+  it("roomData should be displayed correctly", () => {
+    render(
+      <MemoryRouter>
+        <RoomLayout
+          roomData={mockedRoomData}
+          isOwner={true}
+          handleLeaveRoom={() => void 0}
+          handleStartMatch={() => void 0}
+        />
+      </MemoryRouter>,
+    );
+    screen.debug();
+
+    const roomName = screen.getByRole("heading", { level: 2 });
+    const ownerName = screen.getByRole("heading", {
+      level: 4,
+      name: /yamil/i,
+    });
+    const playerName = screen.getByText(/facu/i);
+
+    expect(roomName).toBeInTheDocument();
+    expect(roomName).toHaveTextContent(/famaf/i);
+    expect(ownerName).toBeInTheDocument();
+    expect(ownerName).toHaveTextContent(/yamil/i);
+    expect(playerName).toBeInTheDocument();
+    expect(playerName).toHaveTextContent(/facu/i);
+  });
+});
+
 // import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 // import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 // import { createRoom } from "./services/RoomService.js";
