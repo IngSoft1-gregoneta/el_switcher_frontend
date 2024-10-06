@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -6,13 +7,10 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "jsdom",
-    global: true,
+    globals: true,
     setupFiles: ["./vitest-setup.js"],
-    onConsoleLog(log, type) {
-      console.log("log in test: ", log);
-      if (log === "message from third party library" && type === "stdout") {
-        return false;
-      }
+    coverage: {
+      provider: "v8", // or 'istanbul'
     },
   },
 });

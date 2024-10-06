@@ -1,4 +1,3 @@
-import { Button } from "@headlessui/react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import JoinRoomModalLayout from "./JoinRoomModalLayout";
@@ -9,12 +8,12 @@ export default function ListRoomsLayout({ rooms }) {
     rooms: PropTypes.array,
   };
 
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [roomId, setRoomId] = useState(null);
 
   function handleClickUnirse(id) {
     setRoomId(id);
-    setOpen(true);
+    setIsOpen(true);
   }
 
   let roomsList;
@@ -43,32 +42,38 @@ export default function ListRoomsLayout({ rooms }) {
         );
       }
     });
-  }
 
-  return (
-    <>
-      <JoinRoomModalLayout roomId={roomId} open={open} setOpen={setOpen} />
-      <div className="container mb-6 pb-4 pt-4">
-        <div className="relative overflow-x-auto shadow-md">
-          <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
-            <thead className="bg-lime-200 text-xs uppercase text-gray-700">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Jugadores
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Nombre de la partida
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Creada por
-                </th>
-                <th scope="col" className="px-6 py-3"></th>
-              </tr>
-            </thead>
-            <tbody>{roomsList}</tbody>
-          </table>
+    return (
+      <>
+        <JoinRoomModalLayout
+          roomId={roomId}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+        <div className="container mb-6 pb-4 pt-4">
+          <div className="relative overflow-x-auto shadow-md">
+            <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+              <thead className="bg-lime-200 text-xs uppercase text-gray-700">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    Jugadores
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Nombre de la partida
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Creada por
+                  </th>
+                  <th scope="col" className="px-6 py-3"></th>
+                </tr>
+              </thead>
+              <tbody>{roomsList}</tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  } else {
+    return <div>No hay salas disponibles</div>;
+  }
 }

@@ -1,78 +1,63 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { MemoryRouter, useNavigate } from "react-router-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
 import ListRooms from "./ListRooms";
 import ListRoomsLayout from "./components/ListRoomsLayout";
-import React, { useState } from "react";
 
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return {
-    ...actual,
-    useNavigate: vi.fn(),
-  };
-});
+const mockedRooms = [
+  {
+    room_id: 2,
+    room_name: "famaf",
+    players_expected: 3,
+    players_names: ["grego", "nico"],
+    owner_name: "grego",
+    is_active: true,
+  },
+  {
+    room_id: 3,
+    room_name: "niconeta",
+    players_expected: 3,
+    players_names: ["tadeo", "yamil"],
+    owner_name: "yamil",
+    is_active: true,
+  },
+];
 
-describe("ListRooms Test", () => {
-  let originalFetch;
-
-  beforeEach(() => {
-    originalFetch = global.fetch;
-  });
-  afterEach(() => {
-    global.fetch = originalFetch;
-  });
-
-  beforeEach(() => {
-    vi.resetAllMocks();
-  });
-  test("test correct username of table is render", () => {
-    let rooms = [
-      {
-        room_id: 1,
-        room_name: "famaf",
-        players_expected: 3,
-        players_names: [],
-        owner_name: "estenombredeusuario",
-        is_active: true,
-      },
-      {
-        room_id: 2,
-        room_name: "famaf",
-        players_expected: 3,
-        players_names: [],
-        owner_name: "Juego de pepe",
-        is_active: true,
-      },
-    ];
-    render(<ListRoomsLayout rooms={rooms} />);
-    expect(screen.getByText(/estenombredeusuario/i)).toBeDefined();
-    expect(screen.getByText(/juego de pepe/i)).toBeDefined();
-  });
-
-  test("renders the list of rooms after fetching", async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        json() {
-          return [
-            {
-              room_id: 2,
-              room_name: "famaf",
-              players_expected: 3,
-              players_names: ["grego"],
-              owner_name: "grego",
-              is_active: true,
-            },
-          ];
-        },
-      }),
+describe("ListRooms test", () => {
+  it("should show message of empty list of rooms", () => {
+    render(
+      <MemoryRouter>
+        <ListRoomsLayout rooms={mockedRooms} />
+      </MemoryRouter>,
     );
-    render(<ListRooms />);
-    // aca podes chequear fuera del await si antes de tener la data feched hay algun tipo de msj
-    // like loading...
-    await waitFor(() => {
-      expect(screen.getByText(/grego/i)).toBeDefined();
+
+    const texto = screen.queryByText(/no hay salas/i);
+    expect(texto).not.toBeInTheDocument();
+
+    const jugadores_th = screen.getByRole("columnheader", {
+      name: /jugadores/i,
+      hidden: true,
     });
-    // screen.debug();
+    expect(jugadores_th).toBeInTheDocument();
+
+    const owner = screen.getByText(/yamil/i);
+    expect(owner).toBeInTheDocument();
+  });
+  it("should show list of rooms and not the message of empty rooms", () => {
+    render(
+      <MemoryRouter>
+        <ListRooms />
+      </MemoryRouter>,
+    );
+
+    const texto = screen.getByText(/no hay salas/i);
+    expect(texto).toBeInTheDocument();
+
+    const jugadores_th = screen.queryByRole("columnheader", {
+      name: /jugadores/i,
+      hidden: true,
+    });
+    expect(jugadores_th).not.toBeInTheDocument();
   });
 });

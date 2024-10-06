@@ -1,42 +1,45 @@
-import { useEffect, useState } from "react";
-import { useIdStore, useMatchStore, useWinnerStore } from "../../services/state.js";
+import { useIdStore, useWinnerStore } from "../../zustand/store.js";
 import Board from "./components/Board.jsx";
-import { fetchMatch, leaveMatch, passTurn } from "./services/MatchService.js";
+import { leaveMatch, passTurn } from "./services/MatchService.js";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
 import images from "./logic/bindImage.js";
 import { ButtonFilled, ButtonUnfilled } from "../../components/Buttons.jsx";
 import Winner from "./components/Winner.jsx";
+import useMatchData from "./hooks/useMatchData.jsx";
 
 export default function Match() {
-  const setStateBoard = useMatchStore((state) => state.setStateBoard);
-  const [stateMatch, setStateMatch] = useState(null);
-  const updateMatch = useMatchStore((state) => state.updateMatch);
   const setStateWinner = useWinnerStore((state) => state.setStateWinner);
-  const setUserId = useIdStore((state) => state.setId)
+  const userId = useIdStore((state) => state.userId);
+  const setUserId = useIdStore((state) => state.setUserId);
   const { room_id, user_name, user_id } = useParams();
-  setUserId(user_id)
+  const { stateBoard, statePlayerMe, stateOtherPlayers } = useMatchData(
+    room_id,
+    user_name,
+  );
+  if (!userId) setUserId(user_id);
+
   const navigate = useNavigate();
 
   const handlePassTurn = async () => {
-    try{
-      const response = await passTurn(room_id,user_name);
+    try {
+      const response = await passTurn(room_id, user_name);
       console.log(response);
     } catch (error) {
+      console.error(error);
       console.log("No es el turno de este jugador.");
     }
-  }
+  };
 
-  const handleLeaveMatch = async () =>{
+  const handleLeaveMatch = async () => {
     try {
-      const response = await leaveMatch(room_id,user_name,user_id);
-      navigate('/');
+      const response = await leaveMatch(room_id, user_name, user_id);
+      navigate("/");
       console.log(response);
-      
-    } catch (error){
-      console.log(error);
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
 
   const mapCard = (cards, is_rotated) => {
     const className = is_rotated
@@ -74,9 +77,8 @@ export default function Match() {
         <div className="flex h-fit flex-row items-center justify-center gap-2">
           {cardsDiv}
         </div>
-        <div className="flex basis-1/12 flex-col md:flex-row">
+        <div className="flex flex-grow justify-between basis-1/12 flex-col md:flex-row">
           <div className="basis-1/6 font-bold">{name}</div>
-          <div className="basis-4/6" id="separator"></div>
           <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
             Tarjetas Figura: {deckLen}
           </div>
@@ -87,11 +89,12 @@ export default function Match() {
   function PlayerLeft({ name, cards, deckLen }) {
     const cardsDiv = mapCard(cards, true);
     return (
-      <div className="flex flex-col items-center gap-2 md:flex-row md:gap-6">
-        <div className="flex h-fit flex-col items-center justify-center gap-2">
+      <div className="flex [writing-mode:vertical-lr] flex-row sm:flex-col gap-2">
+        <div className="flex h-fit flex-row items-center justify-center gap-2">
           {cardsDiv}
         </div>
-        <div className="flex basis-1/12 flex-col md:rotate-180 md:flex-row md:gap-14 md:[writing-mode:vertical-lr] lg:gap-32">
+        {/* falta que sea responsive en mobile */}
+        <div className="rotate-180  flex flex-grow justify-between basis-1/12 flex-col md:flex-row">
           <div className="basis-1/6 font-bold">{name}</div>
           <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
             Tarjetas Figura: {deckLen}
@@ -118,48 +121,28 @@ export default function Match() {
     );
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const matchData = await fetchMatch(room_id, user_name);
-        console.log(matchData);
-        setStateMatch(matchData);
-        // TODO: hacer esto por id :SSSS
-        setStateBoard(matchData.board.tiles);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [
-    setStateMatch,
-    user_name,
-    setStateBoard,
-    room_id,
-    user_id,
-    updateMatch, // este hace q se actualice con ws
-  ]);
-
-  if (stateMatch && stateMatch.other_players[0] == undefined){
+  if (stateOtherPlayers && stateOtherPlayers[0] == undefined) {
     setStateWinner(user_name);
-    return <Winner/>
-  } else if (!stateMatch) {
-    return <Spinner />;
-  } else if (stateMatch) {
-    const hasTurn = stateMatch.me.has_turn;
-    const playerMe = stateMatch.me;
-    const playerTop = stateMatch.other_players[0];
-    const playerRight =
-      stateMatch.other_players.length > 1 && stateMatch.other_players[1];
-    const playerLeft =
-      stateMatch.other_players.length > 2 && stateMatch.other_players[2];
+    return <Winner />;
+  } else if (!stateBoard) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  } else {
+    const hasTurn = statePlayerMe.has_turn;
+    const playerMe = statePlayerMe;
+    const playerTop = stateOtherPlayers[0];
+    const playerRight = stateOtherPlayers.length > 1 && stateOtherPlayers[1];
+    const playerLeft = stateOtherPlayers.length > 2 && stateOtherPlayers[2];
 
     const movCards = playerMe.mov_cards.map((card, i) => {
       return (
         <img
           src={images[`${card.mov_type}`]}
           key={i}
-          className="aspect-[3/5] h-16 rounded-sm md:h-32 lg:h-44"
+          className="aspect-[3/5] h-16 rounded-sm md:h-32 lg:h-36"
         />
       );
     });
@@ -191,8 +174,8 @@ export default function Match() {
         </div>
 
         <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
-          <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
-            <Board />
+          <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] bg-gray-300 md:max-h-[90%] md:max-w-[90%]">
+            {/* <Board stateBoard={stateBoard} /> */}
           </div>
         </div>
 
@@ -206,7 +189,6 @@ export default function Match() {
           )}
         </div>
 
-        {/* MOVIMIENTO */}
         <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
             {movCards}
@@ -215,16 +197,28 @@ export default function Match() {
 
         <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <PlayerMe
-            name={playerMe.player_name}
-            cards={playerMe.visible_fig_cards}
-            deckLen={playerMe.deck_len}
+            name={statePlayerMe.player_name}
+            cards={statePlayerMe.visible_fig_cards}
+            deckLen={statePlayerMe.deck_len}
           />
         </div>
 
         <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-          <div className="flex flex-col">
-            {hasTurn && <ButtonFilled onClick={handlePassTurn}>Pasar turno</ButtonFilled>}
-            <ButtonUnfilled onClick={handleLeaveMatch}>Abandonar</ButtonUnfilled>
+          <div className="flex flex-col items-center justify-items-center">
+            {hasTurn && (
+              <ButtonFilled
+                className="mr-0 w-20 text-wrap px-0 sm:mr-2 sm:w-full sm:text-nowrap sm:px-4"
+                onClick={handlePassTurn}
+              >
+                Pasar turno
+              </ButtonFilled>
+            )}
+            <ButtonUnfilled
+              className="mr-0 w-20 text-wrap px-0 sm:mr-2 sm:w-full sm:text-nowrap sm:px-4"
+              onClick={handleLeaveMatch}
+            >
+              Abandonar
+            </ButtonUnfilled>
           </div>
         </div>
       </div>

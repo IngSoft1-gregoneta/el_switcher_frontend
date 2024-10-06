@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { Button } from "@headlessui/react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useIdStore, useOwnerStore } from "../../../services/state";
-import RoomDialog from "./RoomDialog.jsx";
+import { useIdStore } from "../../../zustand/store.js";
+import PropTypes from "prop-types";
+import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons.jsx";
+import ModalInput from "../../../components/ModalInput.jsx";
 
-export default function CreateRoomLayout({ onSubmit }) {
+export default function CreateRoomLayout({ handleCreateRoom }) {
+  CreateRoomLayout.propTypes = {
+    handleCreateRoom: PropTypes.func,
+  };
   const userId = useIdStore((state) => state.userId);
   const navigate = useNavigate();
 
-  if (!userId) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (!userId) {
+      navigate("/");
+    }
+  }, [userId, navigate]);
+
   const handleLeave = () => {
     navigate(`/id/${userId}`);
   };
@@ -18,7 +25,7 @@ export default function CreateRoomLayout({ onSubmit }) {
   const [name, setName] = useState("");
   const [players, setPlayers] = useState(2);
   const [isOpen, setIsOpen] = useState(true);
-  const [ownerName, setOwnerName] = useState("");
+  const [ownerName, setOwnerName] = useState(null);
 
   const handleRoomName = (event) => {
     let name = event.target.value;
@@ -32,15 +39,15 @@ export default function CreateRoomLayout({ onSubmit }) {
   };
 
   const handleSubmit = (event) => {
+    console.log(ownerName);
     event.preventDefault();
     const formData = {
       room_name: name,
       players_expected: players,
       owner_name: ownerName,
     };
-    if (typeof onSubmit === "function" && formData.name !== "") {
-      // Como me mareaste nico jajaja
-      onSubmit(formData);
+    if (typeof handleCreateRoom === "function" && formData.name !== "") {
+      handleCreateRoom(formData);
     } else if (formData.name === "") {
       alert("Empty name");
     }
@@ -49,18 +56,21 @@ export default function CreateRoomLayout({ onSubmit }) {
   return (
     <div className="mx-auto mt-10 flex max-w-screen-lg flex-col items-center justify-center p-4">
       <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
-        <RoomDialog
+        <ModalInput
           isOpen={isOpen}
-          onClose={setIsOpen}
-          onOwnerName={setOwnerName}
-        ></RoomDialog>
+          setIsOpen={setIsOpen}
+          handleClickAceptar={setOwnerName}
+          handleClickCancelar={handleLeave}
+          title="Nombre para partida"
+          desc="Escriba el nombre con el cual quiera ser identificado la partida"
+        />
         <h1 className="mb-8 mt-4 text-center font-serif text-4xl font-bold">
-          Create Room
+          Crear Sala
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4 bg-lime-100 p-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium">
-              Room Name
+              Nombre de la sala
             </label>
             <input
               onChange={handleRoomName}
@@ -72,7 +82,7 @@ export default function CreateRoomLayout({ onSubmit }) {
           </div>
           <div>
             <label htmlFor="playerCount" className="block text-sm font-medium">
-              Player Count
+              Cantidad de jugadores
             </label>
             <input
               onChange={handlePlayerCount}
@@ -85,20 +95,12 @@ export default function CreateRoomLayout({ onSubmit }) {
               placeholder="2-4 players"
             />
           </div>
-          <Button
-            aria-label="Create Room"
-            type="submit"
-            className="mb-2 me-2 w-full border border-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-700 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
-          >
-            Create Room
-          </Button>
-          <Button
-            type="button"
-            onClick={handleLeave}
-            className="mb-2 me-2 w-full border border-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-cyan-700 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200"
-          >
-            Leave
-          </Button>
+          <ButtonFilled type="submit" className="w-full">
+            Crear
+          </ButtonFilled>
+          <ButtonUnfilled onClick={handleLeave} className="w-full">
+            Salir
+          </ButtonUnfilled>
         </form>
       </div>
     </div>

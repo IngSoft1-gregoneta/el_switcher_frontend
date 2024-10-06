@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useIdStore } from "../../services/state";
+import { useIdStore } from "../../zustand/store";
 
 export default function GetId() {
-  // const userId = useIdStore((state) => state.userId);
-  const setId = useIdStore((state) => state.setId);
+  const setUserId = useIdStore((state) => state.setUserId);
   const navigate = useNavigate();
 
   // Creo que esto corre dos veces, pero no se porque
@@ -16,7 +15,7 @@ export default function GetId() {
         });
         if (response.ok) {
           const id = await response.json();
-          setId(id);
+          setUserId(id);
           navigate(`/id/${id}`);
         }
       } catch (err) {
@@ -24,5 +23,5 @@ export default function GetId() {
       }
     };
     fetchUserId();
-  }, [setId, navigate]);
+  }, [setUserId, navigate]);
 }
