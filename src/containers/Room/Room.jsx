@@ -23,7 +23,6 @@ export default function Room() {
     // con eso en true activar un boton que te redirija a la partida
     // o manejar esto con cuidado
     // o usar ambos aproacheees que verifique con la room
-    console.log("hhhho");
     if (matchStarted) {
       navigate(`/match/${user_id}/${room_id}/${user_name}`);
     }

@@ -59,17 +59,16 @@ export async function leaveRoom(room_id, player_name, user_id) {
 
 // Esta aca porque solo se puede crear un match desde Room
 export async function createMatch(roomId, ownerName) {
-  const roomData = { room_id: roomId };
   const owner_name = encodeURIComponent(ownerName);
+  const roomIdEncoded = encodeURIComponent(roomId);
 
   const response = await fetch(
-    `http://localhost:8000/matchs/create_match/${owner_name}`,
+    `http://localhost:8000/matchs/create_match/${roomIdEncoded}/${owner_name}`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(roomData),
     },
   );
   if (!response.ok) {

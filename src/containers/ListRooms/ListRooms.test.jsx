@@ -25,7 +25,7 @@ const mockedRooms = [
 ];
 
 describe("ListRooms test", () => {
-  it("should show message of empty list of rooms", () => {
+  it("should show list of rooms and not the message of empty rooms", () => {
     render(
       <MemoryRouter>
         <ListRoomsLayout rooms={mockedRooms} />
@@ -44,10 +44,26 @@ describe("ListRooms test", () => {
     const owner = screen.getByText(/yamil/i);
     expect(owner).toBeInTheDocument();
   });
-  it("should show list of rooms and not the message of empty rooms", () => {
+  it("should show message of empty list of rooms and not table of rooms", () => {
     render(
       <MemoryRouter>
         <ListRooms />
+      </MemoryRouter>,
+    );
+
+    const texto = screen.getByText(/no hay salas/i);
+    expect(texto).toBeInTheDocument();
+
+    const jugadores_th = screen.queryByRole("columnheader", {
+      name: /jugadores/i,
+      hidden: true,
+    });
+    expect(jugadores_th).not.toBeInTheDocument();
+  });
+  it("should show message of empty list of rooms and not table of rooms on empty array", () => {
+    render(
+      <MemoryRouter>
+        <ListRooms rooms={[]} />
       </MemoryRouter>,
     );
 

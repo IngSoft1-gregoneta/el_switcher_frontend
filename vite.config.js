@@ -6,6 +6,10 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   test: {
+    clearMocks: true,
+    restoreMocks: true,
+    mockReset: true,
+    logHeapUsage: true,
     environment: "jsdom",
     globals: true,
     setupFiles: ["./vitest-setup.js"],

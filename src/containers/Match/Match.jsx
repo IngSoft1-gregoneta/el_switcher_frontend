@@ -77,7 +77,7 @@ export default function Match() {
         <div className="flex h-fit flex-row items-center justify-center gap-2">
           {cardsDiv}
         </div>
-        <div className="flex flex-grow justify-between basis-1/12 flex-col md:flex-row">
+        <div className="flex flex-grow basis-1/12 flex-col justify-between md:flex-row">
           <div className="basis-1/6 font-bold">{name}</div>
           <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
             Tarjetas Figura: {deckLen}
@@ -89,12 +89,12 @@ export default function Match() {
   function PlayerLeft({ name, cards, deckLen }) {
     const cardsDiv = mapCard(cards, true);
     return (
-      <div className="flex [writing-mode:vertical-lr] flex-row sm:flex-col gap-2">
+      <div className="flex flex-row gap-2 [writing-mode:vertical-lr] sm:flex-col">
         <div className="flex h-fit flex-row items-center justify-center gap-2">
           {cardsDiv}
         </div>
         {/* falta que sea responsive en mobile */}
-        <div className="rotate-180  flex flex-grow justify-between basis-1/12 flex-col md:flex-row">
+        <div className="flex flex-grow basis-1/12 rotate-180 flex-col justify-between md:flex-row">
           <div className="basis-1/6 font-bold">{name}</div>
           <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
             Tarjetas Figura: {deckLen}
@@ -174,8 +174,8 @@ export default function Match() {
         </div>
 
         <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
-          <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] bg-gray-300 md:max-h-[90%] md:max-w-[90%]">
-            {/* <Board stateBoard={stateBoard} /> */}
+          <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
+            <Board stateBoard={stateBoard} />
           </div>
         </div>
 

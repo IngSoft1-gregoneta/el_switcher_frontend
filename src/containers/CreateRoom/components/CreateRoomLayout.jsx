@@ -39,7 +39,6 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
   };
 
   const handleSubmit = (event) => {
-    console.log(ownerName);
     event.preventDefault();
     const formData = {
       room_name: name,

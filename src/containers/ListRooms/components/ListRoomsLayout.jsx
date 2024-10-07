@@ -17,7 +17,8 @@ export default function ListRoomsLayout({ rooms }) {
   }
 
   let roomsList;
-  if (rooms != null) {
+  if (rooms != null && rooms.length != 0) {
+    console.log(rooms);
     roomsList = rooms.map((room) => {
       if (room !== undefined) {
         return (

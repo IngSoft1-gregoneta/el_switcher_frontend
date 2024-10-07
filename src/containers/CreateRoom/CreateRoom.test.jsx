@@ -1,14 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
-import { MemoryRouter, useNavigate } from "react-router-dom";
-// import { useNavigate } from "react-router";
-import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+import { act, render, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import CreateRoom from "./CreateRoom";
 import { useIdStore } from "../../zustand/store";
 
@@ -45,10 +37,10 @@ describe("CreateRoom test", () => {
         </MemoryRouter>,
       );
     });
-
-    await waitFor(() =>
-      expect(mockedUseNavigate).not.toHaveBeenCalledWith("/"),
-    );
-    screen.debug();
+    // console.log(mockedUseNavigate.mock.calls);
+    await waitFor(() => {
+      mockedUseNavigate.mockName("navigate mock");
+      expect(mockedUseNavigate).not.toHaveBeenCalledWith("/");
+    });
   });
 });
