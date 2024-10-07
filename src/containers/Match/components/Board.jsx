@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import BoardClass from "../logic/board";
 import "../styles/styles.css";
 import { useNavigate } from "react-router-dom";
+import Tile from "./Tile";
 
 //TODO : is this even a good implementation??
 //       should this even be here??
@@ -11,14 +12,6 @@ const COLORS = Object.freeze({
   RED: "bg-red-600",
   BLUE: "bg-blue-600",
 });
-
-function Tile({ color }) {
-  return (
-    <div
-      className={`tile ${color} m-1 min-h-[50px] min-w-[50px] rounded`}
-    ></div>
-  );
-}
 
 export default function Board({ stateBoard }) {
   const navigate = useNavigate();
