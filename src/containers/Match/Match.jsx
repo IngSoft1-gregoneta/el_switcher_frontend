@@ -50,9 +50,9 @@ export default function Match() {
     );
   } else {
     return (
-      <MatchLayout 
-        statePlayerMe={statePlayerMe} 
-        stateOtherPlayers={stateOtherPlayers} 
+      <MatchLayout
+        statePlayerMe={statePlayerMe}
+        stateOtherPlayers={stateOtherPlayers}
         stateBoard={stateBoard}
         handleLeaveMatch={handleLeaveMatch}
         handlePassTurn={handlePassTurn}
