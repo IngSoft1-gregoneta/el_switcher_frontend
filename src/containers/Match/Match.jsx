@@ -12,10 +12,8 @@ export default function Match() {
   const setUserId = useIdStore((state) => state.setUserId);
   const { room_id, user_name, user_id } = useParams();
   const navigate = useNavigate();
-  const { stateBoard, statePlayerMe, stateOtherPlayers } = useMatchData(
-    room_id,
-    user_name,
-  );
+  const { stateBoard, statePlayerMe, stateOtherPlayers, usedMovCards } =
+    useMatchData(room_id, user_name);
 
   if (!userId) setUserId(user_id);
 
@@ -50,10 +48,11 @@ export default function Match() {
     );
   } else {
     return (
-      <MatchLayout 
-        statePlayerMe={statePlayerMe} 
-        stateOtherPlayers={stateOtherPlayers} 
+      <MatchLayout
+        statePlayerMe={statePlayerMe}
+        stateOtherPlayers={stateOtherPlayers}
         stateBoard={stateBoard}
+        usedMovCards={usedMovCards}
         handleLeaveMatch={handleLeaveMatch}
         handlePassTurn={handlePassTurn}
       />
