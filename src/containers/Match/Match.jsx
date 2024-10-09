@@ -1,4 +1,4 @@
-import { useBoardStore, useIdStore, useWinnerStore} from "../../zustand/store.js";
+import { useBoardStore, useIdStore, useWinnerStore, useTestStore } from "../../zustand/store.js";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
 import Winner from "./components/Winner.jsx";
@@ -6,6 +6,7 @@ import useMatchData from "./hooks/useMatchData.jsx";
 import MatchLayout from "./components/MatchLayout.jsx";
 import { passTurn, leaveMatch } from "./services/MatchService.js";
 import { useEffect } from "react";
+import BoardClass from "./logic/board.js";
 
 export default function Match() {
   const setStateWinner = useWinnerStore((state) => state.setStateWinner);
@@ -13,7 +14,8 @@ export default function Match() {
   const setUserId = useIdStore((state) => state.setUserId);
   const { room_id, user_name, user_id } = useParams();
   const navigate = useNavigate();
-  const { stateBoard, statePlayerMe, stateOtherPlayers } = useMatchData(
+  // Volver a const.
+  let { stateBoard, statePlayerMe, stateOtherPlayers, error } = useMatchData(
     room_id,
     user_name,
   );
@@ -24,10 +26,13 @@ export default function Match() {
   const setSecondPos = useBoardStore((state) => state.setSecondPos);
   const board = useBoardStore((state) => state.board);
   const setBoard = useBoardStore((state) => state.setBoard);
-
-  // console.log("This is the board",board);
-  // const boardInstance = new BoardClass(stateBoard);
-  // setBoard(boardInstance);
+  // Estados de testeo, temporales.
+  // los uso ahora porque no existen los endpoints para manejar los movimientos, los cuales deberian
+  // alterar el estado mandar un broadcast y asi el cliente traer los cambios nuevos.
+  const testMe = useTestStore((state) => state.testMe);
+  const testOthers = useTestStore((state) => state.testOthers);
+  const setTestMe = useTestStore((state) => state.setTestMe);
+  const setTestOthers = useTestStore((state) => state.setTestOthers);
 
   const handlePassTurn = async () => {
     try {
@@ -49,47 +54,83 @@ export default function Match() {
     }
   };
 
+  useEffect(() => {
+    if (stateBoard) {
+      const newBoard = new BoardClass(stateBoard);
+      setBoard(newBoard);
+    }
+  }, [stateBoard, setBoard]);
+
   // TODO : manejar movimientos.
   // const handlePartialMove = async () => {};
   // const handleUndoPartialMove = async () => {};
   // const handleConfirmMoves = async () => {};
 
-
   useEffect(()=>{
-    if(firstPos){
-      // console.log(stateBoard);
-      console.log("First pos: ", firstPos);
-    }
-    if(secondPos){
-      console.log("Second pos: ", secondPos);
-    }
-    if(firstPos && secondPos){
+    // podes clickear cualquier tile pero solo tiene efecto si es el turno del jugador.
+    // es necesario checkear que statePlayerMe no sea null, ya que al renderizar el componente el hook se llama
+    // antes de que useMatchData retorne algo.
+    if(statePlayerMe?.has_turn){
+      if(firstPos && secondPos){
+        let old_board = board;
+        const new_board = old_board.switchTiles(firstPos, secondPos);
+        setBoard(new_board);
+        setTestMe(statePlayerMe);
+        setTestOthers(stateOtherPlayers);
+        console.log(firstPos, secondPos);
+        setFirstPos(null);
+        setSecondPos(null);
+      }
+    } else {
       setFirstPos(null);
       setSecondPos(null);
-      let new_board = board;
-      new_board.switchTiles(firstPos, secondPos);
-      setBoard(new_board);
     }
-  },[firstPos,secondPos,board,setBoard]);
+  },[firstPos,secondPos,board,setBoard,statePlayerMe,stateOtherPlayers]);
 
-  if (stateOtherPlayers && stateOtherPlayers[0] == undefined) {
-    setStateWinner(user_name);
-    return <Winner />;
-  } else if (!stateBoard) {
+  if (error) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+
+  if(!(testMe && testOthers)){
+    console.log("we are not good");
+  }
+
+  // THIS is also for testing, and should be removed
+  if(testMe && testOthers && board){
+    console.log("we are good");
+    return (
+      <MatchLayout
+      statePlayerMe={testMe}
+      stateOtherPlayers={testOthers}
+      handleLeaveMatch={handleLeaveMatch}
+      handlePassTurn={handlePassTurn}
+    />
+    );
+  }
+
+  if (!statePlayerMe || !stateOtherPlayers || !board) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Spinner />
       </div>
     );
-  } else {
-    return (
-      <MatchLayout 
-        statePlayerMe={statePlayerMe} 
-        stateOtherPlayers={stateOtherPlayers} 
-        // stateBoard={board}
-        handleLeaveMatch={handleLeaveMatch}
-        handlePassTurn={handlePassTurn}
-      />
-    );
   }
+
+  if (stateOtherPlayers && stateOtherPlayers[0] === undefined) {
+    setStateWinner(user_name);
+    return <Winner />;
+  }
+
+  return (
+    <MatchLayout
+      statePlayerMe={statePlayerMe}
+      stateOtherPlayers={stateOtherPlayers}
+      handleLeaveMatch={handleLeaveMatch}
+      handlePassTurn={handlePassTurn}
+    />
+  );
 }

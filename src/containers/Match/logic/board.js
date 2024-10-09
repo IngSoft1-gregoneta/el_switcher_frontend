@@ -24,6 +24,7 @@ export default class BoardClass {
   }
 
   switchTiles(pos1, pos2) {
+    // manejo de errores, gracias no tener tipos.
     if(pos1 == null || pos2 == null){
       throw new Error(`Expected position got: pos1=${pos1}, pos2=${pos2}`);
     }

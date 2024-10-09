@@ -4,7 +4,7 @@ import images from "../logic/bindImage";
 import Board from "./Board";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 
-export default function MatchLayout({ statePlayerMe, stateOtherPlayers, stateBoard, handlePassTurn, handleLeaveMatch, handlePos }) {
+export default function MatchLayout({ statePlayerMe, stateOtherPlayers, handlePassTurn, handleLeaveMatch}) {
 
     const hasTurn = statePlayerMe.has_turn;
     const playerMe = statePlayerMe;
@@ -50,7 +50,7 @@ export default function MatchLayout({ statePlayerMe, stateOtherPlayers, stateBoa
 
             <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
                 <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
-                    <Board stateBoard={stateBoard} />
+                    <Board/>
                 </div>
             </div>
 

@@ -32,3 +32,10 @@ export const useBoardStore = create((set)=>({
   setSecondPos: (new_pos) => set({secondPos:new_pos}),
   setBoard: (new_board) => set({board:new_board}),
 }));
+
+export const useTestStore = create((set) => ({
+  testMe : null,
+  testOthers : null,
+  setTestMe : (new_state) => set({testMe : new_state}),
+  setTestOthers : (new_state) => set({testOthers : new_state}),
+}));
