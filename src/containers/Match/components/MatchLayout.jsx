@@ -4,7 +4,7 @@ import images from "../logic/bindImage";
 import Board from "./Board";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 
-export default function MatchLayout({ statePlayerMe, stateOtherPlayers, stateBoard, handlePassTurn, handleLeaveMatch }) {
+export default function MatchLayout({ statePlayerMe, stateOtherPlayers, stateBoard, handlePassTurn, handleLeaveMatch, handlePos }) {
 
     const hasTurn = statePlayerMe.has_turn;
     const playerMe = statePlayerMe;

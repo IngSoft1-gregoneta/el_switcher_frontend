@@ -3,6 +3,8 @@ import BoardClass from "../logic/board";
 import "../styles/styles.css";
 import { useNavigate } from "react-router-dom";
 import Tile from "./Tile";
+import { useBoardStore } from "../../../zustand/store";
+
 
 //TODO : is this even a good implementation??
 //       should this even be here??
@@ -13,18 +15,19 @@ const COLORS = Object.freeze({
   BLUE: "bg-blue-600",
 });
 
-export default function Board({ stateBoard }) {
+export default function Board(/*{ stateBoard }*/) {
   const navigate = useNavigate();
+
+  const board = useBoardStore((state) => state.board);
 
   //TODO : maybe redirecting to root is not the best solution???
   useEffect(() => {
-    if (!stateBoard) {
+    if (!board) {
       navigate("/");
       return null;
     }
-  }, [navigate, stateBoard]);
+  }, [navigate, board]);
 
-  const board = new BoardClass(stateBoard);
 
   return (
     <div className="flex h-full max-h-full w-full max-w-full justify-center">
@@ -52,7 +55,7 @@ export default function Board({ stateBoard }) {
               default:
                 tileColor = "bg-amber-600";
             }
-            return <Tile key={`${rowIndex}-${colIndex}`} color={tileColor} />;
+            return <Tile key={`${rowIndex}-${colIndex}`} posx={colIndex} posy={rowIndex} color={tileColor} />;
           }),
         )}
       </div>

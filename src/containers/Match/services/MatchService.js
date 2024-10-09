@@ -79,3 +79,15 @@ export async function leaveMatch(matchId, playerName, userId) {
 
   return response.json();
 }
+
+export async function makePartialMove(/* movement_card?, user_id?, match_id? */){
+  //TODO
+}
+
+export async function undoPartialMove(/*user_id?, match_id?*/){
+  //TODO
+}
+
+export async function confirmMoves(/*user_id?, match_id?*/){
+  //TODO
+}

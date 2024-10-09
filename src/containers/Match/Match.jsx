@@ -1,10 +1,11 @@
-import { useIdStore, useWinnerStore } from "../../zustand/store.js";
+import { useBoardStore, useIdStore, useWinnerStore} from "../../zustand/store.js";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
 import Winner from "./components/Winner.jsx";
 import useMatchData from "./hooks/useMatchData.jsx";
 import MatchLayout from "./components/MatchLayout.jsx";
 import { passTurn, leaveMatch } from "./services/MatchService.js";
+import { useEffect } from "react";
 
 export default function Match() {
   const setStateWinner = useWinnerStore((state) => state.setStateWinner);
@@ -16,8 +17,17 @@ export default function Match() {
     room_id,
     user_name,
   );
-
   if (!userId) setUserId(user_id);
+  const firstPos = useBoardStore((state) => state.firstPos);
+  const secondPos = useBoardStore((state) => state.secondPos);
+  const setFirstPos = useBoardStore((state) => state.setFirstPos);
+  const setSecondPos = useBoardStore((state) => state.setSecondPos);
+  const board = useBoardStore((state) => state.board);
+  const setBoard = useBoardStore((state) => state.setBoard);
+
+  // console.log("This is the board",board);
+  // const boardInstance = new BoardClass(stateBoard);
+  // setBoard(boardInstance);
 
   const handlePassTurn = async () => {
     try {
@@ -39,6 +49,29 @@ export default function Match() {
     }
   };
 
+  // TODO : manejar movimientos.
+  // const handlePartialMove = async () => {};
+  // const handleUndoPartialMove = async () => {};
+  // const handleConfirmMoves = async () => {};
+
+
+  useEffect(()=>{
+    if(firstPos){
+      // console.log(stateBoard);
+      console.log("First pos: ", firstPos);
+    }
+    if(secondPos){
+      console.log("Second pos: ", secondPos);
+    }
+    if(firstPos && secondPos){
+      setFirstPos(null);
+      setSecondPos(null);
+      let new_board = board;
+      new_board.switchTiles(firstPos, secondPos);
+      setBoard(new_board);
+    }
+  },[firstPos,secondPos,board,setBoard]);
+
   if (stateOtherPlayers && stateOtherPlayers[0] == undefined) {
     setStateWinner(user_name);
     return <Winner />;
@@ -53,7 +86,7 @@ export default function Match() {
       <MatchLayout 
         statePlayerMe={statePlayerMe} 
         stateOtherPlayers={stateOtherPlayers} 
-        stateBoard={stateBoard}
+        // stateBoard={board}
         handleLeaveMatch={handleLeaveMatch}
         handlePassTurn={handlePassTurn}
       />

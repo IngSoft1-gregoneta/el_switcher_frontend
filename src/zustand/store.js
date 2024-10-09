@@ -23,3 +23,12 @@ export const useIdStore = create((set) => ({
   userId: null,
   setUserId: (newId) => set({ userId: newId }),
 }));
+
+export const useBoardStore = create((set)=>({
+  board:null,
+  firstPos:null,
+  secondPos:null,
+  setFirstPos: (new_pos) => set({firstPos:new_pos}),
+  setSecondPos: (new_pos) => set({secondPos:new_pos}),
+  setBoard: (new_board) => set({board:new_board}),
+}));
