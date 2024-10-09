@@ -9,13 +9,15 @@ export default function MatchLayout({
   statePlayerMe,
   stateOtherPlayers,
   stateBoard,
+  usedMovCards,
   handlePassTurn,
   handleLeaveMatch,
 }) {
   MatchLayout.propTypes = {
     statePlayerMe: PropTypes.object,
-    stateOtherPlayers: PropTypes.object,
-    stateBoard: PropTypes.object,
+    stateOtherPlayers: PropTypes.array,
+    stateBoard: PropTypes.array,
+    usedMovCards: PropTypes.array,
     handlePassTurn: PropTypes.func,
     handleLeaveMatch: PropTypes.func,
   };
@@ -26,24 +28,29 @@ export default function MatchLayout({
   const playerLeft = stateOtherPlayers.length > 2 && stateOtherPlayers[2];
 
   // TODO: change this to the parcial cards
-  const movParcialCards = playerMe.mov_cards.map((card, i) => {
+  const movParcialCards = usedMovCards.map((card, i) => {
     return (
       <img
-        src={images[`back_mov`]}
+        src={card.is_used ? images[`${card.mov_type}`] : images[`back_mov`]}
         key={i}
         className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
       />
     );
   });
+
   const movCards = playerMe.mov_cards.map((card, i) => {
-    return (
-      <img
-        src={images[`${card.mov_type}`]}
-        key={i}
-        className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-      />
-    );
+    if (!card.is_used) {
+      return (
+        <img
+          src={images[`${card.mov_type}`]}
+          key={i}
+          data-testid="me-mov-cards"
+          className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+        />
+      );
+    }
   });
+
   return (
     <div className="grid h-screen w-screen grid-cols-4 grid-rows-4">
       <div className="container col-span-1 row-span-1 flex flex-col items-center justify-center text-center">
