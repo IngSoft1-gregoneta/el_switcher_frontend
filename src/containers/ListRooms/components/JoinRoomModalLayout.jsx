@@ -6,7 +6,7 @@ import ModalInput from "../../../components/ModalInput";
 
 export default function JoinRoomModalLayout({ roomId, isOpen, setIsOpen }) {
   JoinRoomModalLayout.propTypes = {
-    roomId: PropTypes.number,
+    roomId: PropTypes.string,
     isOpen: PropTypes.bool,
     setIsOpen: PropTypes.func,
   };

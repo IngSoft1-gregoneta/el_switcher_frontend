@@ -52,7 +52,13 @@ export default function Board({ stateBoard }) {
               default:
                 tileColor = "bg-amber-600";
             }
-            return <Tile key={`${rowIndex}-${colIndex}`} color={tileColor} />;
+            return (
+              <Tile
+                key={`${rowIndex}-${colIndex}`}
+                color={tileColor}
+                figure={ficha.figure}
+              />
+            );
           }),
         )}
       </div>
