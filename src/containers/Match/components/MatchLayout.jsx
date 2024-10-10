@@ -4,6 +4,7 @@ import Board from "./Board";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 import PropTypes from "prop-types";
 import color_proh from "../assets/prohib.svg";
+import MovCard from "./MovCard";
 
 export default function MatchLayout({
   statePlayerMe,
@@ -26,25 +27,20 @@ export default function MatchLayout({
   const playerLeft = stateOtherPlayers.length > 2 && stateOtherPlayers[2];
 
   // TODO: change this to the parcial cards
-  const movParcialCards = usedMovCards.map((card, i) => {
-    return (
-      <img
-        src={card.is_used ? images[`${card.mov_type}`] : images[`back_mov`]}
-        key={i}
-        className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-      />
-    );
-  });
+  // const movParcialCards = usedMovCards.map((card, i) => {
+  //   return (
+  //     <img
+  //       src={card.is_used ? images[`${card.mov_type}`] : images[`back_mov`]}
+  //       key={i}
+  //       className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+  //     />
+  //   );
+  // });
 
   const movCards = playerMe.mov_cards.map((card, i) => {
     if (!card.is_used) {
       return (
-        <img
-          src={images[`${card.mov_type}`]}
-          key={i}
-          data-testid="me-mov-cards"
-          className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-        />
+        <MovCard card={card} index={i}/>
       );
     }
   });
@@ -71,7 +67,7 @@ export default function MatchLayout({
       <div className="container col-span-1 row-span-1">
         <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
-            {movParcialCards}
+            {/* {movParcialCards} */}
           </div>
         </div>
       </div>
@@ -85,13 +81,11 @@ export default function MatchLayout({
           />
         )}
       </div>
-
-            <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
-                <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
-                    <Board/>
-                </div>
-            </div>
-
+          <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
+              <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
+                  <Board/>
+              </div>
+          </div>
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
         {playerRight && (
           <PlayerRight

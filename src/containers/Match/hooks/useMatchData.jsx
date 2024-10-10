@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchMatch } from "../services/MatchService";
 import { useUpdateStore } from "../../../zustand/store";
-import { useBoardStore } from "../../../zustand/store";
 
 const useMatchData = (roomId, userName) => {
   const [stateBoard, setStateBoard] = useState(null);

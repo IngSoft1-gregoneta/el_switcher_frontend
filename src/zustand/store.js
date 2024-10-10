@@ -33,9 +33,7 @@ export const useBoardStore = create((set)=>({
   setBoard: (new_board) => set({board:new_board}),
 }));
 
-export const useTestStore = create((set) => ({
-  testMe : null,
-  testOthers : null,
-  setTestMe : (new_state) => set({testMe : new_state}),
-  setTestOthers : (new_state) => set({testOthers : new_state}),
+export const useMovCardStore = create((set) => ({
+  selectedMovCard : null,
+  setSelectedMovCard : (new_card) => set({selectedMovCard : new_card}),
 }));

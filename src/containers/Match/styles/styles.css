@@ -6,7 +6,39 @@
     transition: background-color 0.3s, transform 0.3s;
 }
 
+.selected_tile{
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: auto;
+    margin: 2px;
+    border: solid 2px white;
+    transform: scale(1.2);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.selected_tile:hover{
+    cursor: pointer;    
+}
+
 .tile:hover {
-    transform: scale(1.05);
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+.mov_card {
+    transition: transform 0.5s;
+}
+
+.mov_card:hover {
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+.mov_card_selected {
+    transform: scale(1.15);
+    transition: transform 0.5s;
+}
+
+.mov_card_selected:hover {
     cursor: pointer;
 }
