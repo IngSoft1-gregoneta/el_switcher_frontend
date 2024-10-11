@@ -54,6 +54,14 @@ export default class BoardClass {
     this.tiles[pos2.pos_y][pos2.pos_x] = tile1;  
   }
 
+  higlightTiles(initPos, mov_type){
+    this.tiles[initPos.pos_x][5].setHighlight();
+    this.tiles[initPos.pos_x][0].setHighlight();
+    this.tiles[5][initPos.pos_y].setHighlight();
+    this.tiles[0][initPos.pos_y].setHighlight();
+    console.log(mov_type);
+  }
+
   printBoard() {
     this.tiles.forEach((e) => {
       e.forEach((x) => console.log(x.color));

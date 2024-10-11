@@ -16,6 +16,16 @@
     transition: background-color 0.3s, transform 0.3s;
 }
 
+.highlighted_tile{
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: auto;
+    margin: 2px;
+    border: solid 2px white;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
 .selected_tile:hover{
     cursor: pointer;    
 }

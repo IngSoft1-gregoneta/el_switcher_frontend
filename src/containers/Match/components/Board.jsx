@@ -55,7 +55,7 @@ export default function Board(/*{ stateBoard }*/) {
               default:
                 tileColor = "bg-amber-600";
             }
-            return <Tile key={`${rowIndex}-${colIndex}`} posx={colIndex} posy={rowIndex} color={tileColor} />;
+            return <Tile key={`${rowIndex}-${colIndex}`} posx={colIndex} posy={rowIndex} color={tileColor} highlight={ficha.is_highlighted} />;
           }),
         )}
       </div>

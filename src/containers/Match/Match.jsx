@@ -55,10 +55,12 @@ export default function Match() {
   }, [stateBoard, setBoard]);
 
   useEffect(() => {
-    if (selectedMovCard) {
+    if (selectedMovCard && firstPos && board) {
       console.log(selectedMovCard.mov_type);
+      board.higlightTiles(firstPos, selectedMovCard.mov_type);
+      setBoard(board);
     }
-  }, [selectedMovCard]);
+  }, [selectedMovCard, board, firstPos]);
 
   // TODO : manejar movimientos.
   const handlePartialMove = async () => {

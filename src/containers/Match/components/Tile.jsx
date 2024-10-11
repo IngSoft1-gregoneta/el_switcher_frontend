@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useBoardStore } from "../../../zustand/store";
 
-export default function Tile({ color, posx, posy }) {
+export default function Tile({ color, posx, posy, highlight }) {
   const firstPos = useBoardStore((state) => state.firstPos);
   const secondPos = useBoardStore((state) => state.secondPos);
   const setFirstPos = useBoardStore((state) => state.setFirstPos);
   const setSecondPos = useBoardStore((state) => state.setSecondPos);
   const [selected, setSelected] = useState(false);
 
-  //TODO anda raro si no tenes el turno, probablemente por manejar estado en tile y match
   const handleTileClick = () => {
     setSelected(!selected);
     if (!firstPos && !secondPos) {
@@ -32,6 +31,15 @@ export default function Tile({ color, posx, posy }) {
       <div
       onClick={handleTileClick}
       className={`selected_tile ${color} m-1 min-h-[50px] min-w-[50px] rounded`}
+    ></div>
+    );
+  }
+
+  if(highlight){
+    return(
+      <div
+      onClick={handleTileClick}
+      className={`highlighted_tile ${color} m-1 min-h-[50px] min-w-[50px] rounded`}
     ></div>
     );
   }
