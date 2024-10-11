@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import testResponses from "./testResponses.json";
 import MatchLayout from "./components/MatchLayout";
+import Tile from "./components/Tile";
 
 describe("Match testing", () => {
   it("names of players appears", () => {
@@ -112,5 +113,26 @@ describe("Match testing", () => {
     if (mockRes.other_players.length < 2) {
       expect(playerRight).not.toBeInTheDocument();
     }
+  });
+
+  it("highlighted figure on board", () => {
+    const mockRes = testResponses;
+    render(
+      <MemoryRouter>
+        <MatchLayout
+          statePlayerMe={mockRes.me}
+          stateOtherPlayers={mockRes.other_players}
+          stateBoard={mockRes.board.tiles}
+          usedMovCards={mockRes.visible_mov_cards}
+          handleLeaveMatch={() => void 0}
+          handlePassTurn={() => void 0}
+        />
+      </MemoryRouter>,
+    );
+    const tiles = screen.getAllByTestId("tile");
+    const numberOfHighlightedTiles = tiles.filter((tile) =>
+      tile.className.split(" ").includes("blur"),
+    ).length;
+    expect(numberOfHighlightedTiles).toBe(4);
   });
 });

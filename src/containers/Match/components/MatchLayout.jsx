@@ -27,28 +27,40 @@ export default function MatchLayout({
   const playerRight = stateOtherPlayers.length > 1 && stateOtherPlayers[1];
   const playerLeft = stateOtherPlayers.length > 2 && stateOtherPlayers[2];
 
-  // TODO: change this to the parcial cards
-  const movParcialCards = usedMovCards.map((card, i) => {
+  const backMovCard = (lengthToFill) => {
+    return Array.from({ length: lengthToFill }, (_, i) => (
+      <img
+        key={3 - lengthToFill + i}
+        src={images[`back_mov`]}
+        className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+      />
+    ));
+  };
+
+  const movParcialDeck = usedMovCards
+    ? [
+        ...usedMovCards.map((card, i) => {
+          return (
+            <img
+              src={images[`${card.mov_type}`]}
+              key={i}
+              className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+            />
+          );
+        }),
+        ...backMovCard(3 - usedMovCards.length),
+      ]
+    : backMovCard(3);
+
+  const movCards = playerMe.mov_cards.map((card, i) => {
     return (
       <img
-        src={card.is_used ? images[`${card.mov_type}`] : images[`back_mov`]}
+        src={images[`${card.mov_type}`]}
         key={i}
+        data-testid="me-mov-cards"
         className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
       />
     );
-  });
-
-  const movCards = playerMe.mov_cards.map((card, i) => {
-    if (!card.is_used) {
-      return (
-        <img
-          src={images[`${card.mov_type}`]}
-          key={i}
-          data-testid="me-mov-cards"
-          className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-        />
-      );
-    }
   });
 
   return (
@@ -73,7 +85,7 @@ export default function MatchLayout({
       <div className="container col-span-1 row-span-1">
         <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
-            {movParcialCards}
+            {movParcialDeck}
           </div>
         </div>
       </div>

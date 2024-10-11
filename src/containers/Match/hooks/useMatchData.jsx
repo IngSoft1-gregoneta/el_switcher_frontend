@@ -6,7 +6,7 @@ const useMatchData = (roomId, userName) => {
   const [stateBoard, setStateBoard] = useState(null);
   const [statePlayerMe, setStatePlayerMe] = useState(null);
   const [stateOtherPlayers, setStateOtherPlayers] = useState(null);
-  const [usedMovCards, setUsedMovCards] = useState(null);
+  const [usedMovCards, setUsedMovCards] = useState([]);
 
   const updateMatch = useUpdateStore((state) => state.updateMatch);
 
