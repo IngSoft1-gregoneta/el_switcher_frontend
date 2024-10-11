@@ -15,7 +15,18 @@ const COLORS = Object.freeze({
   BLUE: "bg-blue-600",
 });
 
-export default function Board(/*{ stateBoard }*/) {
+const COLOR_MAP = {
+  Yellow: COLORS.YELLOW,
+  Green: COLORS.GREEN,
+  Red: COLORS.RED,
+  Blue: COLORS.BLUE,
+};
+
+const getTileColor = (color) => {
+  return COLOR_MAP[color] || "bg-amber-600"; // Fallback color
+};
+
+export default function Board() {
   const navigate = useNavigate();
 
   const board = useBoardStore((state) => state.board);
@@ -32,35 +43,14 @@ export default function Board(/*{ stateBoard }*/) {
   return (
     <div className="flex h-full max-h-full w-full max-w-full justify-center">
       <div className="grid grid-cols-6 grid-rows-6 gap-1 md:gap-2">
-        {/* <div className="flex items-center justify-center h-screen"> */}
-        {/*     <div className="grid grid-cols-6 grid-rows-6 gap-2 mx-auto w-[70vw]"> */}
         {board.tiles.map((row, rowIndex) =>
           row.map((ficha, colIndex) => {
-            let tileColor;
-            //TODO : maybe this way of matching colors is prone to breaking
-            //       how do we solve it?? a mistery for humand kind to wonder
-            switch (ficha.color) {
-              case "Yellow":
-                tileColor = COLORS.YELLOW;
-                break;
-              case "Green":
-                tileColor = COLORS.GREEN;
-                break;
-              case "Red":
-                tileColor = COLORS.RED;
-                break;
-              case "Blue":
-                tileColor = COLORS.BLUE;
-                break;
-              default:
-                tileColor = "bg-amber-600";
-            }
             return (
               <Tile
                 key={`${rowIndex}-${colIndex}`}
-                posx={colIndex} posy={rowIndex} color={tileColor}
+                posx={colIndex} posy={rowIndex} color={getTileColor(ficha.color)}
                 figure={ficha.figure}
-                highlight={ficha.is_highlighted} />
+              />
             );
           }),
         )}

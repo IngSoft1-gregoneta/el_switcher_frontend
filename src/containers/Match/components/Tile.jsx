@@ -1,58 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useBoardStore } from "../../../zustand/store";
 
-export default function Tile({ color, posx, posy, highlight, figure }) {
+function inHighlighted(posx, posy, arroftiles = []) {
+  return arroftiles.some((tile) => tile.pos.x === posx && tile.pos.y === posy);
+}
+
+
+export default function Tile({ color, posx, posy, figure}) {
   const firstPos = useBoardStore((state) => state.firstPos);
   const secondPos = useBoardStore((state) => state.secondPos);
   const setFirstPos = useBoardStore((state) => state.setFirstPos);
   const setSecondPos = useBoardStore((state) => state.setSecondPos);
-  const [selected, setSelected] = useState(false);
-
+  const highlightedTiles = useBoardStore((state) => state.highlightedTiles);
+  
   const handleTileClick = () => {
-    setSelected(!selected);
+    if (highlightedTiles && !inHighlighted(posy, posx, highlightedTiles)) {
+      console.log("Cannot choose this tile");
+      return;
+    }
+  
     if (!firstPos && !secondPos) {
       setFirstPos({ pos_x: posx, pos_y: posy });
     } else if (firstPos && !secondPos) {
       setSecondPos({ pos_x: posx, pos_y: posy });
-    } else if (firstPos === secondPos) {
+    } else if (firstPos.pos_x === secondPos.pos_x && firstPos.pos_y === secondPos.pos_y) {
       setFirstPos(null);
       setSecondPos(null);
     }
   };
 
-  useEffect(()=>{
-    if(firstPos && secondPos && selected){
-      setSelected(!selected);
-    }
-  },[firstPos,secondPos])
-
-  if(selected){
-    return(
-      <div
-      onClick={handleTileClick}
-      className={`selected_tile ${color} m-1 min-h-[50px] min-w-[50px] rounded`}
-    ></div>
-    );
-  }
-
-  if(highlight){
-    return(
-      <div
-      onClick={handleTileClick}
-      className={`highlighted_tile ${color} m-1 min-h-[50px] min-w-[50px] rounded`}
-    ></div>
-    );
-  }
+  const lightStyle =
+    "ring-4 ring-indigo-500 border-2 border-blue-400 shadow-xl transition duration-500 ease-in-out transform scale-105";
+  const highlight = !highlightedTiles ? "" : (inHighlighted(posy,posx,highlightedTiles) ? lightStyle : "") 
 
   const classAtt =
     figure == "None"
       ? ""
-      : "bg-gradient-to-br from-purple-600  to-indigo-700 opacity-55 blur transition duration-500 group-hover:opacity-100";
+      : "bg-gradient-to-br from-purple-900  to-indigo-900 blur-sm transition duration-500";
+
   return (
     <div className="align-center group relative flex h-8 w-8 items-center justify-center rounded object-center sm:h-16 sm:w-16">
       <div
         data-testid="tile"
-        className={`absolute inset-0 z-0 rounded-lg ${classAtt}`}
+        className={`absolute inset-0 z-0 rounded-lg ${classAtt} ${highlight}`}
       ></div>
       <div
         onClick={handleTileClick}

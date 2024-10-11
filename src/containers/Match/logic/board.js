@@ -55,16 +55,34 @@ export default class BoardClass {
   }
 
   higlightTiles(initPos, mov_type){
-    this.tiles[initPos.pos_x][5].setHighlight();
-    this.tiles[initPos.pos_x][0].setHighlight();
-    this.tiles[5][initPos.pos_y].setHighlight();
-    this.tiles[0][initPos.pos_y].setHighlight();
-    console.log(mov_type);
+    if(initPos == null){
+      throw new Error(`Expected position got: initPos=${initPos}`);
+    }
+    if(!("pos_x" in initPos) || !("pos_y" in initPos)){
+      throw new Error(`Expected position got: initPos=${initPos}`);
+    }
+    if(isNaN(initPos.pos_x) || isNaN(initPos.pos_y)){
+      throw new Error(`Expected x and y position values to be numbers, got: pos_x = ${initPos.pos_x}, pos_y=${initPos.pos_y}`);
+    }
+    if(notInRange(5,0,initPos.pos_x) || notInRange(5,0,initPos.pos_y)){
+      throw new Error(`Position has a value outside the range of the board: initPos=${initPos}`);
+    }
+
+    this.tiles[initPos.pos_y][5].setHighlight();
+    this.tiles[initPos.pos_y][0].setHighlight();
+    this.tiles[5][initPos.pos_x].setHighlight();
+    this.tiles[0][initPos.pos_x].setHighlight();
+    return [
+      this.tiles[initPos.pos_y][5],
+      this.tiles[initPos.pos_y][0],
+      this.tiles[5][initPos.pos_x],
+      this.tiles[0][initPos.pos_x]
+    ]
   }
 
   printBoard() {
     this.tiles.forEach((e) => {
-      e.forEach((x) => console.log(x.color));
+      e.forEach((x) => console.log(x));
     });
   }
 }

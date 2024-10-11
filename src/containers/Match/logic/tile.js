@@ -1,7 +1,7 @@
 export default class TileClass {
   constructor(color, pos, figure) {
     this.color = color;
-        this.is_highlighted = false;
+    this.is_highlighted = false;
     this.pos = {
       x: pos.x,
       y: pos.y,
@@ -12,4 +12,3 @@ export default class TileClass {
         this.is_highlighted = true;
     }
 }
-

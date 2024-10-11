@@ -24,6 +24,9 @@ export default function Match() {
   const setSecondPos = useBoardStore((state) => state.setSecondPos);
   const board = useBoardStore((state) => state.board);
   const setBoard = useBoardStore((state) => state.setBoard);
+  
+  const setHighlightedTiles = useBoardStore((state) => state.setHighlightedTiles);
+
   const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
   const setSelectedMovCard = useMovCardStore((state) => state.setSelectedMovCard);
 
@@ -57,16 +60,16 @@ export default function Match() {
   useEffect(() => {
     if (selectedMovCard && firstPos && board) {
       console.log(selectedMovCard.mov_type);
-      board.higlightTiles(firstPos, selectedMovCard.mov_type);
-      setBoard(board);
+      const highlited_tiles = board.higlightTiles(firstPos, selectedMovCard.mov_type);
+      setHighlightedTiles(highlited_tiles);
     }
   }, [selectedMovCard, board, firstPos]);
 
   // TODO : manejar movimientos.
-  const handlePartialMove = async () => {
+  const handlePartialMove = async (roomID,x1,y1,x2,y2) => {
     try{
-      let response = await makePartialMove(room_id,firstPos.pos_x,firstPos.pos_y,secondPos.pos_x,secondPos.pos_y);
-      console.log(response);
+      await makePartialMove(roomID,x1,y1,x2,y2);
+      setHighlightedTiles(null);
     } catch(error){
       console.log(error);
     }
@@ -77,7 +80,13 @@ export default function Match() {
   useEffect(()=>{
     if(statePlayerMe?.has_turn && selectedMovCard != null){
       if(firstPos && secondPos){
-        handlePartialMove();
+        handlePartialMove(
+          room_id,
+          firstPos.pos_x,
+          firstPos.pos_y,
+          secondPos.pos_x,
+          secondPos.pos_y
+        );
         setFirstPos(null);
         setSecondPos(null);
         setSelectedMovCard(null);

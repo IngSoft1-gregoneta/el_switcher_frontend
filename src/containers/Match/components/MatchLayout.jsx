@@ -36,20 +36,20 @@ export default function MatchLayout({
     ));
   };
 
-  const movParcialDeck = usedMovCards
-    ? [
-        ...usedMovCards.map((card, i) => {
-          return (
-            <img
-              src={images[`${card.mov_type}`]}
-              key={i}
-              className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-            />
-          );
-        }),
-        ...backMovCard(3 - usedMovCards.length),
-      ]
-    : backMovCard(3);
+  // const movParcialDeck = usedMovCards
+  //   ? [
+  //       ...usedMovCards.map((card, i) => {
+  //         return (
+  //           <img
+  //             src={images[`${card.mov_type}`]}
+  //             key={i}
+  //             className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+  //           />
+  //         );
+  //       }),
+  //       ...backMovCard(3 - usedMovCards.length),
+  //     ]
+  //   : backMovCard(3);
 
   const movCards = playerMe.mov_cards.map((card, i) => {
     return (
