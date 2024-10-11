@@ -44,7 +44,7 @@ export default function App() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
-  console.log(connectionStatus);
+  console.log("connectionStatus ", connectionStatus);
   useEffect(() => {
     if (lastMessage) {
       console.log("Este es lastmessage " + lastMessage.data);
@@ -70,13 +70,6 @@ export default function App() {
     <RoomProvider>
       <BrowserRouter>
         <Routes>
-          {/* TODO: Remove GetId and load de userId with loaders */}
-          {/* <Route path="/" loader={ */}
-          {/*   fetchUserId */}
-          {/* } action={ () => { */}
-          {/*     const userId = fetchUserId(); */}
-          {/*     return {redirect: `/id/${userId}`} */}
-          {/*   }} element={<GetId />} /> */}
           <Route path="/" element={<GetId />} />
           <Route path="/id/:user_id" element={<AppLayout />} />
           <Route path="/create_room" element={<CreateRoom />} />

@@ -1,11 +1,56 @@
-import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import AppLayout from "./components/AppLayout";
 import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+import App from "./App";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 
+const updateListMock = vi.fn();
+const updateRoomMock = vi.fn();
+const updateMatchMock = vi.fn();
+const setMatchStartedMock = vi.fn();
+vi.mock("react-use-websocket");
+vi.mock("../../zustand/store.js", async (importOriginal) => {
+  return {
+    ...(await importOriginal()),
+    useMatchStore: (state) => {
+      const data = {
+        matchStarted: false,
+        setMatchStarted: setMatchStartedMock,
+      };
+      return state(data);
+    },
+    useUpdateStore: (state) => {
+      const data = {
+        updateList: false,
+        updateRoom: false,
+        updateMatch: false,
+        setUpdateList: updateListMock,
+        setUpdateRoom: updateRoomMock,
+        setUpdateMatch: updateMatchMock,
+      };
+      return state(data);
+    },
+  };
+});
+
+const uuid = crypto.randomUUID();
 describe("App testing", () => {
-  // TODO:
+  let originalFetch;
+  beforeAll(() => {
+    originalFetch = global.fetch;
+    global.fetch = vi.fn(() => {
+      return {
+        ok: true,
+        json: () => new Promise((resolve) => resolve(uuid)),
+      };
+    });
+  });
+  afterAll(() => {
+    global.fetch = originalFetch;
+  });
+
   it("should render /create_room on Crear Partida button", () => {
     render(
       <MemoryRouter>
@@ -17,70 +62,63 @@ describe("App testing", () => {
     expect(button).toBeInTheDocument();
     expect(button).toHaveTextContent(/crear/i);
   });
-});
 
-// // quizas poner esto en un archivo global
-// const uuid = crypto.randomUUID();
-// vi.mock("../../services/state.js", () => ({
-//   useUpdateStore: vi.fn(() => ({
-//     updateList: false,
-//     updateRoom: false,
-//     setUpdateList: vi.fn(),
-//     setUpdateRoom: vi.fn(),
-//   })),
-//   useMatchStore: (state) => {
-//     const data = {
-//       stateMatch: null,
-//       matchStarted: false,
-//       updateMatch: false,
-//       stateBoard: null,
-//       setStateMatch: vi.fn(),
-//       setMatchStarted: vi.fn(),
-//       setUpdateMatch: vi.fn(),
-//       setStateBoard: vi.fn(),
-//     };
-//     return state(data);
-//   },
-//   useIdStore: (state) => {
-//     const data = {
-//       userId: uuid,
-//       setUserId: vi.fn(),
-//     };
-//     return state(data);
-//   },
-// }));
-//
-// vi.mock("react-use-websocket", { spy: true });
-//
-// describe("Websocket test", () => {
-//   let originalFetch;
-//   beforeEach(() => {
-//     originalFetch = global.fetch;
-//   });
-//   afterEach(() => {
-//     global.fetch = originalFetch;
-//   });
-//
-//   it("correct calling on url with useWebSocket", () => {
-//     render(<App />);
-//     expect(useWebSocket).toHaveBeenCalledWith(`ws://localhost:8000/ws/${uuid}`);
-//   });
-//
-//   test("should fetch user ID on mount and call setUserId", async () => {
-//     global.fetch = vi.fn(() =>
-//       Promise.resolve({
-//         json() {
-//           return { id: 1234 };
-//         },
-//       }),
-//     );
-//
-//     render(<App />);
-//
-//     await waitFor(() => {
-//       expect(fetch).toHaveBeenCalledWith("http://127.0.0.1:8000/get_id", {
-//         method: "GET",
-//       });
-//     });
-//   });
-// });
+  it("get the id from GetId, saves it to the store and call webScoket with that id", async () => {
+    vi.mocked(useWebSocket).mockReturnValue({
+      sendMessage: null,
+      lastMessage: null,
+      readyState: null,
+    });
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith("http://127.0.0.1:8000/get_id", {
+        method: "GET",
+      });
+      expect(useWebSocket).toHaveBeenCalledWith(
+        `ws://localhost:8000/ws/${uuid}`,
+      );
+    });
+  });
+  it("test updateList is called on lastMessage == LISTA ", async () => {
+    vi.mocked(useWebSocket).mockReturnValue({
+      sendMessage: null,
+      lastMessage: { data: "LISTA" },
+      readyState: ReadyState.OPEN,
+    });
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(updateListMock).toHaveBeenCalled();
+    });
+  });
+  it("test updateRoom is called on lastMessage == ROOM ", async () => {
+    vi.mocked(useWebSocket).mockReturnValue({
+      sendMessage: null,
+      lastMessage: { data: "ROOM" },
+      readyState: ReadyState.OPEN,
+    });
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(updateRoomMock).toHaveBeenCalled();
+    });
+  });
+  it("test updateMatch is called on lastMessage == MATCH ", async () => {
+    vi.mocked(useWebSocket).mockReturnValue({
+      sendMessage: null,
+      lastMessage: { data: "MATCH" },
+      readyState: ReadyState.OPEN,
+    });
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(updateMatchMock).toHaveBeenCalled();
+      expect(setMatchStartedMock).toHaveBeenCalledWith(true);
+    });
+  });
+});

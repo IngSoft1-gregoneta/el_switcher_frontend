@@ -1,47 +1,43 @@
 {
-  "match_id": "69aadb5a-8670-11ef-b872-f09e4a897aab",
+  "match_id": "69ca3ad4-8749-11ef-aaf1-3085a9f6224c",
   "me": {
     "player_name": "grego",
-    "mov_cards": [
-      {
-        "mov_type": "mov4",
-        "mov_status": "Held",
-        "is_used": true
-      },
-      {
-        "mov_type": "mov4",
-        "mov_status": "Held",
-        "is_used": false
-      },
-      {
-        "mov_type": "mov4",
-        "mov_status": "Held",
-        "is_used": false
-      }
-    ],
     "visible_fig_cards": [
       {
         "card_color": "Blue",
-        "fig_type": "fig13",
-        "is_visible": true
-      },
-      {
-        "card_color": "Blue",
-        "fig_type": "fig15",
+        "fig_type": "fig17",
         "is_visible": true
       },
       {
         "card_color": "White",
-        "fig_type": "fige04",
-        "is_visible": false
+        "fig_type": "fige07",
+        "is_visible": true
+      },
+      {
+        "card_color": "Blue",
+        "fig_type": "fig06",
+        "is_visible": true
       }
     ],
-    "deck_len": 25,
+    "deck_len": 12,
+    "mov_cards": [
+      {
+        "mov_type": "mov2"
+      },
+      {
+        "mov_type": "mov7"
+      }
+    ],
     "has_turn": false
   },
+  "visible_mov_cards": [
+    {
+      "mov_type": "mov2"
+    }
+  ],
   "other_players": [
     {
-      "player_name": "nico",
+      "player_name": "tadeo",
       "visible_fig_cards": [
         {
           "card_color": "Blue",
@@ -50,205 +46,278 @@
         },
         {
           "card_color": "Blue",
-          "fig_type": "fig12",
+          "fig_type": "fig13",
+          "is_visible": true
+        },
+        {
+          "card_color": "Blue",
+          "fig_type": "fig17",
+          "is_visible": true
+        }
+      ],
+      "deck_len": 12,
+      "has_turn": true
+    },
+    {
+      "player_name": "yamil",
+      "visible_fig_cards": [
+        {
+          "card_color": "Blue",
+          "fig_type": "fig16",
+          "is_visible": true
+        },
+        {
+          "card_color": "Blue",
+          "fig_type": "fig07",
           "is_visible": true
         },
         {
           "card_color": "White",
-          "fig_type": "fige03",
+          "fig_type": "fige01",
           "is_visible": true
         }
       ],
-      "deck_len": 25,
-      "has_turn": true
-    }
-  ],
-  "visible_mov_cards": [
+      "deck_len": 12,
+      "has_turn": false
+    },
     {
-      "mov_type": "mov4",
-      "mov_status": "Held",
-      "is_used": false
+      "player_name": "nico",
+      "visible_fig_cards": [
+        {
+          "card_color": "White",
+          "fig_type": "fige01",
+          "is_visible": true
+        },
+        {
+          "card_color": "White",
+          "fig_type": "fige02",
+          "is_visible": true
+        },
+        {
+          "card_color": "Blue",
+          "fig_type": "fig05",
+          "is_visible": true
+        }
+      ],
+      "deck_len": 12,
+      "has_turn": false
     }
   ],
   "board": {
     "tiles": [
       {
-        "tile_color": "Green",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 0,
         "tile_pos_y": 0
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 1,
         "tile_pos_y": 0
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Blue",
+        "tile_in_figure": "fige02",
         "tile_pos_x": 2,
         "tile_pos_y": 0
       },
       {
-        "tile_color": "Green",
+        "tile_color": "Blue",
+        "tile_in_figure": "fige02",
         "tile_pos_x": 3,
         "tile_pos_y": 0
       },
       {
-        "tile_color": "Green",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 4,
         "tile_pos_y": 0
       },
       {
-        "tile_color": "Blue",
+        "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 5,
         "tile_pos_y": 0
       },
       {
         "tile_color": "Blue",
+        "tile_in_figure": "None",
         "tile_pos_x": 0,
         "tile_pos_y": 1
       },
       {
-        "tile_color": "Green",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 1,
         "tile_pos_y": 1
       },
       {
         "tile_color": "Blue",
+        "tile_in_figure": "fige02",
         "tile_pos_x": 2,
         "tile_pos_y": 1
       },
       {
-        "tile_color": "Red",
+        "tile_color": "Blue",
+        "tile_in_figure": "fige02",
         "tile_pos_x": 3,
         "tile_pos_y": 1
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 4,
         "tile_pos_y": 1
       },
       {
-        "tile_color": "Blue",
+        "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 5,
         "tile_pos_y": 1
       },
       {
-        "tile_color": "Red",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 0,
         "tile_pos_y": 2
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 1,
         "tile_pos_y": 2
       },
       {
-        "tile_color": "Red",
+        "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 2,
         "tile_pos_y": 2
       },
       {
-        "tile_color": "Green",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 3,
         "tile_pos_y": 2
       },
       {
         "tile_color": "Blue",
+        "tile_in_figure": "None",
         "tile_pos_x": 4,
         "tile_pos_y": 2
       },
       {
-        "tile_color": "Red",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 5,
         "tile_pos_y": 2
       },
       {
-        "tile_color": "Blue",
+        "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 0,
         "tile_pos_y": 3
       },
       {
         "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 1,
         "tile_pos_y": 3
       },
       {
-        "tile_color": "Red",
+        "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 2,
         "tile_pos_y": 3
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Blue",
+        "tile_in_figure": "None",
         "tile_pos_x": 3,
         "tile_pos_y": 3
       },
       {
         "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 4,
         "tile_pos_y": 3
       },
       {
-        "tile_color": "Blue",
+        "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 5,
         "tile_pos_y": 3
       },
       {
-        "tile_color": "Blue",
+        "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 0,
         "tile_pos_y": 4
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 1,
         "tile_pos_y": 4
       },
       {
-        "tile_color": "Red",
+        "tile_color": "Blue",
+        "tile_in_figure": "None",
         "tile_pos_x": 2,
         "tile_pos_y": 4
       },
       {
-        "tile_color": "Red",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 3,
         "tile_pos_y": 4
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 4,
         "tile_pos_y": 4
       },
       {
-        "tile_color": "Green",
+        "tile_color": "Red",
+        "tile_in_figure": "None",
         "tile_pos_x": 5,
         "tile_pos_y": 4
       },
       {
-        "tile_color": "Blue",
+        "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 0,
         "tile_pos_y": 5
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 1,
         "tile_pos_y": 5
       },
       {
         "tile_color": "Green",
+        "tile_in_figure": "None",
         "tile_pos_x": 2,
         "tile_pos_y": 5
       },
       {
-        "tile_color": "Yellow",
+        "tile_color": "Blue",
+        "tile_in_figure": "None",
         "tile_pos_x": 3,
         "tile_pos_y": 5
       },
       {
-        "tile_color": "Green",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 4,
         "tile_pos_y": 5
       },
       {
-        "tile_color": "Green",
+        "tile_color": "Yellow",
+        "tile_in_figure": "None",
         "tile_pos_x": 5,
         "tile_pos_y": 5
       }

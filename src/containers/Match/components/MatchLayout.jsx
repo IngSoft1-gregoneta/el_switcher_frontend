@@ -27,12 +27,15 @@ export default function MatchLayout({
   const playerRight = stateOtherPlayers.length > 1 && stateOtherPlayers[1];
   const playerLeft = stateOtherPlayers.length > 2 && stateOtherPlayers[2];
 
-  const backMovCard = (
-    <img
-      src={images[`back_mov`]}
-      className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-    />
-  );
+  const backMovCard = (lengthToFill) => {
+    return Array.from({ length: lengthToFill }, (_, i) => (
+      <img
+        key={3 - lengthToFill + i}
+        src={images[`back_mov`]}
+        className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+      />
+    ));
+  };
 
   const movParcialDeck = usedMovCards
     ? [
@@ -45,21 +48,19 @@ export default function MatchLayout({
             />
           );
         }),
-        ...Array(3 - usedMovCards.length).fill(backMovCard),
+        ...backMovCard(3 - usedMovCards.length),
       ]
-    : Array(3).fill(backMovCard);
+    : backMovCard(3);
 
   const movCards = playerMe.mov_cards.map((card, i) => {
-    if (!card.is_used) {
-      return (
-        <img
-          src={images[`${card.mov_type}`]}
-          key={i}
-          data-testid="me-mov-cards"
-          className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-        />
-      );
-    }
+    return (
+      <img
+        src={images[`${card.mov_type}`]}
+        key={i}
+        data-testid="me-mov-cards"
+        className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+      />
+    );
   });
 
   return (
