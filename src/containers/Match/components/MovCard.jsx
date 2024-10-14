@@ -3,11 +3,14 @@ import images from "../logic/bindImage";
 import { useMovCardStore } from "../../../zustand/store";
 
 export default function MovCard({ card, index }) {
-    // const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
+    const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
     const setSelectedMovCard = useMovCardStore((state) => state.setSelectedMovCard);
 
     const handleClick = () => {
-        setSelectedMovCard(card);
+        let new_card = { ...card, index };
+        if (new_card == selectedMovCard) selectedMovCard(null);
+        console.log(card);
+        setSelectedMovCard(new_card);
     }
 
     // if(selectedMovCard && selectedMovCard == card){

@@ -2,6 +2,7 @@ import React from "react";
 import { useBoardStore } from "../../../zustand/store";
 
 function inHighlighted(posx, posy, arroftiles = []) {
+  if (arroftiles == null) return false;
   return arroftiles.some((tile) => tile.pos.x === posx && tile.pos.y === posy);
 }
 

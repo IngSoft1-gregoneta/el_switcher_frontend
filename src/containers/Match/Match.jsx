@@ -32,19 +32,16 @@ export default function Match() {
 
   const handlePassTurn = async () => {
     try {
-      const response = await passTurn(room_id, user_name);
-      console.log(response);
+      await passTurn(room_id, user_name);
     } catch (error) {
       console.error(error);
-      console.log("No es el turno de este jugador.");
     }
   };
 
   const handleLeaveMatch = async () => {
     try {
-      const response = await leaveMatch(room_id, user_name, user_id);
+      await leaveMatch(room_id, user_name, user_id);
       navigate("/");
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -59,16 +56,15 @@ export default function Match() {
 
   useEffect(() => {
     if (selectedMovCard && firstPos && board) {
-      console.log(selectedMovCard.mov_type);
-      const highlited_tiles = board.higlightTiles(firstPos, selectedMovCard.mov_type);
+      const highlited_tiles = board.higlightTiles(firstPos, selectedMovCard.vectors);
       setHighlightedTiles(highlited_tiles);
     }
   }, [selectedMovCard, board, firstPos]);
 
   // TODO : manejar movimientos.
-  const handlePartialMove = async (roomID,x1,y1,x2,y2) => {
+  const handlePartialMove = async (roomID,playerName,cardIndex,x1,y1,x2,y2) => {
     try{
-      await makePartialMove(roomID,x1,y1,x2,y2);
+      await makePartialMove(roomID,playerName,cardIndex,x1,y1,x2,y2);
       setHighlightedTiles(null);
     } catch(error){
       console.log(error);
@@ -82,6 +78,8 @@ export default function Match() {
       if(firstPos && secondPos){
         handlePartialMove(
           room_id,
+          user_name,
+          selectedMovCard.index,
           firstPos.pos_x,
           firstPos.pos_y,
           secondPos.pos_x,

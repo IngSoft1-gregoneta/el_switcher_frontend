@@ -54,7 +54,7 @@ export default class BoardClass {
     this.tiles[pos2.pos_y][pos2.pos_x] = tile1;  
   }
 
-  higlightTiles(initPos, mov_type){
+  higlightTiles(initPos, posVectors){
     if(initPos == null){
       throw new Error(`Expected position got: initPos=${initPos}`);
     }
@@ -67,17 +67,33 @@ export default class BoardClass {
     if(notInRange(5,0,initPos.pos_x) || notInRange(5,0,initPos.pos_y)){
       throw new Error(`Position has a value outside the range of the board: initPos=${initPos}`);
     }
+    if(!Array.isArray(posVectors)){
+      throw new Error(`Expected an array of position vectors for the move, got: ${posVectors}`);
+    }
+    if(posVectors.length != 4){
+      throw new Error(`Position vectors array must have exactly 4 vectors, got: ${posVectors.length}`);
+    }
 
-    this.tiles[initPos.pos_y][5].setHighlight();
-    this.tiles[initPos.pos_y][0].setHighlight();
-    this.tiles[5][initPos.pos_x].setHighlight();
-    this.tiles[0][initPos.pos_x].setHighlight();
-    return [
-      this.tiles[initPos.pos_y][5],
-      this.tiles[initPos.pos_y][0],
-      this.tiles[5][initPos.pos_x],
-      this.tiles[0][initPos.pos_x]
-    ]
+    const posVector1 = posVectors[0];
+    const posVector2 = posVectors[1];
+    const posVector3 = posVectors[2];
+    const posVector4 = posVectors[3];
+  
+    // Calculate valid positions based on position vectors
+    const validPos1 = {x: initPos.pos_y + posVector1[1], y: initPos.pos_x + posVector1[0]};
+    const validPos2 = {x: initPos.pos_y + posVector2[1], y: initPos.pos_x + posVector2[0]};
+    const validPos3 = {x: initPos.pos_y + posVector3[1], y: initPos.pos_x + posVector3[0]};
+    const validPos4 = {x: initPos.pos_y + posVector4[1], y: initPos.pos_x + posVector4[0]};
+  
+    // Collect valid positions that are in range
+    const aux = [validPos1, validPos2, validPos3, validPos4];
+    const validPositions = aux.filter(pos => !notInRange(5, 0, pos.x) && !notInRange(5, 0, pos.y));
+
+    validPositions.forEach((pos) => {
+      this.tiles[pos.x][pos.y].setHighlight();
+    });
+    
+    return validPositions.map(pos => this.tiles[pos.x][pos.y]);
   }
 
   printBoard() {
