@@ -8,7 +8,10 @@ export default class TileClass {
     };
     this.figure = figure;
   }
-    setHighlight(){
+    setHighlightOn(){
         this.is_highlighted = true;
+    }
+    setHighlightOff(){
+        this.is_highlighted = false;
     }
 }

@@ -13,10 +13,18 @@ export default function Tile({ color, posx, posy, figure}) {
   const setFirstPos = useBoardStore((state) => state.setFirstPos);
   const setSecondPos = useBoardStore((state) => state.setSecondPos);
   const highlightedTiles = useBoardStore((state) => state.highlightedTiles);
+  const setHighlightedTiles = useBoardStore((state) => state.setHighlightedTiles);
   
   const handleTileClick = () => {
+    console.log(`X : ${posx}, Y : ${posy}`);
+    // RESET todas las fichas si se selecciona la misma 2 veces
+    if (firstPos?.pos_x === posx && firstPos?.pos_y === posy){
+      setFirstPos(null);
+      setSecondPos(null);
+      setHighlightedTiles(null);
+    }
+    // PASS si la ficha seleccionada no es una opcion valida para el movimiento
     if (highlightedTiles && !inHighlighted(posy, posx, highlightedTiles)) {
-      console.log("Cannot choose this tile");
       return;
     }
   
@@ -32,7 +40,11 @@ export default function Tile({ color, posx, posy, figure}) {
 
   const lightStyle =
     "ring-4 ring-indigo-500 border-2 border-blue-400 shadow-xl transition duration-500 ease-in-out transform scale-105";
-  const highlight = !highlightedTiles ? "" : (inHighlighted(posy,posx,highlightedTiles) ? lightStyle : "") 
+  const highlight = !highlightedTiles ? "" : (inHighlighted(posy,posx,highlightedTiles) ? lightStyle : "");
+
+  const originStyle =
+    "ring-4 ring-pink-500 border-2 border-red-400 shadow-xl transition duration-500 ease-in-out transform scale-105";
+  const origin = !firstPos ? "" : ((firstPos.pos_x == posx && firstPos.pos_y == posy) ? originStyle : "");
 
   const classAtt =
     figure == "None"
@@ -43,7 +55,7 @@ export default function Tile({ color, posx, posy, figure}) {
     <div className="align-center group relative flex h-8 w-8 items-center justify-center rounded object-center sm:h-16 sm:w-16">
       <div
         data-testid="tile"
-        className={`absolute inset-0 z-0 rounded-lg ${classAtt} ${highlight}`}
+        className={`absolute inset-0 z-0 rounded-lg ${classAtt} ${highlight} ${origin}`}
       ></div>
       <div
         onClick={handleTileClick}

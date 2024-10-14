@@ -6,8 +6,9 @@ import useMatchData from "./hooks/useMatchData.jsx";
 import MatchLayout from "./components/MatchLayout.jsx";
 import { passTurn, leaveMatch, makePartialMove } from "./services/MatchService.js";
 import { useEffect } from "react";
-import BoardClass from "./logic/board.js";
 import { useMovCardStore } from "../../zustand/store.js";
+import { useBoardInit } from "./hooks/useBoardInit.jsx";
+import { useMoveHighLights } from "./hooks/useMoveHighLights.jsx";
 
 export default function Match() {
   const setStateWinner = useWinnerStore((state) => state.setStateWinner);
@@ -30,10 +31,19 @@ export default function Match() {
   const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
   const setSelectedMovCard = useMovCardStore((state) => state.setSelectedMovCard);
 
+  const resetMoveState = () => {
+    setFirstPos(null);
+    setSecondPos(null);
+    setSelectedMovCard(null);
+    setHighlightedTiles(null);
+  };
+
   const handlePassTurn = async () => {
     try {
       await passTurn(room_id, user_name);
+      resetMoveState();
     } catch (error) {
+      resetMoveState();
       console.error(error);
     }
   };
@@ -47,31 +57,20 @@ export default function Match() {
     }
   };
 
-  useEffect(() => {
-    if (stateBoard) {
-      const newBoard = new BoardClass(stateBoard);
-      setBoard(newBoard);
-    }
-  }, [stateBoard, setBoard]);
-
-  useEffect(() => {
-    if (selectedMovCard && firstPos && board) {
-      const highlited_tiles = board.higlightTiles(firstPos, selectedMovCard.vectors);
-      setHighlightedTiles(highlited_tiles);
-    }
-  }, [selectedMovCard, board, firstPos]);
-
-  // TODO : manejar movimientos.
   const handlePartialMove = async (roomID,playerName,cardIndex,x1,y1,x2,y2) => {
     try{
       await makePartialMove(roomID,playerName,cardIndex,x1,y1,x2,y2);
-      setHighlightedTiles(null);
+      resetMoveState();
     } catch(error){
+      resetMoveState();
+      // TODO avisar que no se pudo hacer el movimiento?
       console.log(error);
     }
   };
-  // const handleUndoPartialMove = async () => {};
-  // const handleConfirmMoves = async () => {};
+
+  useBoardInit(stateBoard,setBoard);
+
+  useMoveHighLights(selectedMovCard, board, firstPos, statePlayerMe, setHighlightedTiles);
 
   useEffect(()=>{
     if(statePlayerMe?.has_turn && selectedMovCard != null){
@@ -85,13 +84,10 @@ export default function Match() {
           secondPos.pos_x,
           secondPos.pos_y
         );
-        setFirstPos(null);
-        setSecondPos(null);
-        setSelectedMovCard(null);
+        resetMoveState();
       }
     } else {
-      setFirstPos(null);
-      setSecondPos(null);
+      resetMoveState();
     }
   },[firstPos,secondPos,statePlayerMe,selectedMovCard]);
 

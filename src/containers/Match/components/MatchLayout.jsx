@@ -36,20 +36,20 @@ export default function MatchLayout({
     ));
   };
 
-  // const movParcialDeck = usedMovCards
-  //   ? [
-  //       ...usedMovCards.map((card, i) => {
-  //         return (
-  //           <img
-  //             src={images[`${card.mov_type}`]}
-  //             key={i}
-  //             className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-  //           />
-  //         );
-  //       }),
-  //       ...backMovCard(3 - usedMovCards.length),
-  //     ]
-  //   : backMovCard(3);
+  const movParcialDeck = usedMovCards
+    ? [
+        ...usedMovCards.map((card, i) => {
+          return (
+            <img
+              src={images[`${card.mov_type}`]}
+              key={i}
+              className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+            />
+          );
+        }),
+        ...backMovCard(3 - usedMovCards.length),
+      ]
+    : backMovCard(3);
 
   const movCards = playerMe.mov_cards.map((card, i) => {
     return (
@@ -79,7 +79,7 @@ export default function MatchLayout({
       <div className="container col-span-1 row-span-1">
         <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
           <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
-            {/* {movParcialCards} */}
+            {movParcialDeck}
           </div>
         </div>
       </div>

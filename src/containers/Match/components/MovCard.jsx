@@ -7,23 +7,12 @@ export default function MovCard({ card, index }) {
     const setSelectedMovCard = useMovCardStore((state) => state.setSelectedMovCard);
 
     const handleClick = () => {
+        console.log(card.mov_type);
         let new_card = { ...card, index };
         if (new_card == selectedMovCard) selectedMovCard(null);
         console.log(card);
         setSelectedMovCard(new_card);
     }
-
-    // if(selectedMovCard && selectedMovCard == card){
-    //     return (
-    //         <img
-    //             onClick={handleClick}
-    //             src={images[`${card.mov_type}`]}
-    //             key={index}
-    //             data-testid="me-mov-cards"
-    //             className="mov_card_selected aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-    //         />
-    //     );
-    // }
 
     return (
         <img

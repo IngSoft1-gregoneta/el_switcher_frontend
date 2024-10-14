@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import BoardClass from "../logic/board";
 import "../styles/styles.css";
-import { useNavigate } from "react-router-dom";
 import Tile from "./Tile";
 import { useBoardStore } from "../../../zustand/store";
+import Spinner from "../../../components/Spinner";
 
 
 //TODO : is this even a good implementation??
@@ -23,21 +22,17 @@ const COLOR_MAP = {
 };
 
 const getTileColor = (color) => {
-  return COLOR_MAP[color] || "bg-amber-600"; // Fallback color
+  return COLOR_MAP[color] || "bg-amber-600";
 };
 
 export default function Board() {
-  const navigate = useNavigate();
-
   const board = useBoardStore((state) => state.board);
 
-  //TODO : maybe redirecting to root is not the best solution???
   useEffect(() => {
     if (!board) {
-      navigate("/");
-      return null;
+      return <Spinner />;
     }
-  }, [navigate, board]);
+  }, [board]);
 
 
   return (
