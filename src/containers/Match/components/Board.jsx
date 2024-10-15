@@ -4,9 +4,6 @@ import Tile from "./Tile";
 import { useBoardStore } from "../../../zustand/store";
 import Spinner from "../../../components/Spinner";
 
-
-//TODO : is this even a good implementation??
-//       should this even be here??
 const COLORS = Object.freeze({
   YELLOW: "bg-yellow-600",
   GREEN: "bg-green-600",
@@ -33,7 +30,6 @@ export default function Board() {
       return <Spinner />;
     }
   }, [board]);
-
 
   return (
     <div className="flex h-full max-h-full w-full max-w-full justify-center">

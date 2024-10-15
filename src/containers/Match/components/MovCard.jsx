@@ -7,8 +7,7 @@ export default function MovCard({ card, index }) {
     const setSelectedMovCard = useMovCardStore((state) => state.setSelectedMovCard);
 
     const handleClick = () => {
-        console.log(card.mov_type);
-        let new_card = { ...card, index };
+        const new_card = { ...card, index };
         if (new_card == selectedMovCard) selectedMovCard(null);
         console.log(card);
         setSelectedMovCard(new_card);
