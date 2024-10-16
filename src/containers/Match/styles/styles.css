@@ -30,15 +30,8 @@
     cursor: pointer;
 }
 
-.mov_card_selected {
-    transform: scale(1.15);
-    transition: transform 0.5s;
-}
-
-.mov_card_selected:hover {
-    cursor: pointer;
-}
-
-.light {
-    border: solid 5px black;
+.mov_card.unavailable {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    cursor: not-allowed;
 }
