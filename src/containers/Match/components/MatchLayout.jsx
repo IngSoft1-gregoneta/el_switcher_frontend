@@ -6,11 +6,11 @@ import PropTypes from "prop-types";
 import color_proh from "../assets/prohib.svg";
 import clicksound from "../../assets/clicksound.wav"
 import entersound from "../../assets/entersound.wav"
+import MovCard from "./MovCard";
 
 export default function MatchLayout({
   statePlayerMe,
   stateOtherPlayers,
-  stateBoard,
   usedMovCards,
   handlePassTurn,
   handleLeaveMatch,
@@ -18,7 +18,6 @@ export default function MatchLayout({
   MatchLayout.propTypes = {
     statePlayerMe: PropTypes.object,
     stateOtherPlayers: PropTypes.array,
-    stateBoard: PropTypes.array,
     usedMovCards: PropTypes.array,
     handlePassTurn: PropTypes.func,
     handleLeaveMatch: PropTypes.func,
@@ -65,12 +64,7 @@ export default function MatchLayout({
 
   const movCards = playerMe.mov_cards.map((card, i) => {
     return (
-      <img
-        src={images[`${card.mov_type}`]}
-        key={i}
-        data-testid="me-mov-cards"
-        className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-      />
+      <MovCard card={card} index={i} />
     );
   });
   
@@ -111,13 +105,11 @@ export default function MatchLayout({
           />
         )}
       </div>
-
-      <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
-        <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
-          <Board stateBoard={stateBoard} />
-        </div>
-      </div>
-
+          <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
+              <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
+                  <Board/>
+              </div>
+          </div>
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
         {playerRight && (
           <PlayerRight

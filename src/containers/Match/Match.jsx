@@ -1,10 +1,14 @@
-import { useIdStore, useWinnerStore } from "../../zustand/store.js";
+import { useBoardStore, useIdStore, useWinnerStore } from "../../zustand/store.js";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
 import Winner from "./components/Winner.jsx";
 import useMatchData from "./hooks/useMatchData.jsx";
 import MatchLayout from "./components/MatchLayout.jsx";
-import { passTurn, leaveMatch } from "./services/MatchService.js";
+import { passTurn, leaveMatch, makePartialMove } from "./services/MatchService.js";
+import { useEffect } from "react";
+import { useMovCardStore } from "../../zustand/store.js";
+import { useBoardInit } from "./hooks/useBoardInit.jsx";
+import { useMoveHighLights } from "./hooks/useMoveHighLights.jsx";
 
 export default function Match() {
   const setStateWinner = useWinnerStore((state) => state.setStateWinner);
@@ -12,50 +16,109 @@ export default function Match() {
   const setUserId = useIdStore((state) => state.setUserId);
   const { room_id, user_name, user_id } = useParams();
   const navigate = useNavigate();
-  const { stateBoard, statePlayerMe, stateOtherPlayers, usedMovCards } =
+  const { stateBoard, statePlayerMe, stateOtherPlayers, error, usedMovCards } =
     useMatchData(room_id, user_name);
-
   if (!userId) setUserId(user_id);
+  const firstPos = useBoardStore((state) => state.firstPos);
+  const secondPos = useBoardStore((state) => state.secondPos);
+  const setFirstPos = useBoardStore((state) => state.setFirstPos);
+  const setSecondPos = useBoardStore((state) => state.setSecondPos);
+  const board = useBoardStore((state) => state.board);
+  const setBoard = useBoardStore((state) => state.setBoard);
+  
+  const setHighlightedTiles = useBoardStore((state) => state.setHighlightedTiles);
+
+  const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
+  const setSelectedMovCard = useMovCardStore((state) => state.setSelectedMovCard);
+
+  const resetMoveState = () => {
+    setFirstPos(null);
+    setSecondPos(null);
+    setSelectedMovCard(null);
+    setHighlightedTiles(null);
+  };
 
   const handlePassTurn = async () => {
     try {
-      const response = await passTurn(room_id, user_name);
-      console.log(response);
+      await passTurn(room_id, user_name);
+      resetMoveState();
     } catch (error) {
+      resetMoveState();
       console.error(error);
-      console.log("No es el turno de este jugador.");
     }
   };
 
   const handleLeaveMatch = async () => {
     try {
-      const response = await leaveMatch(room_id, user_name, user_id);
+      await leaveMatch(room_id, user_name, user_id);
       navigate("/");
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
   };
 
-  if (stateOtherPlayers && stateOtherPlayers[0] == undefined) {
-    setStateWinner(user_name);
-    return <Winner />;
-  } else if (!stateBoard) {
+  const handlePartialMove = async (roomID,playerName,cardIndex,x1,y1,x2,y2) => {
+    try{
+      await makePartialMove(roomID,playerName,cardIndex,x1,y1,x2,y2);
+      resetMoveState();
+    } catch(error){
+      resetMoveState();
+      // TODO avisar que no se pudo hacer el movimiento?
+      console.log(error);
+    }
+  };
+
+  useBoardInit(stateBoard,setBoard);
+
+  useMoveHighLights(selectedMovCard, board, firstPos, statePlayerMe, setHighlightedTiles);
+
+  useEffect(()=>{
+    if(statePlayerMe?.has_turn && selectedMovCard != null){
+      if(firstPos && secondPos){
+        handlePartialMove(
+          room_id,
+          user_name,
+          selectedMovCard.index,
+          firstPos.pos_x,
+          firstPos.pos_y,
+          secondPos.pos_x,
+          secondPos.pos_y
+        );
+        resetMoveState();
+      }
+    } else {
+      resetMoveState();
+    }
+  },[firstPos,secondPos,statePlayerMe,selectedMovCard]);
+
+  if (error) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+
+  if (!statePlayerMe || !stateOtherPlayers || !board) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Spinner />
       </div>
     );
-  } else {
-    return (
-      <MatchLayout
-        statePlayerMe={statePlayerMe}
-        stateOtherPlayers={stateOtherPlayers}
-        stateBoard={stateBoard}
-        usedMovCards={usedMovCards}
-        handleLeaveMatch={handleLeaveMatch}
-        handlePassTurn={handlePassTurn}
-      />
-    );
   }
+
+  if (stateOtherPlayers && stateOtherPlayers[0] === undefined) {
+    setStateWinner(user_name);
+    return <Winner />;
+  }
+
+  return (
+    <MatchLayout
+      statePlayerMe={statePlayerMe}
+      stateOtherPlayers={stateOtherPlayers}
+      usedMovCards={usedMovCards}
+      handleLeaveMatch={handleLeaveMatch}
+      handlePassTurn={handlePassTurn}
+    />
+  );
 }

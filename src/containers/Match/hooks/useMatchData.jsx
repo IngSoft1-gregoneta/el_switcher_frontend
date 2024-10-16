@@ -7,6 +7,7 @@ const useMatchData = (roomId, userName) => {
   const [statePlayerMe, setStatePlayerMe] = useState(null);
   const [stateOtherPlayers, setStateOtherPlayers] = useState(null);
   const [usedMovCards, setUsedMovCards] = useState([]);
+  const [error, setError] = useState(null);
 
   const updateMatch = useUpdateStore((state) => state.updateMatch);
 
@@ -14,14 +15,12 @@ const useMatchData = (roomId, userName) => {
     const fetchData = async () => {
       try {
         const matchData = await fetchMatch(roomId, userName);
-        console.log(matchData);
         setStateBoard(matchData.board.tiles);
         setStatePlayerMe(matchData.me);
         setStateOtherPlayers(matchData.other_players);
         setUsedMovCards(matchData.visible_mov_cards);
-        // TODO: hacer esto por id :SSSS
       } catch (error) {
-        console.log(error);
+        setError(error);
       }
     };
     fetchData();
@@ -31,11 +30,10 @@ const useMatchData = (roomId, userName) => {
     setStateOtherPlayers,
     userName,
     roomId,
-    setStateBoard,
-    updateMatch, // este hace q se actualice con ws
+    updateMatch,
   ]);
 
-  return { stateBoard, statePlayerMe, stateOtherPlayers, usedMovCards };
+  return { stateBoard, statePlayerMe, stateOtherPlayers, usedMovCards, error };
 };
 
 export default useMatchData;
