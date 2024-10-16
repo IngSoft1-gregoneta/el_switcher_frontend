@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import clicksound from "../../assets/clicksound.wav"
+import entersound from "../../assets/entersound.wav"
 import { useState } from "react";
 import JoinRoomModalLayout from "./JoinRoomModalLayout";
 import { ButtonUnfilled } from "../../../components/Buttons";
@@ -12,8 +14,12 @@ export default function ListRoomsLayout({ rooms }) {
   const [roomId, setRoomId] = useState(null);
 
   function handleClickUnirse(id) {
+    new Audio(clicksound).play()
     setRoomId(id);
     setIsOpen(true);
+  }
+  function enterplay() {
+    new Audio(entersound).play()
   }
 
   let roomsList;
@@ -35,7 +41,7 @@ export default function ListRoomsLayout({ rooms }) {
             </td>
             <td className="px-6 py-4">{room.owner_name}</td>
             <td className="px-6 py-4 text-right">
-              <ButtonUnfilled onClick={() => handleClickUnirse(room.room_id)}>
+              <ButtonUnfilled onClick={() => handleClickUnirse(room.room_id)} onmouseenter={enterplay}>
                 Unirse
               </ButtonUnfilled>
             </td>

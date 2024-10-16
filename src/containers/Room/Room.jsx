@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useIdStore, useMatchStore } from "../../zustand/store.js";
+import clicksound from "../assets/clicksound.wav"
 import useRoomData from "./hooks/useRoomData.jsx";
 import RoomLayout from "./components/RoomLayout.jsx";
 import { leaveRoom, createMatch } from "./services/RoomService.js";
@@ -29,6 +30,7 @@ export default function Room() {
   }, [matchStarted, navigate, user_name, room_id, user_id]);
 
   const handleLeaveRoom = () => {
+    new Audio(clicksound).play()
     try {
       leaveRoom(room_id, user_name, user_id);
     } catch (err) {
@@ -38,6 +40,7 @@ export default function Room() {
   };
 
   const handleStartMatch = async () => {
+    new Audio(clicksound).play()
     if (roomData.players_names.length < roomData.players_expected) {
       alert("No hay suficientes jugadores");
     } else {

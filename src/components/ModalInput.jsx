@@ -9,6 +9,9 @@ import {
 } from "@headlessui/react";
 import { useState } from "react";
 import { ButtonFilled, ButtonUnfilled } from "./Buttons";
+import clicksound from "../containers/assets/clicksound.wav"
+import entersound from "../containers/assets/entersound.wav"
+
 
 // Puede parecer confuso, pero la idea de este modal es solo para recibir un input y una funcion la cual utilizara este input
 export default function ModalInput({
@@ -23,6 +26,13 @@ export default function ModalInput({
 
   function handleChange(e) {
     setInput(e.target.value);
+  }
+
+  function clickplay() {
+    new Audio(clicksound).play()
+  }
+  function enterplay() {
+    new Audio(entersound).play()
   }
   return (
     <Dialog
@@ -61,17 +71,21 @@ export default function ModalInput({
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <ButtonFilled
+              <ButtonFilled 
+                onmouseenter={enterplay}
                 onClick={() => {
                   handleClickAceptar(input);
+                  clickplay()
                   setIsOpen(false);
                 }}
               >
                 Aceptar
               </ButtonFilled>
               <ButtonUnfilled
+                onmouseenter={enterplay}
                 onClick={() => {
                   handleClickCancelar();
+                  clickplay()
                   setIsOpen(false);
                 }}
               >

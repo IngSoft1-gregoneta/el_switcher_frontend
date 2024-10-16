@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIdStore } from "../../../zustand/store.js";
 import PropTypes from "prop-types";
+import clicksound from "../../assets/clicksound.wav"
+import entersound from "../../assets/entersound.wav"
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons.jsx";
 import ModalInput from "../../../components/ModalInput.jsx";
 
@@ -52,6 +54,14 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
     }
   };
 
+  function clickplay() {
+    new Audio(clicksound).play()
+  }
+
+  function enterplay() {
+    new Audio(entersound).play()
+  }
+
   return (
     <div className="mx-auto mt-10 flex max-w-screen-lg flex-col items-center justify-center p-4">
       <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
@@ -94,10 +104,10 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
               placeholder="2-4 players"
             />
           </div>
-          <ButtonFilled type="submit" className="w-full">
+          <ButtonFilled type="submit" className="w-full" onClick={clickplay} onmouseenter={enterplay}>
             Crear
           </ButtonFilled>
-          <ButtonUnfilled onClick={handleLeave} className="w-full">
+          <ButtonUnfilled onClick={handleLeave} onmouseenter={enterplay} className="w-full">
             Salir
           </ButtonUnfilled>
         </form>
