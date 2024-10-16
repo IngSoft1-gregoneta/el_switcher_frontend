@@ -1,11 +1,32 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import testResponses from "./testResponses.json";
 import MatchLayout from "./components/MatchLayout";
-import Tile from "./components/Tile";
+import { useBoardStore } from "../../zustand/store";
+
+const mockBoard = {
+  tiles: [
+    [{ color: "YELLOW", figure: "fig" }, { color: "GREEN", figure: "fig" }, { color: "RED", figure: "fig" }, { color: "BLUE", figure: "fig" }, { color: "YELLOW", figure: "None" }, { color: "GREEN", figure: "None" }],
+    [{ color: "RED", figure: "None" }, { color: "BLUE", figure: "None" }, { color: "YELLOW", figure: "None" }, { color: "GREEN", figure: "None" }, { color: "RED", figure: "None" }, { color: "BLUE", figure: "None" }],
+    [{ color: "YELLOW", figure: "None" }, { color: "GREEN", figure: "None" }, { color: "RED", figure: "None" }, { color: "BLUE", figure: "None" }, { color: "YELLOW", figure: "None" }, { color: "GREEN", figure: "None" }],
+    [{ color: "RED", figure: "None" }, { color: "BLUE", figure: "None" }, { color: "YELLOW", figure: "None" }, { color: "GREEN", figure: "None" }, { color: "RED", figure: "None" }, { color: "BLUE", figure: "None" }],
+    [{ color: "YELLOW", figure: "None" }, { color: "GREEN", figure: "None" }, { color: "RED", figure: "None" }, { color: "BLUE", figure: "None" }, { color: "YELLOW", figure: "None" }, { color: "GREEN", figure: "None" }],
+    [{ color: "RED", figure: "None" }, { color: "BLUE", figure: "None" }, { color: "YELLOW", figure: "None" }, { color: "GREEN", figure: "None" }, { color: "RED", figure: "None" }, { color: "BLUE", figure: "None" }]
+  ]
+};
 
 describe("Match testing", () => {
+  beforeEach(()=>{
+    useBoardStore.setState({
+      board: mockBoard,
+    })
+  });
+
+  afterEach(()=>{
+    vi.clearAllMocks();
+  });
+
   it("names of players appears", () => {
     const mockRes = testResponses;
     render(
@@ -13,7 +34,6 @@ describe("Match testing", () => {
         <MatchLayout
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
-          stateBoard={mockRes.board.tiles}
           usedMovCards={mockRes.visible_mov_cards}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
@@ -33,7 +53,6 @@ describe("Match testing", () => {
         <MatchLayout
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
-          stateBoard={mockRes.board.tiles}
           usedMovCards={mockRes.visible_mov_cards}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
@@ -55,7 +74,6 @@ describe("Match testing", () => {
         <MatchLayout
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
-          stateBoard={mockRes.board.tiles}
           usedMovCards={mockRes.visible_mov_cards}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
@@ -76,7 +94,6 @@ describe("Match testing", () => {
         <MatchLayout
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
-          stateBoard={mockRes.board.tiles}
           usedMovCards={mockRes.visible_mov_cards}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
@@ -96,7 +113,6 @@ describe("Match testing", () => {
         <MatchLayout
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
-          stateBoard={mockRes.board.tiles}
           usedMovCards={mockRes.visible_mov_cards}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
@@ -117,12 +133,12 @@ describe("Match testing", () => {
 
   it("highlighted figure on board", () => {
     const mockRes = testResponses;
+    
     render(
       <MemoryRouter>
         <MatchLayout
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
-          stateBoard={mockRes.board.tiles}
           usedMovCards={mockRes.visible_mov_cards}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
