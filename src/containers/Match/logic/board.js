@@ -27,7 +27,7 @@ export default class BoardClass {
     });
   }
 
-  higlightTiles(initPos, posVectors){
+  highlightTiles(initPos, posVectors){
     if(initPos == null){
       throw new Error(`Expected position got: initPos=${initPos}`);
     }

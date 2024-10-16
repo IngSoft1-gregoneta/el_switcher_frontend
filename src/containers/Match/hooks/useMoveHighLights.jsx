@@ -9,7 +9,7 @@ export function useMoveHighLights(selectedMovCard, board, firstPos, statePlayerM
             board
           ) {
           board.disableHighlights();
-          const highlited_tiles = board.higlightTiles(firstPos, selectedMovCard.vectors);
+          const highlited_tiles = board.highlightTiles(firstPos, selectedMovCard.vectors);
           setHighlightedTiles(highlited_tiles);
         }
     }, [selectedMovCard, board, firstPos, statePlayerMe]);

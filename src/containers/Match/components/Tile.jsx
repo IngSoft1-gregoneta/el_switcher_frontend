@@ -7,7 +7,7 @@ function inHighlighted(posx, posy, arroftiles = []) {
 }
 
 
-export default function Tile({ color, posx, posy, figure}) {
+export default function Tile({ color, posx, posy, figure }) {
   const firstPos = useBoardStore((state) => state.firstPos);
   const secondPos = useBoardStore((state) => state.secondPos);
   const setFirstPos = useBoardStore((state) => state.setFirstPos);
@@ -16,7 +16,6 @@ export default function Tile({ color, posx, posy, figure}) {
   const setHighlightedTiles = useBoardStore((state) => state.setHighlightedTiles);
   
   const handleTileClick = () => {
-    console.log(`X : ${posx}, Y : ${posy}`);
     // RESET todas las fichas si se selecciona la misma 2 veces
     if (firstPos?.pos_x === posx && firstPos?.pos_y === posy){
       setFirstPos(null);
@@ -60,10 +59,11 @@ export default function Tile({ color, posx, posy, figure}) {
             ""
         );
 
+  const classAttStyle = "bg-gradient-to-br from-purple-900  to-indigo-900 blur transition duration-500";
   const classAtt =
     figure == "None"
       ? ""
-      : "bg-gradient-to-br from-purple-900  to-indigo-900 blur transition duration-500"; 
+      : classAttStyle; 
       // con blur-sm se rompe el test porque separa palabras por " " entonces no toma blur-sm como una tile resaltada
 
   return (
@@ -73,6 +73,7 @@ export default function Tile({ color, posx, posy, figure}) {
         className={`absolute inset-0 z-0 rounded-lg ${classAtt} ${highlight} ${origin}`}
       ></div>
       <div
+        data-testid="actual-tile"
         onClick={handleTileClick}
         className={`tile ${color} inset-0 z-50 m-1 min-h-[50px] min-w-[50px] rounded`}
       ></div>

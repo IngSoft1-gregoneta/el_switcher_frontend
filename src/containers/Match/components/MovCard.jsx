@@ -9,7 +9,6 @@ export default function MovCard({ card, index }) {
     const handleClick = () => {
         const new_card = { ...card, index };
         if (new_card == selectedMovCard) selectedMovCard(null);
-        console.log(card);
         setSelectedMovCard(new_card);
     }
 

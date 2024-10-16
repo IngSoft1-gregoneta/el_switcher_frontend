@@ -15,13 +15,11 @@ const useMatchData = (roomId, userName) => {
     const fetchData = async () => {
       try {
         const matchData = await fetchMatch(roomId, userName);
-        console.log(matchData);
         setStateBoard(matchData.board.tiles);
         setStatePlayerMe(matchData.me);
         setStateOtherPlayers(matchData.other_players);
         setUsedMovCards(matchData.visible_mov_cards);
       } catch (error) {
-        console.log(error);
         setError(error);
       }
     };
