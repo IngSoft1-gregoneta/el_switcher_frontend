@@ -1,8 +1,14 @@
 import React from "react";
 import images from "../logic/bindImage";
 import { useMovCardStore } from "../../../zustand/store";
+import PropTypes from "prop-types";
 
 export default function MovCard({ card, index }) {
+  MovCard.propTypes = {
+    card: PropTypes.object,
+    index: PropTypes.number
+  }
+
   const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
   const setSelectedMovCard = useMovCardStore(
     (state) => state.setSelectedMovCard,

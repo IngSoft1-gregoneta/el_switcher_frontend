@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import images from "../logic/bindImage";
+import { useEffect, useState } from "react";
 import FigCard from "./FigCard";
+import PropTypes from "prop-types";
 
 const mapCards = (
   cards,
   name,
   isRotated,
-  selectedFigCard,
-  setSelectedFigCard,
+  selectedFigCards,
+  dispatchFigCards,
 ) => {
-  const className = isRotated
-    ? "aspect-[5/3] w-24 rounded-sm   md:w-32 lg:w-44"
-    : "aspect-[3/5] h-24 rounded-sm   md:h-32 lg:h-44";
+  const rotationA = "aspect-[5/3] w-24 rounded-sm   md:w-32 lg:w-44";
+  const rotationB = "aspect-[3/5] h-24 rounded-sm   md:h-32 lg:h-44";
+  const className = isRotated ? rotationA : rotationB;
   return cards.map((card, i) => {
     return (
       <FigCard
@@ -20,13 +20,14 @@ const mapCards = (
         figType={card.fig_type}
         index={i}
         isSelected={
-          selectedFigCard &&
-          selectedFigCard.index === i &&
-          selectedFigCard.player === name
+          card.canBeSelected &&
+          selectedFigCards &&
+          selectedFigCards.index === i &&
+          selectedFigCards.player === name
         }
         onSelected={() =>
           card.canBeSelected &&
-          setSelectedFigCard({
+          dispatchFigCards({
             type: "select_fig_card",
             player: name,
             index: i,
@@ -37,30 +38,32 @@ const mapCards = (
   });
 };
 
-export function PlayerMe({
-  name,
-  cards,
-  deckLen,
-  selectedFigCard,
-  setSelectedFigCard,
-}) {
-  //TODO: deberia ser un useEffect que se fije si el jugador ya no tiene el turno
-  //para deseleccionar las seleccionadas ie ver si hasITurn false
-  const figCards = mapCards(
-    cards,
-    name,
-    false,
-    selectedFigCard,
-    setSelectedFigCard,
-  );
+export function PlayerMe({ player, selectedFigCards, dispatchFigCards }) {
+  PlayerMe.propTypes = {
+    player: PropTypes.object,
+    selectedFigCards: PropTypes.object,
+    dispatchFigCards: PropTypes.func,
+  };
+  const [figCards, setFigCards] = useState(null);
+  useEffect(() => {
+    setFigCards(
+      mapCards(
+        player.visible_fig_cards,
+        player.player_name,
+        false,
+        selectedFigCards,
+        dispatchFigCards,
+      ),
+    );
+  }, [selectedFigCards, dispatchFigCards, player]);
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex basis-1/12 flex-col md:flex-row">
-        <div className="basis-1/6 font-bold">{name}</div>
+        <div className="basis-1/6 font-bold">{player.player_name}</div>
         <div className="basis-4/6" id="separator"></div>
         <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
-          Tarjetas Figura: {deckLen}
+          Tarjetas Figura: {player.deck_len}
         </div>
       </div>
       <div className="flex h-fit flex-row items-center justify-center gap-2">
@@ -70,20 +73,24 @@ export function PlayerMe({
   );
 }
 
-export function PlayerTop({
-  name,
-  cards,
-  deckLen,
-  selectedFigCard,
-  setSelectedFigCard,
-}) {
-  const figCards = mapCards(
-    cards,
-    name,
-    false,
-    selectedFigCard,
-    setSelectedFigCard,
-  );
+export function PlayerTop({ player, selectedFigCards, dispatchFigCards }) {
+  PlayerTop.propTypes = {
+    player: PropTypes.object,
+    selectedFigCards: PropTypes.object,
+    dispatchFigCards: PropTypes.func,
+  };
+  const [figCards, setFigCards] = useState(null);
+  useEffect(() => {
+    setFigCards(
+      mapCards(
+        player.visible_fig_cards,
+        player.player_name,
+        false,
+        selectedFigCards,
+        dispatchFigCards,
+      ),
+    );
+  }, [selectedFigCards, dispatchFigCards, player]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -91,30 +98,33 @@ export function PlayerTop({
         {figCards}
       </div>
       <div className="flex flex-grow basis-1/12 flex-col justify-between md:flex-row">
-        <div className="basis-1/6 font-bold">{name}</div>
+        <div className="basis-1/6 font-bold">{player.player_name}</div>
         <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
-          Tarjetas Figura: {deckLen}
+          Tarjetas Figura: {player.deck_len}
         </div>
       </div>
     </div>
   );
 }
 
-export function PlayerLeft({
-  name,
-  cards,
-  deckLen,
-
-  selectedFigCard,
-  setSelectedFigCard,
-}) {
-  const figCards = mapCards(
-    cards,
-    name,
-    false,
-    selectedFigCard,
-    setSelectedFigCard,
-  );
+export function PlayerLeft({ player, selectedFigCards, dispatchFigCards }) {
+  PlayerLeft.propTypes = {
+    player: PropTypes.object,
+    selectedFigCards: PropTypes.object,
+    dispatchFigCards: PropTypes.func,
+  };
+  const [figCards, setFigCards] = useState(null);
+  useEffect(() => {
+    setFigCards(
+      mapCards(
+        player.visible_fig_cards,
+        player.player_name,
+        true,
+        selectedFigCards,
+        dispatchFigCards,
+      ),
+    );
+  }, [selectedFigCards, dispatchFigCards, player]);
 
   return (
     <div
@@ -126,29 +136,34 @@ export function PlayerLeft({
       </div>
       {/* falta que sea responsive en mobile */}
       <div className="flex flex-grow basis-1/12 rotate-180 flex-col justify-between md:flex-row">
-        <div className="basis-1/6 font-bold">{name}</div>
+        <div className="basis-1/6 font-bold">{player.player_name}</div>
         <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
-          Tarjetas Figura: {deckLen}
+          Tarjetas Figura: {player.deck_len}
         </div>
       </div>
     </div>
   );
 }
 
-export function PlayerRight({
-  name,
-  cards,
-  deckLen,
-  selectedFigCard,
-  setSelectedFigCard,
-}) {
-  const figCards = mapCards(
-    cards,
-    name,
-    false,
-    selectedFigCard,
-    setSelectedFigCard,
-  );
+export function PlayerRight({ player, selectedFigCards, dispatchFigCards }) {
+  PlayerRight.propTypes = {
+    player: PropTypes.object,
+    selectedFigCards: PropTypes.object,
+    dispatchFigCards: PropTypes.func,
+  };
+  const [figCards, setFigCards] = useState(null);
+
+  useEffect(() => {
+    setFigCards(
+      mapCards(
+        player.visible_fig_cards,
+        player.player_name,
+        true,
+        selectedFigCards,
+        dispatchFigCards,
+      ),
+    );
+  }, [selectedFigCards, dispatchFigCards, player]);
 
   return (
     <div
@@ -156,9 +171,9 @@ export function PlayerRight({
       className="flex flex-col items-center gap-2 md:flex-row md:gap-6"
     >
       <div className="flex basis-1/12 flex-col md:flex-row md:gap-14 md:[writing-mode:vertical-lr] lg:gap-32">
-        <div className="basis-1/6 font-bold">{name}</div>
+        <div className="basis-1/6 font-bold">{player.player_name}</div>
         <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
-          Tarjetas Figura: {deckLen}
+          Tarjetas Figura: {player.deck_len}
         </div>
       </div>
       <div className="flex h-fit flex-col items-center justify-center gap-2">

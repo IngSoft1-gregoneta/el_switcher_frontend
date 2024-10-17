@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import images from "../logic/bindImage";
-import { useMovCardStore } from "../../../zustand/store";
+import PropTypes from "prop-types";
 
 export default function FigCard({
   className,
@@ -9,6 +9,13 @@ export default function FigCard({
   onSelected,
   isSelected,
 }) {
+  FigCard.propTypes = {
+    className: PropTypes.string,
+    figType: PropTypes.string,
+    index: PropTypes.number,
+    onSelected: PropTypes.func,
+    isSelected: PropTypes.bool,
+  };
   const [selectedStyle, setSelectedStyle] = useState("");
 
   useEffect(() => {

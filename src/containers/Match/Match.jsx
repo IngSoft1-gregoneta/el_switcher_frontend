@@ -59,7 +59,7 @@ export default function Match() {
     (state) => state.setSelectedMovCard,
   );
 
-  const [selectedFigCard, setSelectedFigCard] = useReducer(
+  const [selectedFigCards, dispatchFigCards] = useReducer(
     selectFigCardReducer,
     { selectedFigCard: null, player: null },
   );
@@ -72,16 +72,16 @@ export default function Match() {
   });
 
   const handleDiscardFigure = async (tile) => {
-    if (selectedFigCard.player && selectedFigCard.index) {
+    if (selectedFigCards.player && selectedFigCards.index) {
       try {
         await discardFigure(
           room_id,
-          selectedFigCard.player,
-          selectedFigCard.index,
+          selectedFigCards.player,
+          selectedFigCards.index,
           tile.x,
           tile.y,
         );
-        setSelectedFigCard({ type: "deselect" });
+        dispatchFigCards({ type: "deselect" });
         console.log("discarded?");
       } catch (error) {
         console.error(error);
@@ -107,6 +107,32 @@ export default function Match() {
       console.error(error);
     }
   };
+  const handlePartialMove = async (
+    roomID,
+    playerName,
+    cardIndex,
+    x1,
+    y1,
+    x2,
+    y2,
+  ) => {
+    try {
+      await makePartialMove(roomID, playerName, cardIndex, x1, y1, x2, y2);
+      resetMoveStateRef.current();
+    } catch (error) {
+      resetMoveStateRef.current();
+      // TODO avisar que no se pudo hacer el movimiento?
+      console.log(error);
+    }
+  };
+
+  const handleRevertMove = async () => {
+    try {
+      await undoPartialMove(room_id, user_name);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useBoardInit(stateBoard, setBoard);
 
@@ -117,36 +143,8 @@ export default function Match() {
     statePlayerMe,
     setHighlightedTiles,
   );
-  const handleRevertMove = async() => {
-    try{
-      await undoPartialMove(room_id, user_name);
-    } catch(error) {
-      console.log(error);
-    } 
-  }
-
-  useBoardInit(stateBoard,setBoard);
 
   useEffect(() => {
-    const handlePartialMove = async (
-      roomID,
-      playerName,
-      cardIndex,
-      x1,
-      y1,
-      x2,
-      y2,
-    ) => {
-      try {
-        await makePartialMove(roomID, playerName, cardIndex, x1, y1, x2, y2);
-        resetMoveStateRef.current();
-      } catch (error) {
-        resetMoveStateRef.current();
-        // TODO avisar que no se pudo hacer el movimiento?
-        console.log(error);
-      }
-    };
-
     if (statePlayerMe?.has_turn && selectedMovCard != null) {
       if (firstPos && secondPos) {
         handlePartialMove(
@@ -200,8 +198,8 @@ export default function Match() {
       stateOtherPlayers={stateOtherPlayers}
       usedMovCards={usedMovCards}
       selectedFigReducer={{
-        stateFig: selectedFigCard,
-        reducerFig: setSelectedFigCard,
+        selectedFigCards: selectedFigCards,
+        dispatchFigCards: dispatchFigCards,
       }}
       handleLeaveMatch={handleLeaveMatch}
       handlePassTurn={handlePassTurn}
