@@ -4,7 +4,7 @@ import Spinner from "../../components/Spinner.jsx";
 import Winner from "./components/Winner.jsx";
 import useMatchData from "./hooks/useMatchData.jsx";
 import MatchLayout from "./components/MatchLayout.jsx";
-import { passTurn, leaveMatch, makePartialMove } from "./services/MatchService.js";
+import { passTurn, leaveMatch, makePartialMove, undoPartialMove } from "./services/MatchService.js";
 import { useEffect } from "react";
 import { useMovCardStore } from "../../zustand/store.js";
 import { useBoardInit } from "./hooks/useBoardInit.jsx";
@@ -68,6 +68,14 @@ export default function Match() {
     }
   };
 
+  const handleRevertMove = async() => {
+    try{
+      await undoPartialMove(room_id, user_name);
+    } catch(error) {
+      console.log(error);
+    } 
+  }
+
   useBoardInit(stateBoard,setBoard);
 
   useMoveHighLights(selectedMovCard, board, firstPos, statePlayerMe, setHighlightedTiles);
@@ -119,6 +127,8 @@ export default function Match() {
       usedMovCards={usedMovCards}
       handleLeaveMatch={handleLeaveMatch}
       handlePassTurn={handlePassTurn}
+      handlePartialMove={handleRevertMove}
+      handleRevertMove={handleRevertMove}
     />
   );
 }
