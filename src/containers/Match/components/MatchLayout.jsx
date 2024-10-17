@@ -5,7 +5,6 @@ import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 import PropTypes from "prop-types";
 import color_proh from "../assets/prohib.svg";
 import MovCard from "./MovCard";
-import { useReducer } from "react";
 
 export default function MatchLayout({
   statePlayerMe,
@@ -15,6 +14,7 @@ export default function MatchLayout({
   handleLeaveMatch,
   handleDiscardFigure,
   selectedFigReducer,
+  handleRevertMove,
 }) {
   MatchLayout.propTypes = {
     statePlayerMe: PropTypes.object,
@@ -22,6 +22,7 @@ export default function MatchLayout({
     usedMovCards: PropTypes.array,
     handlePassTurn: PropTypes.func,
     handleLeaveMatch: PropTypes.func,
+    handleRevertMove: PropTypes.func,
   };
   const hasTurn = statePlayerMe.has_turn;
   const playerMe = statePlayerMe;
@@ -136,6 +137,14 @@ export default function MatchLayout({
 
       <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <div className="flex flex-col items-center justify-items-center">
+          {hasTurn && (
+            <ButtonFilled
+              className="mx-0 text-wrap px-1 py-2"
+              onClick={handleRevertMove}
+            >
+              Revertir Movimiento
+            </ButtonFilled>
+          )}
           {hasTurn && (
             <ButtonFilled
               className="mx-0 text-wrap px-1 py-2"

@@ -12,6 +12,7 @@ import {
   passTurn,
   leaveMatch,
   makePartialMove,
+  undoPartialMove,
   discardFigure,
 } from "./services/MatchService.js";
 import { useEffect, useReducer, useRef } from "react";
@@ -116,6 +117,15 @@ export default function Match() {
     statePlayerMe,
     setHighlightedTiles,
   );
+  const handleRevertMove = async() => {
+    try{
+      await undoPartialMove(room_id, user_name);
+    } catch(error) {
+      console.log(error);
+    } 
+  }
+
+  useBoardInit(stateBoard,setBoard);
 
   useEffect(() => {
     const handlePartialMove = async (
@@ -196,6 +206,8 @@ export default function Match() {
       handleLeaveMatch={handleLeaveMatch}
       handlePassTurn={handlePassTurn}
       handleDiscardFigure={handleDiscardFigure}
+      handlePartialMove={handleRevertMove}
+      handleRevertMove={handleRevertMove}
     />
   );
 }

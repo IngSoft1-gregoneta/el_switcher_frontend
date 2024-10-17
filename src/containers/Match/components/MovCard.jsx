@@ -10,8 +10,14 @@ export default function MovCard({ card, index }) {
 
   const handleClick = () => {
     const new_card = { ...card, index };
-    if (new_card == selectedMovCard) selectedMovCard(null);
-    setSelectedMovCard(new_card);
+
+    if (selectedMovCard && new_card.index === selectedMovCard.index) {
+      setSelectedMovCard(null);
+    } else if (card.is_used == true) {
+      setSelectedMovCard(null);
+    } else {
+      setSelectedMovCard(new_card);
+    }
   };
 
   return (
@@ -20,8 +26,8 @@ export default function MovCard({ card, index }) {
       src={images[`${card.mov_type}`]}
       key={index}
       data-testid="me-mov-cards"
-      className="mov_card aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+      className={`mov_card aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36 ${card.is_used ? "unavailable" : ""} `}
+      title={card.is_used ? "Esta carta ya ha sido usada" : ""}
     />
   );
 }
-
