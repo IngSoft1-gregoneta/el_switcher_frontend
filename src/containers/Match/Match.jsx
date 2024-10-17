@@ -204,7 +204,7 @@ export default function Match() {
       handleLeaveMatch={handleLeaveMatch}
       handlePassTurn={handlePassTurn}
       handleDiscardFigure={handleDiscardFigure}
-      handlePartialMove={handleRevertMove}
+      handlePartialMove={handlePartialMove}
       handleRevertMove={handleRevertMove}
     />
   );

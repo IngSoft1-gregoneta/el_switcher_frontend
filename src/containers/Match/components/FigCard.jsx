@@ -31,7 +31,7 @@ export default function FigCard({
       onClick={onSelected}
       src={images[`${figType}`]}
       key={index}
-      data-testid="me-mov-cards"
+      data-testid="fig-cards"
       className={`${className} ${selectedStyle}`}
     />
   );
