@@ -21,19 +21,6 @@
     cursor: pointer;
 }
 
-.mov_card {
-    transition: transform 0.5s;
-}
-
-.mov_card:hover {
-    transform: scale(1.15);
-    cursor: pointer;
-}
-
-.mov_card_selected {
-    transform: scale(1.15);
-    transition: transform 0.5s;
-}
 
 .mov_card_selected:hover {
     cursor: pointer;

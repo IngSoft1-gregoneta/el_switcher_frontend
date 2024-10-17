@@ -15,6 +15,8 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.1.8",
+    "el_switcher": "file:",
+    "framer-motion": "11.11.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
