@@ -72,7 +72,7 @@ export default function Match() {
   });
 
   const handleDiscardFigure = async (tile) => {
-    if (selectedFigCards.player && selectedFigCards.index) {
+    if (selectedFigCards.player && selectedFigCards.index !== null) {
       try {
         await discardFigure(
           room_id,
