@@ -5,6 +5,7 @@ import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 import PropTypes from "prop-types";
 import color_proh from "../assets/prohib.svg";
 import MovCard from "./MovCard";
+import { useReducer } from "react";
 
 export default function MatchLayout({
   statePlayerMe,
@@ -12,6 +13,8 @@ export default function MatchLayout({
   usedMovCards,
   handlePassTurn,
   handleLeaveMatch,
+  handleDiscardFigure,
+  selectedFigReducer,
 }) {
   MatchLayout.propTypes = {
     statePlayerMe: PropTypes.object,
@@ -25,6 +28,9 @@ export default function MatchLayout({
   const playerTop = stateOtherPlayers[0];
   const playerRight = stateOtherPlayers.length > 1 && stateOtherPlayers[1];
   const playerLeft = stateOtherPlayers.length > 2 && stateOtherPlayers[2];
+
+  const { stateFig: selectedFigCard, reducerFig: setSelectedFigCard } =
+    selectedFigReducer;
 
   const backMovCard = (lengthToFill) => {
     return Array.from({ length: lengthToFill }, (_, i) => (
@@ -52,9 +58,7 @@ export default function MatchLayout({
     : backMovCard(3);
 
   const movCards = playerMe.mov_cards.map((card, i) => {
-    return (
-      <MovCard card={card} index={i} />
-    );
+    return <MovCard card={card} key={i} index={i} />;
   });
 
   return (
@@ -73,6 +77,8 @@ export default function MatchLayout({
           name={playerTop.player_name}
           cards={playerTop.visible_fig_cards}
           deckLen={playerTop.deck_len}
+          selectedFigCard={selectedFigCard}
+          setSelectedFigCard={setSelectedFigCard}
         />
       </div>
 
@@ -90,20 +96,24 @@ export default function MatchLayout({
             name={playerLeft.player_name}
             cards={playerLeft.visible_fig_cards}
             deckLen={playerLeft.deck_len}
+            selectedFigCard={selectedFigCard}
+            setSelectedFigCard={setSelectedFigCard}
           />
         )}
       </div>
-          <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
-              <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
-                  <Board/>
-              </div>
-          </div>
+      <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
+        <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
+          <Board handleDiscardFigure={(tile) => handleDiscardFigure(tile)} />
+        </div>
+      </div>
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
         {playerRight && (
           <PlayerRight
             name={playerRight.player_name}
             cards={playerRight.visible_fig_cards}
             deckLen={playerRight.deck_len}
+            selectedFigCard={selectedFigCard}
+            setSelectedFigCard={setSelectedFigCard}
           />
         )}
       </div>
@@ -119,6 +129,8 @@ export default function MatchLayout({
           name={statePlayerMe.player_name}
           cards={statePlayerMe.visible_fig_cards}
           deckLen={statePlayerMe.deck_len}
+          selectedFigCard={selectedFigCard}
+          setSelectedFigCard={setSelectedFigCard}
         />
       </div>
 
@@ -127,7 +139,10 @@ export default function MatchLayout({
           {hasTurn && (
             <ButtonFilled
               className="mx-0 text-wrap px-1 py-2"
-              onClick={handlePassTurn}
+              onClick={() => {
+                handlePassTurn();
+                setSelectedFigCard({ type: "deselect" });
+              }}
             >
               Pasar turno
             </ButtonFilled>

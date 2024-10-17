@@ -22,30 +22,33 @@ const getTileColor = (color) => {
   return COLOR_MAP[color] || "bg-amber-600";
 };
 
-export default function Board() {
+export default function Board({ handleDiscardFigure }) {
   const board = useBoardStore((state) => state.board);
 
-  useEffect(() => {
-    if (!board) {
-      return <Spinner />;
-    }
-  }, [board]);
-
-  return (
-    <div className="flex h-full max-h-full w-full max-w-full justify-center">
-      <div className="grid grid-cols-6 grid-rows-6 gap-1 md:gap-2">
-        {board.tiles.map((row, rowIndex) =>
-          row.map((ficha, colIndex) => {
-            return (
-              <Tile
-                key={`${rowIndex}-${colIndex}`}
-                posx={colIndex} posy={rowIndex} color={getTileColor(ficha.color)}
-                figure={ficha.figure}
-              />
-            );
-          }),
-        )}
+  if (!board) {
+    return <Spinner />;
+  } else {
+    return (
+      <div className="flex h-full max-h-full w-full max-w-full justify-center">
+        <div className="grid grid-cols-6 grid-rows-6 gap-1 md:gap-2">
+          {board.tiles.map((row, rowIndex) =>
+            row.map((ficha, colIndex) => {
+              return (
+                <Tile
+                  onClick={() =>
+                    handleDiscardFigure({ x: colIndex, y: rowIndex })
+                  }
+                  key={`${rowIndex}-${colIndex}`}
+                  posx={colIndex}
+                  posy={rowIndex}
+                  color={getTileColor(ficha.color)}
+                  figure={ficha.figure}
+                />
+              );
+            }),
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

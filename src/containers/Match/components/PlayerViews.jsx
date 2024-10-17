@@ -1,19 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import images from "../logic/bindImage";
+import FigCard from "./FigCard";
 
-const mapCard = (cards, is_rotated) => {
-  const className = is_rotated
+const mapCards = (
+  cards,
+  name,
+  isRotated,
+  selectedFigCard,
+  setSelectedFigCard,
+) => {
+  const className = isRotated
     ? "aspect-[5/3] w-24 rounded-sm   md:w-32 lg:w-44"
     : "aspect-[3/5] h-24 rounded-sm   md:h-32 lg:h-44";
   return cards.map((card, i) => {
     return (
-      <img key={i} className={className} src={images[`${card.fig_type}`]} />
+      <FigCard
+        key={i}
+        className={className}
+        figType={card.fig_type}
+        index={i}
+        isSelected={
+          selectedFigCard &&
+          selectedFigCard.index === i &&
+          selectedFigCard.player === name
+        }
+        onSelected={() =>
+          card.canBeSelected &&
+          setSelectedFigCard({
+            type: "select_fig_card",
+            player: name,
+            index: i,
+          })
+        }
+      />
     );
   });
 };
 
-export function PlayerMe({ name, cards, deckLen }) {
-  const cardsDiv = mapCard(cards, false);
+export function PlayerMe({
+  name,
+  cards,
+  deckLen,
+  selectedFigCard,
+  setSelectedFigCard,
+}) {
+  //TODO: deberia ser un useEffect que se fije si el jugador ya no tiene el turno
+  //para deseleccionar las seleccionadas ie ver si hasITurn false
+  const figCards = mapCards(
+    cards,
+    name,
+    false,
+    selectedFigCard,
+    setSelectedFigCard,
+  );
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex basis-1/12 flex-col md:flex-row">
@@ -24,18 +64,31 @@ export function PlayerMe({ name, cards, deckLen }) {
         </div>
       </div>
       <div className="flex h-fit flex-row items-center justify-center gap-2">
-        {cardsDiv}
+        {figCards}
       </div>
     </div>
   );
 }
 
-export function PlayerTop({ name, cards, deckLen }) {
-  const cardsDiv = mapCard(cards, false);
+export function PlayerTop({
+  name,
+  cards,
+  deckLen,
+  selectedFigCard,
+  setSelectedFigCard,
+}) {
+  const figCards = mapCards(
+    cards,
+    name,
+    false,
+    selectedFigCard,
+    setSelectedFigCard,
+  );
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex h-fit flex-row items-center justify-center gap-2">
-        {cardsDiv}
+        {figCards}
       </div>
       <div className="flex flex-grow basis-1/12 flex-col justify-between md:flex-row">
         <div className="basis-1/6 font-bold">{name}</div>
@@ -47,15 +100,29 @@ export function PlayerTop({ name, cards, deckLen }) {
   );
 }
 
-export function PlayerLeft({ name, cards, deckLen }) {
-  const cardsDiv = mapCard(cards, true);
+export function PlayerLeft({
+  name,
+  cards,
+  deckLen,
+
+  selectedFigCard,
+  setSelectedFigCard,
+}) {
+  const figCards = mapCards(
+    cards,
+    name,
+    false,
+    selectedFigCard,
+    setSelectedFigCard,
+  );
+
   return (
     <div
       className="flex flex-row gap-2 [writing-mode:vertical-lr] sm:flex-col"
       data-testid="player-left"
     >
       <div className="flex h-fit flex-row items-center justify-center gap-2">
-        {cardsDiv}
+        {figCards}
       </div>
       {/* falta que sea responsive en mobile */}
       <div className="flex flex-grow basis-1/12 rotate-180 flex-col justify-between md:flex-row">
@@ -68,8 +135,21 @@ export function PlayerLeft({ name, cards, deckLen }) {
   );
 }
 
-export function PlayerRight({ name, cards, deckLen }) {
-  const cardsDiv = mapCard(cards, true);
+export function PlayerRight({
+  name,
+  cards,
+  deckLen,
+  selectedFigCard,
+  setSelectedFigCard,
+}) {
+  const figCards = mapCards(
+    cards,
+    name,
+    false,
+    selectedFigCard,
+    setSelectedFigCard,
+  );
+
   return (
     <div
       data-testid="player-right"
@@ -82,9 +162,8 @@ export function PlayerRight({ name, cards, deckLen }) {
         </div>
       </div>
       <div className="flex h-fit flex-col items-center justify-center gap-2">
-        {cardsDiv}
+        {figCards}
       </div>
     </div>
   );
 }
-
