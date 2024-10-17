@@ -23,7 +23,7 @@ export default function MovCard({ card, index }) {
     } else {
       setSelectedMovCard(new_card);
     }
-    
+}
 
     function clickplay() {
         new Audio(clicksound).play()
@@ -61,5 +61,4 @@ export default function MovCard({ card, index }) {
             ${card.is_used ? "unavailable" : ""}
           `}
           title={card.is_used ? "Esta carta ya ha sido usada" : ""}></motion.img>
-    );
-};
+    )}
