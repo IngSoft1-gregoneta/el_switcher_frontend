@@ -5,6 +5,7 @@ import { useMovCardStore } from "../../../zustand/store";
 import entersound from "../../assets/entersound.wav"
 import clicksound from "../../assets/cardsound.wav"
 
+let canreturn = false
 
 export default function MovCard({ card, index }) {
     const [scope, animate] = useAnimate()
@@ -15,20 +16,35 @@ export default function MovCard({ card, index }) {
         if (new_card == selectedMovCard) selectedMovCard(null);
         setSelectedMovCard(new_card);
     }
+    
 
     function clickplay() {
         new Audio(clicksound).play()
-        animate(scope.current, {scale: 1.3})
-      }
-    function enterplay() {
+
+        if (canreturn){ 
+            canreturn = false;
+            animate(scope.current, {scale: 1, y: 0});
+        }
+        else{ 
+            canreturn = true;
+            animate(scope.current, {scale: 1.3});
+        }
+        
+        
+    }
+    function Hoverstart(){
         new Audio(entersound).play()
+        if (!canreturn) animate(scope.current, {scale: 1.2, y: -30})
+    }
+    function Hoverend(){
+        if (!canreturn){animate(scope.current, {scale: 1, y: 0})}
     }
 
     return (
         <motion.img 
-        whileHover={{scale: 1.2, y: -30}}
+        onHoverStart={Hoverstart}
+        onHoverEnd={Hoverend}
         onClick={() => {handleClick();clickplay();}}
-        onMouseOver={enterplay}
         ref = {scope}
         src={images[`${card.mov_type}`]}
         key={index}
