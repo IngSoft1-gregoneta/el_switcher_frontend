@@ -26,6 +26,12 @@
     cursor: pointer;
 }
 
+.mov_card.unavailable {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .light {
     border: solid 5px black;
 }

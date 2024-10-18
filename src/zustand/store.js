@@ -39,3 +39,8 @@ export const useMovCardStore = create((set) => ({
   selectedMovCard : null,
   setSelectedMovCard : (new_card) => set({selectedMovCard : new_card}),
 }));
+
+export const useStopTrigger = create((set) => ({
+  trigger : false,
+  setTrigger : (status) => set({trigger : status}),
+}));
