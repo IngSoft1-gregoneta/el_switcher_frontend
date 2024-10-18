@@ -1,5 +1,7 @@
 import React, { useEffect,useState } from "react";
 import { useAnimate, stagger,motion } from "framer-motion";
+import {useParams } from "react-router-dom";
+import useMatchData from "../hooks/useMatchData.jsx";
 import images from "../logic/bindImage";
 import { useMovCardStore } from "../../../zustand/store";
 import entersound from "../../assets/entersound.wav"
@@ -7,6 +9,8 @@ import clicksound from "../../assets/cardsound.wav"
 
 export default function MovCard({ card, index }) {
   const [scope, animate] = useAnimate()
+  const {room_id, user_name} = useParams();
+  const {statePlayerMe} = useMatchData(room_id, user_name);
   const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
   const setSelectedMovCard = useMovCardStore(
     (state) => state.setSelectedMovCard
@@ -15,10 +19,10 @@ export default function MovCard({ card, index }) {
   
 
   useEffect(() => {
-    if (card.is_used) {
+    if (card.is_used || statePlayerMe) {
       animate(scope.current,{ scale:1, y:0});
     }
-  },[animate, card.is_used]);
+  },[animate, card.is_used, statePlayerMe]);
 
   useEffect(() => {
     if (selectedMovCard){
@@ -36,10 +40,17 @@ export default function MovCard({ card, index }) {
       animate(scope.current, {scale: 1, y: 0});
       setSelectedMovCard(null);
     } else if(card.is_used == true){
+      if (selectedMovCard != null){
+        const prev_movCard = document.getElementById("mov_card" + selectedMovCard.index);
+          if (prev_movCard) {
+              animate(prev_movCard, {scale: 1, y: 0});
+            }
+      }
       setSelectedMovCard(null);
     } else {
-      setCanReturn(true);
-      if (selectedMovCard != null){
+      if (statePlayerMe.has_turn){
+        setCanReturn(true);
+        if (selectedMovCard != null){
         const prev_movCard = document.getElementById("mov_card" + selectedMovCard.index);
           if (prev_movCard) {
               animate(prev_movCard, {scale: 1, y: 0});
@@ -47,6 +58,7 @@ export default function MovCard({ card, index }) {
       }
       animate(scope.current, {scale: 1.3,y: -30});
       setSelectedMovCard(new_card);
+      }
     }
 }
 

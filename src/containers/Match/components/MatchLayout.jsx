@@ -140,8 +140,9 @@ export default function MatchLayout({
         <div className="flex flex-col items-center justify-items-center">
         {hasTurn && (
             <ButtonFilled
+              onmouseenter={enterplay}
               className="mx-0 text-wrap px-1 py-2"
-              onClick={handleRevertMove}
+              onClick={() => {handleRevertMove(); clickplay();}}
             >
               Revertir Movimiento
             </ButtonFilled>
