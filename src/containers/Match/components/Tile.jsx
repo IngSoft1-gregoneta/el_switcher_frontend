@@ -6,18 +6,20 @@ function inHighlighted(posx, posy, arroftiles = []) {
   return arroftiles.some((tile) => tile.pos.x === posx && tile.pos.y === posy);
 }
 
-
-export default function Tile({ color, posx, posy, figure }) {
+export default function Tile({ color, posx, posy, figure, onClick }) {
   const firstPos = useBoardStore((state) => state.firstPos);
   const secondPos = useBoardStore((state) => state.secondPos);
   const setFirstPos = useBoardStore((state) => state.setFirstPos);
   const setSecondPos = useBoardStore((state) => state.setSecondPos);
   const highlightedTiles = useBoardStore((state) => state.highlightedTiles);
-  const setHighlightedTiles = useBoardStore((state) => state.setHighlightedTiles);
-  
+  const setHighlightedTiles = useBoardStore(
+    (state) => state.setHighlightedTiles,
+  );
+
   const handleTileClick = () => {
+    onClick();
     // RESET todas las fichas si se selecciona la misma 2 veces
-    if (firstPos?.pos_x === posx && firstPos?.pos_y === posy){
+    if (firstPos?.pos_x === posx && firstPos?.pos_y === posy) {
       setFirstPos(null);
       setSecondPos(null);
       setHighlightedTiles(null);
@@ -26,12 +28,15 @@ export default function Tile({ color, posx, posy, figure }) {
     if (highlightedTiles && !inHighlighted(posy, posx, highlightedTiles)) {
       return;
     }
-  
+
     if (!firstPos && !secondPos) {
       setFirstPos({ pos_x: posx, pos_y: posy });
     } else if (firstPos && !secondPos) {
       setSecondPos({ pos_x: posx, pos_y: posy });
-    } else if (firstPos.pos_x === secondPos.pos_x && firstPos.pos_y === secondPos.pos_y) {
+    } else if (
+      firstPos.pos_x === secondPos.pos_x &&
+      firstPos.pos_y === secondPos.pos_y
+    ) {
       setFirstPos(null);
       setSecondPos(null);
     }
@@ -39,32 +44,26 @@ export default function Tile({ color, posx, posy, figure }) {
 
   const lightStyle =
     "ring-4 ring-indigo-500 border-2 border-blue-400 shadow-xl transition duration-500 ease-in-out transform scale-105";
-  
-  const highlight =
-   !highlightedTiles 
-      ? "" 
-      : (inHighlighted(posy,posx,highlightedTiles) 
-          ? lightStyle 
-          : ""
-        );
+
+  const highlight = !highlightedTiles
+    ? ""
+    : inHighlighted(posy, posx, highlightedTiles)
+      ? lightStyle
+      : "";
 
   const originStyle =
     "ring-4 ring-pink-500 border-2 border-red-400 shadow-xl transition duration-500 ease-in-out transform scale-105";
-  
-  const origin = 
-    !firstPos 
-      ? "" 
-      : ((firstPos.pos_x == posx && firstPos.pos_y == posy) 
-            ? originStyle : 
-            ""
-        );
 
-  const classAttStyle = "bg-gradient-to-br from-purple-900  to-indigo-900 blur transition duration-500";
-  const classAtt =
-    figure == "None"
-      ? ""
-      : classAttStyle; 
-      // con blur-sm se rompe el test porque separa palabras por " " entonces no toma blur-sm como una tile resaltada
+  const origin = !firstPos
+    ? ""
+    : firstPos.pos_x == posx && firstPos.pos_y == posy
+      ? originStyle
+      : "";
+
+  const classAttStyle =
+    "bg-gradient-to-br from-purple-900  to-indigo-900 blur transition duration-500";
+  const classAtt = figure == "None" ? "" : classAttStyle;
+  // con blur-sm se rompe el test porque separa palabras por " " entonces no toma blur-sm como una tile resaltada
 
   return (
     <div className="align-center group relative flex h-8 w-8 items-center justify-center rounded object-center sm:h-16 sm:w-16">
@@ -80,3 +79,4 @@ export default function Tile({ color, posx, posy, figure }) {
     </div>
   );
 }
+

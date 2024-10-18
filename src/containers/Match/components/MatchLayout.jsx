@@ -12,6 +12,9 @@ export default function MatchLayout({
   usedMovCards,
   handlePassTurn,
   handleLeaveMatch,
+  handleDiscardFigure,
+  selectedFigReducer,
+  handleRevertMove,
 }) {
   MatchLayout.propTypes = {
     statePlayerMe: PropTypes.object,
@@ -19,12 +22,20 @@ export default function MatchLayout({
     usedMovCards: PropTypes.array,
     handlePassTurn: PropTypes.func,
     handleLeaveMatch: PropTypes.func,
+    handleRevertMove: PropTypes.func,
+    handleDiscardFigure: PropTypes.func,
+    selectedFigReducer: PropTypes.object,
   };
   const hasTurn = statePlayerMe.has_turn;
   const playerMe = statePlayerMe;
   const playerTop = stateOtherPlayers[0];
   const playerRight = stateOtherPlayers.length > 1 && stateOtherPlayers[1];
   const playerLeft = stateOtherPlayers.length > 2 && stateOtherPlayers[2];
+
+  const {
+    selectedFigCards: selectedFigCards,
+    dispatchFigCards: dispatchFigCards,
+  } = selectedFigReducer;
 
   const backMovCard = (lengthToFill) => {
     return Array.from({ length: lengthToFill }, (_, i) => (
@@ -52,9 +63,7 @@ export default function MatchLayout({
     : backMovCard(3);
 
   const movCards = playerMe.mov_cards.map((card, i) => {
-    return (
-      <MovCard card={card} index={i} />
-    );
+    return <MovCard card={card} key={i} index={i} />;
   });
 
   return (
@@ -70,9 +79,9 @@ export default function MatchLayout({
 
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <PlayerTop
-          name={playerTop.player_name}
-          cards={playerTop.visible_fig_cards}
-          deckLen={playerTop.deck_len}
+          player={playerTop}
+          selectedFigCards={selectedFigCards}
+          dispatchFigCards={dispatchFigCards}
         />
       </div>
 
@@ -87,23 +96,23 @@ export default function MatchLayout({
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
         {playerLeft && (
           <PlayerLeft
-            name={playerLeft.player_name}
-            cards={playerLeft.visible_fig_cards}
-            deckLen={playerLeft.deck_len}
+            player={playerLeft}
+            selectedFigCards={selectedFigCards}
+            dispatchFigCards={dispatchFigCards}
           />
         )}
       </div>
-          <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
-              <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
-                  <Board/>
-              </div>
-          </div>
+      <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
+        <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
+          <Board handleDiscardFigure={(tile) => handleDiscardFigure(tile)} />
+        </div>
+      </div>
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
         {playerRight && (
           <PlayerRight
-            name={playerRight.player_name}
-            cards={playerRight.visible_fig_cards}
-            deckLen={playerRight.deck_len}
+            player={playerRight}
+            selectedFigCards={selectedFigCards}
+            dispatchFigCards={dispatchFigCards}
           />
         )}
       </div>
@@ -116,9 +125,9 @@ export default function MatchLayout({
 
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <PlayerMe
-          name={statePlayerMe.player_name}
-          cards={statePlayerMe.visible_fig_cards}
-          deckLen={statePlayerMe.deck_len}
+          player={playerMe}
+          selectedFigCards={selectedFigCards}
+          dispatchFigCards={dispatchFigCards}
         />
       </div>
 
@@ -127,7 +136,18 @@ export default function MatchLayout({
           {hasTurn && (
             <ButtonFilled
               className="mx-0 text-wrap px-1 py-2"
-              onClick={handlePassTurn}
+              onClick={handleRevertMove}
+            >
+              Revertir Movimiento
+            </ButtonFilled>
+          )}
+          {hasTurn && (
+            <ButtonFilled
+              className="mx-0 text-wrap px-1 py-2"
+              onClick={() => {
+                handlePassTurn();
+                dispatchFigCards({ type: "deselect" });
+              }}
             >
               Pasar turno
             </ButtonFilled>
