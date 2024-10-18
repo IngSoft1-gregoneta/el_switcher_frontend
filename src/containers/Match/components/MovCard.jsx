@@ -1,38 +1,51 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import { useAnimate, stagger,motion } from "framer-motion";
 import images from "../logic/bindImage";
-import {useStopTrigger} from "../../../zustand/store";
 import { useMovCardStore } from "../../../zustand/store";
 import entersound from "../../assets/entersound.wav"
 import clicksound from "../../assets/cardsound.wav"
 
-let canreturn = false
-
 export default function MovCard({ card, index }) {
   const [scope, animate] = useAnimate()
-  const Settrigger = useStopTrigger((state) => state.setTrigger)
-  const trigger = useStopTrigger((state) => state.trigger)
   const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
   const setSelectedMovCard = useMovCardStore(
     (state) => state.setSelectedMovCard
   );
-  if (trigger) {
-    animate(scope.current, {scale: 0, y: 0})
-    Settrigger(false)
-  }
+  const [canreturn, setCanReturn] = useState(false);
+  
+
+  useEffect(() => {
+    if (card.is_used) {
+      animate(scope.current,{ scale:1, y:0});
+    }
+  },[animate, card.is_used]);
+
+  useEffect(() => {
+    if (selectedMovCard){
+      if (selectedMovCard.index != index){
+        setCanReturn(false);
+      }
+    }
+},[animate, selectedMovCard]);
 
   const handleClick = () => {
     const new_card = { ...card, index };
 
     if (selectedMovCard && new_card.index === selectedMovCard.index) {
-      canreturn = false;
+      setCanReturn(false);
       animate(scope.current, {scale: 1, y: 0});
       setSelectedMovCard(null);
     } else if(card.is_used == true){
       setSelectedMovCard(null);
     } else {
-      canreturn = true;
-      animate(scope.current, {scale: 1.3});
+      setCanReturn(true);
+      if (selectedMovCard != null){
+        const prev_movCard = document.getElementById("mov_card" + selectedMovCard.index);
+          if (prev_movCard) {
+              animate(prev_movCard, {scale: 1, y: 0});
+            }
+      }
+      animate(scope.current, {scale: 1.3,y: -30});
       setSelectedMovCard(new_card);
     }
 }
@@ -42,7 +55,7 @@ export default function MovCard({ card, index }) {
         }
     function Hoverstart(){
         new Audio(entersound).play()
-        if (!canreturn) animate(scope.current, {scale: 1.2, y: -30})
+        if (!canreturn && !card.is_used) animate(scope.current, {scale: 1.2, y: -30})
     }
     function Hoverend(){
         if (!canreturn || card.is_used){
@@ -64,5 +77,6 @@ export default function MovCard({ card, index }) {
             ${card.is_used ? "unavailable" : ""}
           `}
         title={card.is_used ? "Esta carta ya ha sido usada" : ""}
+        id = {"mov_card"+ index}
         ></motion.img>
     )}

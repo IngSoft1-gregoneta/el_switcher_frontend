@@ -1,4 +1,4 @@
-import { useBoardStore, useIdStore, useStopTrigger, useWinnerStore } from "../../zustand/store.js";
+import { useBoardStore, useIdStore, useWinnerStore } from "../../zustand/store.js";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
 import Winner from "./components/Winner.jsx";
@@ -30,20 +30,17 @@ export default function Match() {
 
   const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
   const setSelectedMovCard = useMovCardStore((state) => state.setSelectedMovCard);
-  const setTrigger = useStopTrigger((state) => state.setTrigger);
 
   const resetMoveState = () => {
     setFirstPos(null);
     setSecondPos(null);
     setSelectedMovCard(null);
     setHighlightedTiles(null);
-    
   };
 
   const handlePassTurn = async () => {
     try {
       await passTurn(room_id, user_name);
-      setTrigger(true);
       resetMoveState();
     } catch (error) {
       resetMoveState();
@@ -63,7 +60,6 @@ export default function Match() {
   const handlePartialMove = async (roomID,playerName,cardIndex,x1,y1,x2,y2) => {
     try{
       await makePartialMove(roomID,playerName,cardIndex,x1,y1,x2,y2);
-      setTrigger(true);
       resetMoveState();
     } catch(error){
       resetMoveState();
@@ -75,7 +71,6 @@ export default function Match() {
   const handleRevertMove = async() => {
     try{
       await undoPartialMove(room_id, user_name);
-      setTrigger(true);
     } catch(error) {
       console.log(error);
     } 
