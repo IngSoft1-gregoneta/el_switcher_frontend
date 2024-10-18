@@ -2,9 +2,7 @@ import { create } from "zustand";
 
 export const useMatchStore = create((set) => ({
   matchStarted: false,
-  winner: null,
   setMatchStarted: (new_state) => set(() => ({ matchStarted: new_state })),
-  setWinner: (winnerName) => set(() => ({ winner : winnerName})),
 }));
 
 export const useUpdateStore = create((set) => ({

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchMatch } from "../services/MatchService";
-import { useMatchStore, useUpdateStore } from "../../../zustand/store";
+import { useUpdateStore } from "../../../zustand/store";
 
 const useMatchData = (roomId, userName) => {
   const [stateBoard, setStateBoard] = useState(null);
@@ -8,7 +8,7 @@ const useMatchData = (roomId, userName) => {
   const [stateOtherPlayers, setStateOtherPlayers] = useState(null);
   const [usedMovCards, setUsedMovCards] = useState([]);
   const [error, setError] = useState(null);
-  const setWinner = useMatchStore((state) => state.setWinner);
+  const [stateWinner, setStateWinner] = useState(null);
 
   const updateMatch = useUpdateStore((state) => state.updateMatch);
 
@@ -20,12 +20,11 @@ const useMatchData = (roomId, userName) => {
         setStatePlayerMe(matchData.me);
         setStateOtherPlayers(matchData.other_players);
         setUsedMovCards(matchData.visible_mov_cards);
-        if (matchData.winner){
-          setWinner(matchData.winner.player_name);
+        if (matchData.winner != null){
+          setStateWinner(matchData.winner.player_name);
         } else {
-          setWinner(null);
+          setStateWinner(null);
         }
-
       } catch (error) {
         setError(error);
       }
@@ -35,13 +34,13 @@ const useMatchData = (roomId, userName) => {
     setUsedMovCards,
     setStatePlayerMe,
     setStateOtherPlayers,
+    setStateWinner,
     userName,
-    setWinner,
     roomId,
     updateMatch,
   ]);
 
-  return { stateBoard, statePlayerMe, stateOtherPlayers, setWinner, usedMovCards, error };
+  return { stateBoard, statePlayerMe, stateOtherPlayers, stateWinner, usedMovCards, error };
 };
 
 export default useMatchData;
