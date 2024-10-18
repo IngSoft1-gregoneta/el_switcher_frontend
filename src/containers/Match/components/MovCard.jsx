@@ -4,16 +4,22 @@ import {useParams } from "react-router-dom";
 import useMatchData from "../hooks/useMatchData.jsx";
 import images from "../logic/bindImage";
 import { useMovCardStore } from "../../../zustand/store";
+import PropTypes from "prop-types";
 import entersound from "../../assets/entersound.wav"
 import clicksound from "../../assets/cardsound.wav"
 
 export default function MovCard({ card, index }) {
+  MovCard.propTypes = {
+    card: PropTypes.object,
+    index: PropTypes.number
+  }
+
   const [scope, animate] = useAnimate()
   const {room_id, user_name} = useParams();
   const {statePlayerMe} = useMatchData(room_id, user_name);
   const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
   const setSelectedMovCard = useMovCardStore(
-    (state) => state.setSelectedMovCard
+    (state) => state.setSelectedMovCard,
   );
   const [canreturn, setCanReturn] = useState(false);
   
