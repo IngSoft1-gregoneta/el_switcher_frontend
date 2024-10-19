@@ -56,7 +56,7 @@ const useMatchData = (roomId, userName) => {
         setStateOtherPlayers(otherPlayersExtendVisibleCards);
         setUsedMovCards(matchData.visible_mov_cards);
         matchData.me.has_turn ? setHaveITurn(true) : setHaveITurn(false);
-        setStateWinner(matchData.winner != null ? matchData.winner.player_name : null);
+        setStateWinner(matchData.winner != null ? matchData.winner : null);
       } catch (error) {
         setError(error);
       }

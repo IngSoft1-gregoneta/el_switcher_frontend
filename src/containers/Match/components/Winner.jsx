@@ -1,32 +1,39 @@
 import React from "react";
-import useMatchData from "../hooks/useMatchData";
 import { ButtonFilled } from "../../../components/Buttons";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function Winner() {
-  const { room_id, user_name} = useParams();
-  const winner = useMatchData(room_id, user_name).stateWinner;
+export default function Winner({winner}) {
+  const { user_name} = useParams();
   const navigate = useNavigate();
   const handleLeave = () => {
     navigate("/");
   };
-
-  const isWinner = winner === user_name; 
+  const winnerName = winner.player_name;
+  const isWinner = winner.player_name === user_name;
+  const winByDiscardingDeck = winner.mov_cards == 0;
   
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       {isWinner ? (
         <>
-          <h1 className="text-4xl font-bold">¡Felicitaciones!</h1>
-          <h2 className="mt-4 text-2xl font-semibold">
-            ¡Eres el ganador de la partida!
+          <h1 className="text-4xl font-bold">{`¡Felicitaciones ${winnerName}!`}</h1>
+          {winByDiscardingDeck ? (
+            <h2 className="mt-4 text-2xl font-semibold">
+            {`Victoria por finalizar mazo de figuras`}
           </h2>
+          ) : (
+            <h2 className="mt-4 text-2xl font-semibold">
+            {`Victoria por abandono`}
+          </h2>
+          )}
         </>
       ) : (
         <>
-          <h1 className="text-4xl font-bold">Lo siento...</h1>
+          <h1 className="text-4xl font-bold">
+            {`El ganador fue ${winnerName}. Mejor suerte la próxima vez.`}
+          </h1>
           <h2 className="mt-4 text-2xl font-semibold">
-            {`El ganador fue ${winner}. Mejor suerte la próxima vez.`}
+            {`Derrota por finalizar mazo de figuras`}
           </h2>
         </>
       )}

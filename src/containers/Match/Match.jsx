@@ -175,7 +175,7 @@ export default function Match() {
   }
   
   if (stateWinner != null) {
-    return < Winner/>
+    return < Winner winner={stateWinner}/>
 }
   if (!statePlayerMe || !stateOtherPlayers || !board) {
     return (
