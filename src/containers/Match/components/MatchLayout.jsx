@@ -31,6 +31,9 @@ export default function MatchLayout({
   const playerTop = stateOtherPlayers[0];
   const playerRight = stateOtherPlayers.length > 1 && stateOtherPlayers[1];
   const playerLeft = stateOtherPlayers.length > 2 && stateOtherPlayers[2];
+  const playerWithTurn =
+    stateOtherPlayers.filter((player) => player.has_turn)[0]?.player_name ||
+    statePlayerMe.player_name;
 
   const {
     selectedFigCards: selectedFigCards,
@@ -70,7 +73,7 @@ export default function MatchLayout({
     <div className="grid h-screen w-screen grid-cols-4 grid-rows-4">
       <div className="container col-span-1 row-span-1 flex flex-col items-center justify-center text-center">
         <h3 className="font-bold md:text-2xl">Tiempo restante</h3>
-        <p className="text-2xl md:text-7xl">00:42</p>
+        <p className="m-2 text-2xl md:text-5xl">00:42</p>
         <div className="align-center relative flex items-center justify-center object-center">
           <img src={color_proh} className="z-10 h-14 w-14" />
           <div className="absolute z-0 h-8 w-8 rounded bg-blue-600"></div>
@@ -86,9 +89,12 @@ export default function MatchLayout({
       </div>
 
       <div className="container col-span-1 row-span-1">
-        <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-          <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
-            {movParcialDeck}
+        <div className="mt-2 flex flex-col justify-center text-center align-middle">
+          <div className="font-bold">{playerWithTurn}</div>
+          <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
+            <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
+              {movParcialDeck}
+            </div>
           </div>
         </div>
       </div>
