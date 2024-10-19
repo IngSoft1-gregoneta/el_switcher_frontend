@@ -55,7 +55,6 @@ export default function App() {
         setUpdateRoom();
       }
       if (lastMessage.data == "MATCH") {
-        console.log("desde match");
         setMatchStarted(true);
         setUpdateMatch();
       }
