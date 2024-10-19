@@ -31,6 +31,9 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+.selectedFigCards{
+    border: solid 5px black;
+}
 
 .light {
     border: solid 5px black;

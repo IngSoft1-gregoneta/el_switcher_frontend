@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import images from "../logic/bindImage";
 import PropTypes from "prop-types";
+import {useAnimate,motion } from "framer-motion";
+import clicksound from "../../assets/clicksound.wav"
+import entersound from "../../assets/entersound.wav"
+import {useParams } from "react-router-dom";
+import useMatchData from "../hooks/useMatchData.jsx";
 
 export default function FigCard({
   className,
@@ -17,22 +22,46 @@ export default function FigCard({
     isSelected: PropTypes.bool,
   };
   const [selectedStyle, setSelectedStyle] = useState("");
+  const [canreturn, setCanReturn] = useState(false);
+  const {room_id, user_name} = useParams();
+  const {statePlayerMe} = useMatchData(room_id, user_name);
+  const [scope, animate] = useAnimate()
 
   useEffect(() => {
     if (isSelected) {
-      setSelectedStyle("bg-black");
+
+      setCanReturn(true);
+      animate(scope.current, {scale: 1.3,y: -30});
     } else {
       setSelectedStyle("");
+      setCanReturn(false);
     }
   }, [isSelected]);
 
+  function clickplay() {
+    new Audio(clicksound).play()
+    }
+function Hoverstart(){
+    new Audio(entersound).play()
+    if (!canreturn) animate(scope.current, {scale: 1.2, y: -30})
+}
+function Hoverend(){
+    if (!canreturn){
+      animate(scope.current, {scale: 1, y: 0})
+    }
+}
+
+
   return (
-    <img
-      onClick={onSelected}
+    <motion.img
+      onHoverStart={Hoverstart}
+      onHoverEnd={Hoverend}
+      ref = {scope}
+      onClick={() => {onSelected();clickplay();}}
       src={images[`${figType}`]}
       key={index}
       data-testid="fig-cards"
       className={`${className} ${selectedStyle}`}
-    />
+    ></motion.img>
   );
 }
