@@ -267,7 +267,7 @@ describe("Match testing", () => {
 
     const img = screen.getByTestId("me-mov-cards");
     fireEvent.click(img);
-    expect(setMock).toBeCalledWith({ ...mockCard, index: 0 });
+    expect(setMock).toBeCalledWith(null);
   });
 
   it("Double click on movCard should set state to null", () => {

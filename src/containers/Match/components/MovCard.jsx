@@ -54,7 +54,7 @@ export default function MovCard({ card, index }) {
       }
       setSelectedMovCard(null);
     } else {
-      if (statePlayerMe.has_turn){
+      if (statePlayerMe?.has_turn){
         setCanReturn(true);
         if (selectedMovCard != null){
         const prev_movCard = document.getElementById("mov_card" + selectedMovCard.index);
@@ -64,7 +64,7 @@ export default function MovCard({ card, index }) {
       }
       animate(scope.current, {scale: 1.3,y: -30});
       setSelectedMovCard(new_card);
-      }
+      }else setSelectedMovCard(null);
     }
 }
 
