@@ -53,19 +53,23 @@ export default function ListRoomsLayout({ rooms }) {
       value={filterName}
       onChange={(e) => setFilterName(e.target.value)}
       style={{
-        border: "1px solid #ccc", /* Define un borde */
-        padding: "0.5rem 1rem", /* Ajusta el padding */
-        borderRadius: "0.5rem", /* Bordes redondeados */
-        fontFamily: "'Roboto', sans-serif"
+        border: "1px solid #ccc",
+        padding: "0.5rem 1rem",
+        fontFamily: "'Roboto', sans-serif",
+        backgroundColor: "#e3f9d7",
+        color: "#333",
       }}
+      className="placeholder:text-[#333]"
     />
     <select
       value={filterPlayers}
       onChange={(e) => setFilterPlayers(e.target.value)}
       style={{
-        border: "1px solid #ccc", /* Define un borde */
-        padding: "0.5rem 1rem", /* Ajusta el padding */
-        borderRadius: "0.5rem" /* Bordes redondeados */
+        border: "1px solid #ccc",
+        padding: "0.5rem 1rem",
+        fontFamily: "'Roboto', sans-serif",
+        backgroundColor: "#e3f9d7",
+        color: "#333"
       }}
     >
             <option value="" style={{fontFamily: "'Roboto', sans-serif"}}>Filtrar por jugadores</option>
