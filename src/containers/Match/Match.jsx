@@ -1,8 +1,4 @@
-import {
-  useBoardStore,
-  useIdStore,
-  useWinnerStore,
-} from "../../zustand/store.js";
+import { useBoardStore, useIdStore } from "../../zustand/store.js";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
 import Winner from "./components/Winner.jsx";
@@ -37,12 +33,11 @@ const selectFigCardReducer = (state, action) => {
 };
 
 export default function Match() {
-  const setStateWinner = useWinnerStore((state) => state.setStateWinner);
   const userId = useIdStore((state) => state.userId);
   const setUserId = useIdStore((state) => state.setUserId);
   const { room_id, user_name, user_id } = useParams();
   const navigate = useNavigate();
-  const { stateBoard, statePlayerMe, stateOtherPlayers, error, usedMovCards } =
+  const { stateBoard, statePlayerMe, stateOtherPlayers, stateWinner, usedMovCards, error } =
     useMatchData(room_id, user_name);
   if (!userId) setUserId(user_id);
   const firstPos = useBoardStore((state) => state.firstPos);
@@ -178,7 +173,10 @@ export default function Match() {
       </div>
     );
   }
-
+  
+  if (stateWinner != null) {
+    return < Winner winner={stateWinner}/>
+}
   if (!statePlayerMe || !stateOtherPlayers || !board) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -187,10 +185,6 @@ export default function Match() {
     );
   }
 
-  if (stateOtherPlayers && stateOtherPlayers[0] === undefined) {
-    setStateWinner(user_name);
-    return <Winner />;
-  }
 
   return (
     <MatchLayout

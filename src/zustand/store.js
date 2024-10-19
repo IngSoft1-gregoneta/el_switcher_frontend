@@ -7,11 +7,6 @@ export const useMatchStore = create((set) => ({
   setHaveITurn: (new_state) => set(() => ({ haveITurn: new_state })),
 }));
 
-export const useWinnerStore = create((set) => ({
-  stateWinner: null,
-  setStateWinner: (new_winner) => set(() => ({ stateWinner: new_winner })),
-}));
-
 export const useUpdateStore = create((set) => ({
   updateList: false,
   updateRoom: false,

@@ -16,6 +16,7 @@ const useMatchData = (roomId, userName) => {
   const [stateOtherPlayers, setStateOtherPlayers] = useState(null);
   const [usedMovCards, setUsedMovCards] = useState([]);
   const [error, setError] = useState(null);
+  const [stateWinner, setStateWinner] = useState(null);
 
   const updateMatch = useUpdateStore((state) => state.updateMatch);
   const setHaveITurn = useMatchStore((state) => state.setHaveITurn);
@@ -55,6 +56,7 @@ const useMatchData = (roomId, userName) => {
         setStateOtherPlayers(otherPlayersExtendVisibleCards);
         setUsedMovCards(matchData.visible_mov_cards);
         matchData.me.has_turn ? setHaveITurn(true) : setHaveITurn(false);
+        setStateWinner(matchData.winner != null ? matchData.winner : null);
       } catch (error) {
         setError(error);
       }
@@ -65,12 +67,13 @@ const useMatchData = (roomId, userName) => {
     setUsedMovCards,
     setStatePlayerMe,
     setStateOtherPlayers,
+    setStateWinner,
     userName,
     roomId,
     updateMatch,
   ]);
 
-  return { stateBoard, statePlayerMe, stateOtherPlayers, usedMovCards, error };
+  return { stateBoard, statePlayerMe, stateOtherPlayers, stateWinner, usedMovCards, error };
 };
 
 export default useMatchData;

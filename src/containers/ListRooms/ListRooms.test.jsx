@@ -22,7 +22,71 @@ const mockedRooms = [
     owner_name: "yamil",
     is_active: true,
   },
+  {
+    room_id: 4,
+    room_name: "room4",
+    players_expected: 4,
+    players_names: ["tito", "tita"],
+    owner_name: "tito",
+    is_active: true,
+  },
 ];
+
+describe("ListRoomsLayout tests", () => {
+  it("should filter rooms by name", () => {
+    render(
+      <MemoryRouter>
+        <ListRoomsLayout rooms={mockedRooms} />
+      </MemoryRouter>
+    );
+
+    // filtrar por nombre de sala
+    const filterInput = screen.getByPlaceholderText(/filtrar por nombre de sala/i);
+    fireEvent.change(filterInput, { target: { value: "room4" } });
+
+    // verificar que solo la sala de estrategia está visible
+    expect(screen.getByText(/room4/i)).toBeInTheDocument();
+    expect(screen.queryByText(/famaf/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/niconeta/i)).not.toBeInTheDocument();
+  });
+
+  it("should filter rooms by number of players", () => {
+    render(
+      <MemoryRouter>
+        <ListRoomsLayout rooms={mockedRooms} />
+      </MemoryRouter>
+    );
+
+    // filtrar por cantidad de jugadores
+    const playersFilter = screen.getByRole("combobox"); // Ajusta si es necesario para obtener el select correcto
+    fireEvent.change(playersFilter, { target: { value: "4" } });
+
+    // verificar que solo la sala de estrategia está visible
+    expect(screen.getByText(/room4/i)).toBeInTheDocument();
+    expect(screen.queryByText(/famaf/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/niconeta/i)).not.toBeInTheDocument();
+  });
+
+  it("should show all rooms when filters are cleared", () => {
+    render(
+      <MemoryRouter>
+        <ListRoomsLayout rooms={mockedRooms} />
+      </MemoryRouter>
+    );
+
+    // filtrar por nombre de sala
+    const filterInput = screen.getByPlaceholderText(/filtrar por nombre de sala/i);
+    fireEvent.change(filterInput, { target: { value: "room4" } });
+
+    // limpiar filtro
+    fireEvent.change(filterInput, { target: { value: "" } });
+
+    // verificar que todas las salas están visibles
+    expect(screen.getByText(/famaf/i)).toBeInTheDocument();
+    expect(screen.getByText(/niconeta/i)).toBeInTheDocument();
+    expect(screen.getByText(/room4/i)).toBeInTheDocument();
+  });
+});
 
 describe("ListRooms test", () => {
   it("should show list of rooms and not the message of empty rooms", () => {
