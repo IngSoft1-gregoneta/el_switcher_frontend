@@ -1,4 +1,8 @@
-import { useBoardStore, useIdStore } from "../../zustand/store.js";
+import {
+  useBoardStore,
+  useIdStore,
+  useMatchStore,
+} from "../../zustand/store.js";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner.jsx";
 import Winner from "./components/Winner.jsx";
@@ -33,13 +37,9 @@ const selectFigCardReducer = (state, action) => {
 };
 
 export default function Match() {
+  const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
   const userId = useIdStore((state) => state.userId);
   const setUserId = useIdStore((state) => state.setUserId);
-  const { room_id, user_name, user_id } = useParams();
-  const navigate = useNavigate();
-  const { stateBoard, statePlayerMe, stateOtherPlayers, stateWinner, usedMovCards, error } =
-    useMatchData(room_id, user_name);
-  if (!userId) setUserId(user_id);
   const firstPos = useBoardStore((state) => state.firstPos);
   const secondPos = useBoardStore((state) => state.secondPos);
   const setFirstPos = useBoardStore((state) => state.setFirstPos);
@@ -53,6 +53,16 @@ export default function Match() {
   const setSelectedMovCard = useMovCardStore(
     (state) => state.setSelectedMovCard,
   );
+  const { room_id, user_name, user_id } = useParams();
+  const navigate = useNavigate();
+  const {
+    stateBoard,
+    statePlayerMe,
+    stateOtherPlayers,
+    stateWinner,
+    usedMovCards,
+    error,
+  } = useMatchData(room_id, user_name);
 
   const [selectedFigCards, dispatchFigCards] = useReducer(
     selectFigCardReducer,
@@ -65,6 +75,8 @@ export default function Match() {
     setSelectedMovCard(null);
     setHighlightedTiles(null);
   });
+
+  if (!userId) setUserId(user_id);
 
   const handleDiscardFigure = async (tile) => {
     if (selectedFigCards.player && selectedFigCards.index !== null) {
@@ -97,6 +109,7 @@ export default function Match() {
   const handleLeaveMatch = async () => {
     try {
       await leaveMatch(room_id, user_name, user_id);
+      setMatchStarted(false);
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -173,10 +186,10 @@ export default function Match() {
       </div>
     );
   }
-  
+
   if (stateWinner != null) {
-    return < Winner winner={stateWinner}/>
-}
+    return <Winner winner={stateWinner} />;
+  }
   if (!statePlayerMe || !stateOtherPlayers || !board) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -184,7 +197,6 @@ export default function Match() {
       </div>
     );
   }
-
 
   return (
     <MatchLayout

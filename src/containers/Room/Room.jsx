@@ -19,11 +19,6 @@ export default function Room() {
   }
 
   useEffect(() => {
-    // Pasar a false cuando el match termine
-    // quizas poner el campo de isStarted en el server y si fetcheamos la room
-    // con eso en true activar un boton que te redirija a la partida
-    // o manejar esto con cuidado
-    // o usar ambos aproacheees que verifique con la room
     if (matchStarted) {
       navigate(`/match/${user_id}/${room_id}/${user_name}`);
     }
