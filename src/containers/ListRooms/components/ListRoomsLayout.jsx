@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import clicksound from "../../assets/clicksound.wav"
+import entersound from "../../assets/entersound.wav"
 import { useState } from "react";
 import JoinRoomModalLayout from "./JoinRoomModalLayout";
 import { ButtonUnfilled } from "../../../components/Buttons";
@@ -14,8 +16,12 @@ export default function ListRoomsLayout({ rooms }) {
   const [filterPlayers, setFilterPlayers] = useState("");
 
   function handleClickUnirse(id) {
+    new Audio(clicksound).play()
     setRoomId(id);
     setIsOpen(true);
+  }
+  function enterplay() {
+    new Audio(entersound).play()
   }
 
   const filteredRooms = rooms?.filter((room) => {
@@ -32,6 +38,7 @@ export default function ListRoomsLayout({ rooms }) {
 
   return (
     <>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"></link>
       <JoinRoomModalLayout
         roomId={roomId}
         isOpen={isOpen}
@@ -40,22 +47,35 @@ export default function ListRoomsLayout({ rooms }) {
       <div className="container mb-6 pb-4 pt-4">
         {}
         <div className="flex justify-between mb-4">
-          <input
-            type="text"
-            placeholder="Filtrar por nombre de sala"
-            value={filterName}
-            onChange={(e) => setFilterName(e.target.value)}
-            className="border px-4 py-2"
-          />
-          <select
-            value={filterPlayers}
-            onChange={(e) => setFilterPlayers(e.target.value)}
-            className="border px-4 py-2"
-          >
-            <option value="">Filtrar por jugadores</option>
-            <option value="2">2 jugadores</option>
-            <option value="3">3 jugadores</option>
-            <option value="4">4 jugadores</option>
+        <input
+      type="text"
+      placeholder="Filtrar por nombre de sala"
+      value={filterName}
+      onChange={(e) => setFilterName(e.target.value)}
+      style={{
+        border: "1px solid #ccc",
+        padding: "0.5rem 1rem",
+        fontFamily: "'Roboto', sans-serif",
+        backgroundColor: "#e3f9d7",
+        color: "#333",
+      }}
+      className="placeholder:text-[#333]"
+    />
+    <select
+      value={filterPlayers}
+      onChange={(e) => setFilterPlayers(e.target.value)}
+      style={{
+        border: "1px solid #ccc",
+        padding: "0.5rem 1rem",
+        fontFamily: "'Roboto', sans-serif",
+        backgroundColor: "#e3f9d7",
+        color: "#333"
+      }}
+    >
+            <option value="" style={{fontFamily: "'Roboto', sans-serif"}}>Filtrar por jugadores</option>
+            <option value="2" style={{fontFamily: "'Roboto', sans-serif"}}>2 jugadores</option>
+            <option value="3" style={{fontFamily: "'Roboto', sans-serif"}}>3 jugadores</option>
+            <option value="4" style={{fontFamily: "'Roboto', sans-serif"}}>4 jugadores</option>
           </select>
         </div>
 
@@ -102,7 +122,17 @@ export default function ListRoomsLayout({ rooms }) {
             </table>
           </div>
         ) : (
-          <div>No hay salas disponibles</div>
+          <div
+          style={{
+            textAlign: "center", /* Centrado horizontal */
+            marginTop: "2rem", /* Separación desde arriba */
+            fontFamily: "'Roboto', sans-serif",
+            fontSize: "1.25rem", /* Tamaño de fuente */
+            color: "#000" /* Color gris para el texto */
+          }}
+        >
+          No hay salas disponibles
+        </div>
         )}
       </div>
     </>

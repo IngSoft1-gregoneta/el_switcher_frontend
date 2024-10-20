@@ -1,5 +1,9 @@
 import React from "react";
 import { useBoardStore } from "../../../zustand/store";
+import bubble1 from "../../assets/bubblesound1.wav"
+import bubble2 from "../../assets/bubblesound2.wav"
+import bubble3 from "../../assets/bubblesound3.wav"
+import bubble4 from "../../assets/bubblesound4.wav"
 
 function inHighlighted(posx, posy, arroftiles = []) {
   if (arroftiles == null) return false;
@@ -15,9 +19,12 @@ export default function Tile({ color, posx, posy, figure, onClick }) {
   const setHighlightedTiles = useBoardStore(
     (state) => state.setHighlightedTiles,
   );
+  const audiolist = [bubble1,bubble2,bubble3,bubble4]
 
   const handleTileClick = () => {
     onClick();
+    let n = Math.floor(Math.random()*4)
+    let audioselected = audiolist[n]
     // RESET todas las fichas si se selecciona la misma 2 veces
     if (firstPos?.pos_x === posx && firstPos?.pos_y === posy) {
       setFirstPos(null);
@@ -28,17 +35,20 @@ export default function Tile({ color, posx, posy, figure, onClick }) {
     if (highlightedTiles && !inHighlighted(posy, posx, highlightedTiles)) {
       return;
     }
-
+    
+  
     if (!firstPos && !secondPos) {
       setFirstPos({ pos_x: posx, pos_y: posy });
     } else if (firstPos && !secondPos) {
       setSecondPos({ pos_x: posx, pos_y: posy });
+      new Audio(audioselected).play();
     } else if (
       firstPos.pos_x === secondPos.pos_x &&
       firstPos.pos_y === secondPos.pos_y
     ) {
       setFirstPos(null);
       setSecondPos(null);
+      
     }
   };
 

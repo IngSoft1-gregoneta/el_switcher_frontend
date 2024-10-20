@@ -1,5 +1,6 @@
 import Spinner from "../../../components/Spinner";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons.jsx";
+import entersound from "../../assets/entersound.wav"
 import propTypes from "prop-types";
 
 export default function RoomLayout({
@@ -20,6 +21,10 @@ export default function RoomLayout({
         <Spinner />
       </div>
     );
+  }
+    
+  function enterplay() {
+    new Audio(entersound).play()
   }
 
   return (
@@ -48,6 +53,7 @@ export default function RoomLayout({
         <div className="mt-6">
           <ButtonUnfilled
             type="button"
+            onmouseenter={enterplay}
             onClick={() => handleLeaveRoom()}
             className="w-full"
           >
@@ -56,6 +62,7 @@ export default function RoomLayout({
           {isOwner && (
             <ButtonFilled
               type="button"
+              onmouseenter={enterplay}
               onClick={() => handleStartMatch()}
               className="w-full"
             >

@@ -21,12 +21,8 @@
     cursor: pointer;
 }
 
-.mov_card {
-    transition: transform 0.5s;
-}
 
-.mov_card:hover {
-    transform: scale(1.15);
+.mov_card_selected:hover {
     cursor: pointer;
 }
 
@@ -34,4 +30,11 @@
     filter: grayscale(100%);
     opacity: 0.5;
     cursor: not-allowed;
+}
+.selectedFigCards{
+    border: solid 5px black;
+}
+
+.light {
+    border: solid 5px black;
 }

@@ -40,4 +40,3 @@ export const useMovCardStore = create((set) => ({
 
 
 
-
