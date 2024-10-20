@@ -12,7 +12,7 @@ export default function Winner({ winner }) {
     navigate("/");
   };
   const winnerName = winner.player_name;
-  const isWinner = winner.player_name === user_name;
+  const isWinner = winnerName === user_name;
   const winByDiscardingDeck = winner.fig_cards == 0;
   
   function clickplay(){
