@@ -10,7 +10,7 @@ export default function Winner({winner}) {
   };
   const winnerName = winner.player_name;
   const isWinner = winner.player_name === user_name;
-  const winByDiscardingDeck = winner.mov_cards == 0;
+  const winByDiscardingDeck = winner.fig_cards == 0;
   
   return (
     <div className="flex h-screen flex-col items-center justify-center">
