@@ -248,7 +248,12 @@ describe("Match testing", () => {
         />
       </MemoryRouter>,
     );
-    const tiles = screen.getAllByTestId("tile");
+    const tiles = screen.getAllByTestId("tile-background");
+
+    const highlightedTiles = tiles.filter((tile) =>
+    tile.className.split(" ").includes("blur"));
+    console.log('Highlighted Tiles:', highlightedTiles);
+
     const numberOfHighlightedTiles = tiles.filter((tile) =>
       tile.className.split(" ").includes("blur"),
     ).length;
