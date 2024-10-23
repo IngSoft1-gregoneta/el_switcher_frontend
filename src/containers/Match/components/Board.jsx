@@ -5,10 +5,10 @@ import { useBoardStore } from "../../../zustand/store";
 import Spinner from "../../../components/Spinner";
 
 const COLORS = Object.freeze({
-  YELLOW: "bg-yellow-600",
+  YELLOW: "bg-yellow-500",
   GREEN: "bg-green-600",
   RED: "bg-red-600",
-  BLUE: "bg-blue-600",
+  BLUE: "bg-blue-700",
 });
 
 const COLOR_MAP = {
@@ -29,8 +29,8 @@ export default function Board({ handleDiscardFigure }) {
     return <Spinner />;
   } else {
     return (
-      <div className="flex h-full max-h-full w-full max-w-full justify-center">
-        <div className="grid grid-cols-6 grid-rows-6 gap-1 md:gap-2">
+      <div className="flex h-full w-full items-center justify-center bg-"> {/* Fondo del tablero */}
+        <div className="grid grid-cols-6 grid-rows-6 gap-1 md:gap-2 p-2 rounded-lg relative"> {/* Espaciado y bordes redondeados */}
           {board.tiles.map((row, rowIndex) =>
             row.map((ficha, colIndex) => {
               return (
@@ -47,6 +47,7 @@ export default function Board({ handleDiscardFigure }) {
               );
             }),
           )}
+          <div className="absolute inset-0 bg-gray-800 z-0 rounded-lg" /> {/* Fondo azul detrás del tablero */}
         </div>
       </div>
     );
