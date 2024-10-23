@@ -51,15 +51,15 @@ export default function Tile({ color, posx, posy, figure, onClick }) {
   const getClassAttStyle = () => {
     switch (color) {
       case "bg-yellow-500":
-        return "bg-yellow-400";
+        return "bg-yellow-400 blur z-10";
       case "bg-green-600":
-        return "bg-green-500";
+        return "bg-green-500 blur z-10";
       case "bg-red-600":
-        return "bg-red-500";
+        return "bg-red-500 blur z-10";
       case "bg-blue-700":
-        return "bg-blue-600";
+        return "bg-blue-600 blur z-10";
       default:
-        return "";
+        return "bg-gray-600 blur z-10";
     }
   };
 
@@ -81,7 +81,7 @@ export default function Tile({ color, posx, posy, figure, onClick }) {
     ? originStyle
     : "";
 
-  const classAttStyle = `${getClassAttStyle()} blur z-10`;
+  const classAttStyle = getClassAttStyle();
   const classAtt = figure === "None" ? "" : classAttStyle;
 
   return (
