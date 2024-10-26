@@ -23,52 +23,52 @@ import Match from "./Match";
 const mockBoard = {
   tiles: [
     [
-      { color: "YELLOW", figure: "fig" },
-      { color: "GREEN", figure: "fig" },
-      { color: "RED", figure: "fig" },
-      { color: "BLUE", figure: "fig" },
-      { color: "YELLOW", figure: "None" },
-      { color: "GREEN", figure: "None" },
+      { color: "Yellow", figure: "fig" },
+      { color: "Green", figure: "fig" },
+      { color: "Red", figure: "fig" },
+      { color: "Blue", figure: "fig" },
+      { color: "Yellow", figure: "None" },
+      { color: "Green", figure: "None" },
     ],
     [
-      { color: "RED", figure: "None" },
-      { color: "BLUE", figure: "None" },
-      { color: "YELLOW", figure: "None" },
-      { color: "GREEN", figure: "None" },
-      { color: "RED", figure: "None" },
-      { color: "BLUE", figure: "None" },
+      { color: "Red", figure: "None" },
+      { color: "Blue", figure: "None" },
+      { color: "Yellow", figure: "None" },
+      { color: "Green", figure: "None" },
+      { color: "Red", figure: "None" },
+      { color: "Blue", figure: "None" },
     ],
     [
-      { color: "YELLOW", figure: "None" },
-      { color: "GREEN", figure: "None" },
-      { color: "RED", figure: "None" },
-      { color: "BLUE", figure: "None" },
-      { color: "YELLOW", figure: "None" },
-      { color: "GREEN", figure: "None" },
+      { color: "Yellow", figure: "None" },
+      { color: "Green", figure: "None" },
+      { color: "Red", figure: "None" },
+      { color: "Blue", figure: "None" },
+      { color: "Yellow", figure: "None" },
+      { color: "Green", figure: "None" },
     ],
     [
-      { color: "RED", figure: "None" },
-      { color: "BLUE", figure: "None" },
-      { color: "YELLOW", figure: "None" },
-      { color: "GREEN", figure: "None" },
-      { color: "RED", figure: "None" },
-      { color: "BLUE", figure: "None" },
+      { color: "Red", figure: "None" },
+      { color: "Blue", figure: "None" },
+      { color: "Yellow", figure: "None" },
+      { color: "Green", figure: "None" },
+      { color: "Red", figure: "None" },
+      { color: "Blue", figure: "None" },
     ],
     [
-      { color: "YELLOW", figure: "None" },
-      { color: "GREEN", figure: "None" },
-      { color: "RED", figure: "None" },
-      { color: "BLUE", figure: "None" },
-      { color: "YELLOW", figure: "None" },
-      { color: "GREEN", figure: "None" },
+      { color: "Yellow", figure: "None" },
+      { color: "Green", figure: "None" },
+      { color: "Red", figure: "None" },
+      { color: "Blue", figure: "None" },
+      { color: "Yellow", figure: "None" },
+      { color: "Green", figure: "None" },
     ],
     [
-      { color: "RED", figure: "None" },
-      { color: "BLUE", figure: "None" },
-      { color: "YELLOW", figure: "None" },
-      { color: "GREEN", figure: "None" },
-      { color: "RED", figure: "None" },
-      { color: "BLUE", figure: "None" },
+      { color: "Red", figure: "None" },
+      { color: "Blue", figure: "None" },
+      { color: "Yellow", figure: "None" },
+      { color: "Green", figure: "None" },
+      { color: "Red", figure: "None" },
+      { color: "Blue", figure: "None" },
     ],
   ],
 };
@@ -229,7 +229,7 @@ describe("Match testing", () => {
 
   it("highlighted figure on board", () => {
     const mockRes = testResponses;
-
+  
     render(
       <MemoryRouter>
         <MatchLayout
@@ -248,13 +248,16 @@ describe("Match testing", () => {
         />
       </MemoryRouter>,
     );
-    const tiles = screen.getAllByTestId("tile");
+  
+    const tiles = screen.getAllByTestId("tile-background");
+  
     const numberOfHighlightedTiles = tiles.filter((tile) =>
       tile.className.split(" ").includes("blur"),
     ).length;
+  
     expect(numberOfHighlightedTiles).toBe(4);
   });
-
+  
   it("Click on movCard should set state", () => {
     const mockCard = { mock: "mockCard" };
 
@@ -284,7 +287,7 @@ describe("Match testing", () => {
   it("First click on tile should set first position", () => {
     render(
       <Tile
-        color={"bg-yellow-600"}
+        color={"bg-yellow-500"}
         posx={0}
         posy={0}
         figure={"fig"}
@@ -305,7 +308,7 @@ describe("Match testing", () => {
 
     render(
       <Tile
-        color={"bg-yellow-600"}
+        color={"bg-yellow-500"}
         posx={1}
         posy={1}
         figure={"fig"}
@@ -330,7 +333,7 @@ describe("Match testing", () => {
   it("Double click on the same first position tile should reset the move state to null", () => {
     render(
       <Tile
-        color={"bg-yellow-600"}
+        color={"bg-yellow-500"}
         posx={0}
         posy={0}
         figure={"fig"}
