@@ -20,6 +20,7 @@ const useMatchData = (roomId, userName) => {
 
   const updateMatch = useUpdateStore((state) => state.updateMatch);
   const setHaveITurn = useMatchStore((state) => state.setHaveITurn);
+  const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +52,7 @@ const useMatchData = (roomId, userName) => {
           },
         );
         console.log(matchData);
+        setMatchStarted(true);
         setStateBoard(matchData.board.tiles);
         setStatePlayerMe(meExtendVisibleCards);
         setStateOtherPlayers(otherPlayersExtendVisibleCards);

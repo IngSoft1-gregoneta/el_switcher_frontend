@@ -14,6 +14,7 @@ import {
 } from "../../zustand/store.js";
 import Match from "../Match/Match.jsx";
 import Room from "../Room/Room.jsx";
+import "./styles/background.css";
 
 export default function App() {
   const [socketUrl, setSocketUrl] = useState(null);
@@ -23,6 +24,7 @@ export default function App() {
   const setUpdateRoom = useUpdateStore((state) => state.setUpdateRoom);
   const setUpdateMatch = useUpdateStore((state) => state.setUpdateMatch);
   const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
+  const matchStarted = useMatchStore((state) => state.matchStarted);
 
   useEffect(() => {
     if (userId) {
@@ -66,22 +68,31 @@ export default function App() {
     setUpdateRoom,
     setUpdateList,
   ]);
+
   return (
     <RoomProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<GetId />} />
-          <Route path="/id/:user_id" element={<AppLayout />} />
-          <Route path="/create_room" element={<CreateRoom />} />
-          <Route path="/room/:user_id/:room_id/:user_name" element={<Room />} />
-          <Route path="/failed_room" element={<RoomCreationFailed />} />
-          <Route
-            path="/match/:user_id/:room_id/:user_name"
-            element={<Match />}
-          />
-          <Route path="*" element={<NotFoundPageLayout />} />
-        </Routes>
-      </BrowserRouter>
+        {/* Fondo */}
+        <div id="background-wrap">
+          <div className="cloud x1"></div>
+          <div className="cloud x2"></div>
+          <div className="cloud x3"></div>
+          <div className="cloud x4"></div>
+          <div className="cloud x5"></div>
+        </div>
+        {/* Contenido */}
+        <div className="app-content">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<GetId />} />
+              <Route path="/id/:user_id" element={<AppLayout />} />
+              <Route path="/create_room" element={<CreateRoom />} />
+              <Route path="/room/:user_id/:room_id/:user_name" element={<Room />} />
+              <Route path="/failed_room" element={<RoomCreationFailed />} />
+              <Route path="/match/:user_id/:room_id/:user_name" element={<Match />} />
+              <Route path="*" element={<NotFoundPageLayout />} />
+            </Routes>
+          </BrowserRouter>
+        </div>  
     </RoomProvider>
   );
 }
