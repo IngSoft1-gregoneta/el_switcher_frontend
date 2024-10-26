@@ -93,16 +93,20 @@ export default function MatchLayout({
       </div>
 
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <PlayerTop
-          player={playerTop}
-          selectedFigCards={selectedFigCards}
-          dispatchFigCards={dispatchFigCards}
-        />
+        <div className="rounded-lg bg-[#084c61] bg-opacity-90 p-4 shadow-lg text-white">
+          <PlayerTop
+            player={playerTop}
+            selectedFigCards={selectedFigCards}
+            dispatchFigCards={dispatchFigCards}
+            />
+        </div>
       </div>
 
       <div className="container col-span-1 row-span-1">
+        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-1 shadow-lg text-white">
         <div className="mt-2 flex flex-col justify-center text-center align-middle">
-          <div className="font-bold">{playerWithTurn}</div>
+            Turno del jugador : {playerWithTurn}
+            </div>
           <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
             <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
               {movParcialDeck}
@@ -112,12 +116,14 @@ export default function MatchLayout({
       </div>
 
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
-        {playerLeft && (
-          <PlayerLeft
+          {playerLeft && (
+        <div className="rounded-lg bg-cyan-700 bg-opacity-90 p-4 shadow-lg text-white">
+            <PlayerLeft
             player={playerLeft}
             selectedFigCards={selectedFigCards}
             dispatchFigCards={dispatchFigCards}
-          />
+            />
+        </div>
         )}
       </div>
       <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
@@ -127,26 +133,37 @@ export default function MatchLayout({
       </div>
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
         {playerRight && (
+          <div className="rounded-lg bg-cyan-700 bg-opacity-90 p-4 shadow-lg text-white">
           <PlayerRight
             player={playerRight}
             selectedFigCards={selectedFigCards}
             dispatchFigCards={dispatchFigCards}
           />
+        </div>
         )}
       </div>
 
-      <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
-          {movCards}
+      <div className="container col-span-1 row-span-1">
+        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-1 shadow-lg text-white">
+        <div className="mt-2 flex flex-col justify-center text-center align-middle">
+            Cartas de movimiento
+            </div>
+          <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center p-6">
+            <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
+              {movCards}
+            </div>
+          </div>
         </div>
       </div>
-
+      
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <PlayerMe
-          player={playerMe}
-          selectedFigCards={selectedFigCards}
-          dispatchFigCards={dispatchFigCards}
-        />
+        <div className="rounded-lg bg-[#e8e5da] bg-opacity-100 p-4 shadow-lg text-slate-900">
+          <PlayerMe
+            player={playerMe}
+            selectedFigCards={selectedFigCards}
+            dispatchFigCards={dispatchFigCards}
+            />
+        </div>
       </div>
 
       <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
@@ -154,7 +171,7 @@ export default function MatchLayout({
           {hasTurn && (
             <ButtonFilled
               onmouseenter={enterplay}
-              className="mx-0 text-wrap px-1 py-2"
+              className="mx-0 text-wrap px-1 py-2 text-slate-800 bold drop-shadow-[0_1.2px_1.2px_rgba(50,50,50,0.5)]"
               onClick={() => {handleRevertMove(); clickplay();}}
             >
               Revertir Movimiento
@@ -163,7 +180,7 @@ export default function MatchLayout({
           {hasTurn && (
             <ButtonFilled
               onmouseenter={enterplay}
-              className="mx-0 text-wrap px-1 py-2"
+              className="mx-0 text-wrap px-1 py-2 text-slate-800 bold drop-shadow-[0_1.2px_1.2px_rgba(50,50,50,0.5)]"
               onClick={() => {
                 handlePassTurn();
                 dispatchFigCards({ type: "deselect" });
@@ -176,7 +193,7 @@ export default function MatchLayout({
           {/* TODO: Should show modal asking you if you really want leave the match */}
           <ButtonUnfilled
             onmouseenter={enterplay}
-            className="mx-0 text-wrap px-1 py-2"
+            className="mx-0 text-wrap px-1 py-2 text-slate-800 bold]"
             onClick={() => {handleLeaveMatch(); clickplay();}}
           >
             Abandonar
