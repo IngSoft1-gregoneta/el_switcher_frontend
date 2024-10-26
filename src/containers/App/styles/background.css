@@ -1,21 +1,12 @@
-body {
-	background: linear-gradient(to top, #00b4ff, #10347c);
-	color: #333;
-	font: 100% Arial, Sans Serif;
-	height: 100vh;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-    z-index: 0;
-}
-
 #background-wrap {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
     bottom: 0;
 	left: 0;
-	padding-top: 50px;
-	position: fixed;
 	right: 0;
-	top: 0;
+	padding-top: 50px;
 	z-index: -1;
 }
 
@@ -120,7 +111,7 @@ body {
 	box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
 
 	height: 120px;
-	position: relative;
+	position: absolute;
 	width: 350px;
 }
 

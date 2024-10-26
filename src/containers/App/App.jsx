@@ -71,16 +71,21 @@ export default function App() {
 
   return (
     <RoomProvider>
-        {/* Fondo */}
-        <div id="background-wrap">
+      {/* Background Container */}
+      <div className="fixed top-0 left-0 w-full h-full z-[-1] overflow-hidden">
+      {/* Background Color Gradient */}
+      <div className="absolute top-0 w-full h-full z-[-1] bg-gradient-to-t from-[#00b4ff] to-[#10347c]"/>
+        {/* Nubes */}
+        <div id="background-wrap" className="absolute top-0 left-0 w-full h-full overflow-hidden">
           <div className="cloud x1"></div>
           <div className="cloud x2"></div>
           <div className="cloud x3"></div>
           <div className="cloud x4"></div>
           <div className="cloud x5"></div>
         </div>
+      </div>
         {/* Contenido */}
-        <div className="app-content">
+        <div className="min-h-screen">
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<GetId />} />
@@ -92,7 +97,7 @@ export default function App() {
               <Route path="*" element={<NotFoundPageLayout />} />
             </Routes>
           </BrowserRouter>
-        </div>  
+          </div>
     </RoomProvider>
   );
 }

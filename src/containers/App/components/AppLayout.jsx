@@ -22,7 +22,7 @@ function enterplay() {
 
   return (
     <div>
-      <div className="mx-auto flex max-w-screen-lg flex-col items-center justify-center p-4">
+      <div className="mx-auto flex max-w-screen-lg flex-col items-center justify-center p-4 z-50">
         <h1 className="m-8 text-center font-serif text-6xl font-bold text-yellow-600 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]">
           EL SWITCHER
         </h1>

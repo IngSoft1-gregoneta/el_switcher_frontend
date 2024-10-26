@@ -91,7 +91,7 @@ export default function MovCard({ card, index }) {
         key={index}
         data-testid="me-mov-cards"
         transition={{bounceDamping: 10}}
-        className={`mov_card aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36
+        className={`mov_card aspect-[2/3] rounded-sm md:h-32 lg:h-36
             ${card.is_used ? "unavailable" : ""}
           `}
         title={card.is_used ? "Esta carta ya ha sido usada" : ""}
