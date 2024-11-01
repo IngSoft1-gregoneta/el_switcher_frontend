@@ -13,7 +13,7 @@ export default function Winner({ winner }) {
   };
   const winnerName = winner.player_name;
   const isWinner = winnerName === user_name;
-  const winByDiscardingDeck = winner.mov_cards == 0;
+  const winByDiscardingDeck = winner.fig_cards == 0;
   
   function clickplay(){
     if (audio.paused){
