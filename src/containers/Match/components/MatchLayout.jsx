@@ -15,7 +15,6 @@ export default function MatchLayout({
   handlePassTurn,
   handleLeaveMatch,
   handleDiscardFigure,
-  selectedFigReducer,
   handleRevertMove,
 }) {
   MatchLayout.propTypes = {
@@ -37,10 +36,6 @@ export default function MatchLayout({
     stateOtherPlayers.filter((player) => player.has_turn)[0]?.player_name ||
     statePlayerMe.player_name;
 
-  const {
-    selectedFigCards: selectedFigCards,
-    dispatchFigCards: dispatchFigCards,
-  } = selectedFigReducer;
 
   
   function clickplay() {
@@ -95,8 +90,6 @@ export default function MatchLayout({
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <PlayerTop
           player={playerTop}
-          selectedFigCards={selectedFigCards}
-          dispatchFigCards={dispatchFigCards}
         />
       </div>
 
@@ -115,8 +108,6 @@ export default function MatchLayout({
         {playerLeft && (
           <PlayerLeft
             player={playerLeft}
-            selectedFigCards={selectedFigCards}
-            dispatchFigCards={dispatchFigCards}
           />
         )}
       </div>
@@ -129,8 +120,6 @@ export default function MatchLayout({
         {playerRight && (
           <PlayerRight
             player={playerRight}
-            selectedFigCards={selectedFigCards}
-            dispatchFigCards={dispatchFigCards}
           />
         )}
       </div>
@@ -144,8 +133,6 @@ export default function MatchLayout({
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <PlayerMe
           player={playerMe}
-          selectedFigCards={selectedFigCards}
-          dispatchFigCards={dispatchFigCards}
         />
       </div>
 

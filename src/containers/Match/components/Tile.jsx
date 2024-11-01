@@ -12,44 +12,23 @@ function inHighlighted(posx, posy, arroftiles = []) {
 
 export default function Tile({ color, posx, posy, figure, onClick }) {
   const firstPos = useBoardStore((state) => state.firstPos);
-  const secondPos = useBoardStore((state) => state.secondPos);
-  const setFirstPos = useBoardStore((state) => state.setFirstPos);
-  const setSecondPos = useBoardStore((state) => state.setSecondPos);
   const highlightedTiles = useBoardStore((state) => state.highlightedTiles);
-  const setHighlightedTiles = useBoardStore(
-    (state) => state.setHighlightedTiles,
-  );
   const audiolist = [bubble1,bubble2,bubble3,bubble4]
 
+  //
+  const dispatchPositions = useBoardStore(state => state.dispatch);
+  //
   const handleTileClick = () => {
+    
     onClick();
+    // experimento 
+    dispatchPositions({ type : "setTilePosition" , position : { pos_x : posx , pos_y : posy } })
+    // 
+
     let n = Math.floor(Math.random()*4)
     let audioselected = audiolist[n]
-    // RESET todas las fichas si se selecciona la misma 2 veces
-    if (firstPos?.pos_x === posx && firstPos?.pos_y === posy) {
-      setFirstPos(null);
-      setSecondPos(null);
-      setHighlightedTiles(null);
-    }
     // PASS si la ficha seleccionada no es una opcion valida para el movimiento
-    if (highlightedTiles && !inHighlighted(posy, posx, highlightedTiles)) {
-      return;
-    }
-    
-  
-    if (!firstPos && !secondPos) {
-      setFirstPos({ pos_x: posx, pos_y: posy });
-    } else if (firstPos && !secondPos) {
-      setSecondPos({ pos_x: posx, pos_y: posy });
       new Audio(audioselected).play();
-    } else if (
-      firstPos.pos_x === secondPos.pos_x &&
-      firstPos.pos_y === secondPos.pos_y
-    ) {
-      setFirstPos(null);
-      setSecondPos(null);
-      
-    }
   };
 
   const lightStyle =

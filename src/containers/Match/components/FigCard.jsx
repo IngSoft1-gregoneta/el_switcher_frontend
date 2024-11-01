@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 import {useAnimate,motion } from "framer-motion";
 import clicksound from "../../assets/clicksound.wav"
 import entersound from "../../assets/entersound.wav"
-import {useParams } from "react-router-dom";
-import useMatchData from "../hooks/useMatchData.jsx";
 
 export default function FigCard({
   className,
@@ -23,8 +21,6 @@ export default function FigCard({
   };
   const [selectedStyle, setSelectedStyle] = useState("");
   const [canreturn, setCanReturn] = useState(false);
-  const {room_id, user_name} = useParams();
-  const {statePlayerMe} = useMatchData(room_id, user_name);
   const [scope, animate] = useAnimate()
 
   useEffect(() => {

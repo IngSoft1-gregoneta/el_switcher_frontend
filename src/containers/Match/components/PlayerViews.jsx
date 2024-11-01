@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import FigCard from "./FigCard";
 import PropTypes from "prop-types";
+import { useFigCardStore } from "../../../zustand/store";
 
 const mapCards = (
   cards,
@@ -38,13 +39,16 @@ const mapCards = (
   });
 };
 
-export function PlayerMe({ player, selectedFigCards, dispatchFigCards }) {
+export function PlayerMe({ player }) {
   PlayerMe.propTypes = {
     player: PropTypes.object,
     selectedFigCards: PropTypes.object,
     dispatchFigCards: PropTypes.func,
   };
+
   const [figCards, setFigCards] = useState(null);
+  const selectedFigCards = useFigCardStore(state => state.selectedFigCards);
+  const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
   useEffect(() => {
     setFigCards(
       mapCards(
@@ -73,13 +77,15 @@ export function PlayerMe({ player, selectedFigCards, dispatchFigCards }) {
   );
 }
 
-export function PlayerTop({ player, selectedFigCards, dispatchFigCards }) {
+export function PlayerTop({ player }) {
   PlayerTop.propTypes = {
     player: PropTypes.object,
     selectedFigCards: PropTypes.object,
     dispatchFigCards: PropTypes.func,
   };
   const [figCards, setFigCards] = useState(null);
+  const selectedFigCards = useFigCardStore(state => state.selectedFigCards);
+  const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
   useEffect(() => {
     setFigCards(
       mapCards(
@@ -107,13 +113,15 @@ export function PlayerTop({ player, selectedFigCards, dispatchFigCards }) {
   );
 }
 
-export function PlayerLeft({ player, selectedFigCards, dispatchFigCards }) {
+export function PlayerLeft({ player }) {
   PlayerLeft.propTypes = {
     player: PropTypes.object,
     selectedFigCards: PropTypes.object,
     dispatchFigCards: PropTypes.func,
   };
   const [figCards, setFigCards] = useState(null);
+  const selectedFigCards = useFigCardStore(state => state.selectedFigCards);
+  const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
   useEffect(() => {
     setFigCards(
       mapCards(
@@ -145,14 +153,15 @@ export function PlayerLeft({ player, selectedFigCards, dispatchFigCards }) {
   );
 }
 
-export function PlayerRight({ player, selectedFigCards, dispatchFigCards }) {
+export function PlayerRight({ player }) {
   PlayerRight.propTypes = {
     player: PropTypes.object,
     selectedFigCards: PropTypes.object,
     dispatchFigCards: PropTypes.func,
   };
   const [figCards, setFigCards] = useState(null);
-
+  const selectedFigCards = useFigCardStore(state => state.selectedFigCards);
+  const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
   useEffect(() => {
     setFigCards(
       mapCards(

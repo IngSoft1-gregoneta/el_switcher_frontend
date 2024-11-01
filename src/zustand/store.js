@@ -24,19 +24,20 @@ export const useIdStore = create((set) => ({
 export const useBoardStore = create((set) => ({
   board: null,
   firstPos: null,
-  secondPos: null,
   highlightedTiles: null,
+  dispatch: null,
+  dispatchMovCard : null,
+  setMovCardDispatch : (dispatch) => set({dispatchMovCard : dispatch}),
   setHighlightedTiles: (new_highlighted_tiles) =>
     set({ highlightedTiles: new_highlighted_tiles }),
   setFirstPos: (new_pos) => set({ firstPos: new_pos }),
-  setSecondPos: (new_pos) => set({ secondPos: new_pos }),
   setBoard: (new_board) => set({ board: new_board }),
+  setDispatch : (dispatch) => set({dispatch : dispatch })
 }));
 
-export const useMovCardStore = create((set) => ({
-  selectedMovCard: null,
-  setSelectedMovCard: (new_card) => set({ selectedMovCard: new_card }),
+export const useFigCardStore = create((set) => ({
+  selectedFigCards: null,
+  selectedFigCardsDispatch: null,
+  setSelectedFigCards: (new_card) => set({ selectedFigCards: new_card }),
+  setFigCardsDispatch: (dispatch) => set({ selectedFigCardsDispatch: dispatch }),
 }));
-
-
-
