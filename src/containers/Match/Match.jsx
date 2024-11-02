@@ -17,21 +17,21 @@ import {
   discardFigure,
 } from "./services/MatchService.js";
 import { useEffect, useReducer } from "react";
-import BoardClass from "./logic/board.js";
 import { 
   setPositionReducer, 
   setMovCardReducer, 
   selectFigCardReducer, 
 } from "./services/Reducers.js";
+import useHighLightTiles from "./hooks/useHighLightTiles.jsx";
+import useSetFirstPos from "./hooks/useSetFirstPos.jsx";
+import useInitBoard from "./hooks/useInitBoard.jsx";
+import useSetSelectedFigCards from "./hooks/useSetSelectedFigCards.jsx";
 
 
 export default function Match() {
   const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
   const userId = useIdStore((state) => state.userId);
   const setUserId = useIdStore((state) => state.setUserId);
-  const setHighlightedTiles = useBoardStore(
-    (state) => state.setHighlightedTiles,
-  );
   const { room_id, user_name, user_id } = useParams();
   const navigate = useNavigate();
   const {
@@ -43,47 +43,47 @@ export default function Match() {
     error,
   } = useMatchData(room_id, user_name);
   const board = useBoardStore( state => state.board);
-  const setBoard = useBoardStore( state => state.setBoard);
 
-  useEffect(() => {
-    if(stateBoard){
-      setBoard(new BoardClass(stateBoard));
-    }
-  },[stateBoard, setBoard]);
-
-
+  // Declare state reducers, initial state.
   const [selectedFigCards, dispatchFigCards] = useReducer(
     selectFigCardReducer,
     { selectedFigCard: null, player: null },
   );
-
-  const setSelectedFigCards = useFigCardStore(state => state.setSelectedFigCards);
-  useEffect(()=>{
-    setSelectedFigCards(selectedFigCards);
-    },[selectedFigCards])
-
   const [positions, dispatchPositions] = useReducer(
     setPositionReducer,
     { first_position : null, second_position : null },
   );
-
   const [selectedMovCard, dispatchSelectedMovCard] = useReducer(
     setMovCardReducer,
     { card : null },
   );
 
+  // Set needed gobal state. Data needed by other components
+  useSetFirstPos(positions, statePlayerMe);
+  useInitBoard(stateBoard);
+  useSetSelectedFigCards(selectedFigCards);
+  useHighLightTiles(
+    positions, 
+    selectedMovCard, 
+    board, 
+    statePlayerMe
+  );
+
+  // Action dispatchers set to store for component event interaction
   const setMovCardDispatch = useBoardStore( state => state.setMovCardDispatch );
   setMovCardDispatch(dispatchSelectedMovCard);
-
   const setPosDispatch = useBoardStore( state => state.setDispatch );
   setPosDispatch(dispatchPositions);
-
   const setFigCardsDispatch = useFigCardStore( state => state.setFigCardsDispatch);
   setFigCardsDispatch(dispatchFigCards);
 
   useEffect(()=>{
-    if(!statePlayerMe?.has_turn) return;
-    if(!positions.first_position || !positions.second_position) return;
+    if(!statePlayerMe?.has_turn) {
+      return;
+    }
+    if(!positions.first_position || !positions.second_position) {
+      return;
+    }
 
     try {
       makePartialMove(
@@ -103,23 +103,10 @@ export default function Match() {
     }
   },[positions, selectedMovCard, statePlayerMe]);
 
-  useEffect(() => {
-    if(
-      !board || !selectedMovCard.card || !statePlayerMe.has_turn || 
-      !positions.first_position || selectedMovCard.card?.is_used
-    ) {
-      setHighlightedTiles(null);
-      return;
-    }
-
-    board.disableHighlights();
-    const highlited_tiles = board.highlightTiles(positions.first_position, selectedMovCard.card?.vectors);
-    setHighlightedTiles(highlited_tiles);
-  
-  },[positions, selectedMovCard, board, statePlayerMe])
-
   if (!userId) setUserId(user_id);
 
+
+  // Event handlers, leave, pass turn, discard figure, revert partial move
   const handleDiscardFigure = async (tile) => {
     if(!selectedFigCards.player || selectedFigCards.index == null) return;
 

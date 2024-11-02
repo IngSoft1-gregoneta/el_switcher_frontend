@@ -13,9 +13,7 @@ import MatchLayout from "./components/MatchLayout";
 import { useBoardStore, useMovCardStore } from "../../zustand/store";
 import MovCard from "./components/MovCard";
 import Tile from "./components/Tile";
-import { useBoardInit } from "./hooks/useBoardInit";
 import BoardClass from "./logic/board";
-import { useMoveHighLights } from "./hooks/useMoveHighLights";
 import useMatchData from "./hooks/useMatchData";
 import Match from "./Match";
 
@@ -78,9 +76,6 @@ describe("Match testing", () => {
     useBoardStore.setState({
       board: mockBoard,
     });
-    useMovCardStore.setState({
-      setSelectedMovCard: vi.fn(),
-    });
   });
 
   afterEach(() => {
@@ -96,10 +91,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -122,10 +113,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -150,10 +137,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -177,10 +160,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -203,10 +182,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -236,10 +211,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}

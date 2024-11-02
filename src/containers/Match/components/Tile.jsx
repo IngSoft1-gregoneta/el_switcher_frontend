@@ -14,22 +14,14 @@ export default function Tile({ color, posx, posy, figure, onClick }) {
   const firstPos = useBoardStore((state) => state.firstPos);
   const highlightedTiles = useBoardStore((state) => state.highlightedTiles);
   const audiolist = [bubble1,bubble2,bubble3,bubble4]
-
-  //
   const dispatchPositions = useBoardStore(state => state.dispatch);
-  //
   const handleTileClick = () => {
     
     onClick();
-    // experimento 
     dispatchPositions({ type : "setTilePosition" , position : { pos_x : posx , pos_y : posy } })
-    // 
-
-    // PASS si la ficha seleccionada no es una opcion valida para el movimiento
-      new Audio(audioselected).play();
-    let n = Math.floor(Math.random() * 4);
+    let n = Math.random(4)
     let audioselected = audiolist[n];
-
+    new Audio(audioselected).play();
     if (highlightedTiles && !inHighlighted(posy, posx, highlightedTiles)) {
       return;
     }

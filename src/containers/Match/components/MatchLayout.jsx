@@ -7,6 +7,7 @@ import color_proh from "../assets/prohib.svg";
 import clicksound from "../../assets/clicksound.wav"
 import entersound from "../../assets/entersound.wav"
 import MovCard from "./MovCard";
+import { useFigCardStore } from "../../../zustand/store";
 
 export default function MatchLayout({
   statePlayerMe,
@@ -25,7 +26,6 @@ export default function MatchLayout({
     handleLeaveMatch: PropTypes.func,
     handleRevertMove: PropTypes.func,
     handleDiscardFigure: PropTypes.func,
-    selectedFigReducer: PropTypes.object,
   };
   const hasTurn = statePlayerMe.has_turn;
   const playerMe = statePlayerMe;
@@ -35,7 +35,7 @@ export default function MatchLayout({
   const playerWithTurn =
     stateOtherPlayers.filter((player) => player.has_turn)[0]?.player_name ||
     statePlayerMe.player_name;
-
+  const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
 
   
   function clickplay() {
