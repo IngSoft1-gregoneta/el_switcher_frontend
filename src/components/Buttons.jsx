@@ -6,7 +6,7 @@ export const ButtonFilled = ({ children, onClick, className, onmouseenter, type 
       type={type}
       onClick={onClick}
       onMouseOver={onmouseenter}
-      className={`my-1 border border-cyan-600 bg-cyan-700 py-2 text-center text-sm font-medium text-cyan-50 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-white sm:mb-2 sm:me-2 sm:px-5 sm:py-2.5 ${className}`}
+      className={`my-1 border-2 border-[#5f2536] bg-[#8d0801] py-2 text-center text-sm font-medium text-slate-200 data-[hover]:bg-[#dfd4c6] data-[hover]:data-[active]:bg-[#2f4550] data-[hover]:text-slate-800 sm:mb-2 sm:me-2 sm:px-5 sm:py-2.5 ${className}`}
       name="add_game"
     >
       {children}
@@ -20,7 +20,7 @@ export const ButtonUnfilled = ({ children, onClick, onmouseenter,className, type
       type={type}
       onClick={onClick}
       onMouseOver={onmouseenter}
-      className={`my-1 border border-cyan-700 py-2 text-center text-sm font-medium text-cyan-700 data-[hover]:bg-cyan-800 data-[hover]:data-[active]:bg-cyan-700 data-[hover]:text-cyan-200 sm:mb-2 sm:me-2 sm:px-5 sm:py-2.5 ${className}`}
+      className={`my-1 border-2 border-[#6E2E41] py-2 text-center text-sm font-medium text-slate-800 data-[hover]:bg-[#DFD4C6] data-[hover]:data-[active]:bg-[#2f4550] data-[hover]:text-slate-700 sm:mb-2 sm:me-2 sm:px-5 sm:py-2.5 ${className}`}
     >
       {children}
     </Button>
