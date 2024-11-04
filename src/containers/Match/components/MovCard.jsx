@@ -1,7 +1,5 @@
-import React, { useEffect,useState } from "react";
+import React, { useState } from "react";
 import { useAnimate ,motion } from "framer-motion";
-import {useParams } from "react-router-dom";
-import useMatchData from "../hooks/useMatchData.jsx";
 import images from "../logic/bindImage";
 import { useBoardStore } from "../../../zustand/store";
 import PropTypes from "prop-types";
