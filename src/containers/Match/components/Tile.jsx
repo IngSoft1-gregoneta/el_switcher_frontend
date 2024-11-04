@@ -14,7 +14,7 @@ export default function Tile({ color, posx, posy, figure, onClick }) {
   const firstPos = useBoardStore((state) => state.firstPos);
   const highlightedTiles = useBoardStore((state) => state.highlightedTiles);
   const audiolist = [bubble1,bubble2,bubble3,bubble4]
-  const dispatchPositions = useBoardStore(state => state.dispatch);
+  const dispatchPositions = useBoardStore(state => state.dispatchPositions);
   const handleTileClick = () => {
     
     onClick();

@@ -6,7 +6,7 @@ export default function useHighLightTiles(positions, selectedMovCard, board, sta
 
   useEffect(()=>{
     if(
-      !board || !selectedMovCard.card || !statePlayerMe.has_turn || 
+      !board || !selectedMovCard?.card || !statePlayerMe?.has_turn || 
       !positions.first_position || selectedMovCard.card?.is_used
     ) {
       setHighlightedTiles(null);

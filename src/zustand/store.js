@@ -25,14 +25,14 @@ export const useBoardStore = create((set) => ({
   board: null,
   firstPos: null,
   highlightedTiles: null,
-  dispatch: null,
+  dispatchPositions: null,
   dispatchMovCard : null,
   setMovCardDispatch : (dispatch) => set({dispatchMovCard : dispatch}),
   setHighlightedTiles: (new_highlighted_tiles) =>
     set({ highlightedTiles: new_highlighted_tiles }),
   setFirstPos: (new_pos) => set({ firstPos: new_pos }),
   setBoard: (new_board) => set({ board: new_board }),
-  setDispatch : (dispatch) => set({dispatch : dispatch })
+    setDispatchPositions : (dispatch) => set({dispatchPositions : dispatch })
 }));
 
 export const useFigCardStore = create((set) => ({

@@ -72,7 +72,7 @@ export default function Match() {
   // Action dispatchers set to store for component event interaction
   const setMovCardDispatch = useBoardStore( state => state.setMovCardDispatch );
   setMovCardDispatch(dispatchSelectedMovCard);
-  const setPosDispatch = useBoardStore( state => state.setDispatch );
+  const setPosDispatch = useBoardStore( state => state.setDispatchPositions );
   setPosDispatch(dispatchPositions);
   const setFigCardsDispatch = useFigCardStore( state => state.setFigCardsDispatch);
   setFigCardsDispatch(dispatchFigCards);
