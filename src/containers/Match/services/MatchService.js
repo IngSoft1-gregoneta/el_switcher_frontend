@@ -164,3 +164,33 @@ export async function discardFigure(matchId, playerName, cardIndex, x, y) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 }
+
+export async function blockFigure(matchId, playerName, otherPlayerName, cardIndex, posx, posy){
+  const match_id = encodeURIComponent(matchId)
+  const player_name = encodeURIComponent(playerName)
+  const other_player_name = encodeURIComponent(otherPlayerName)
+  const card_index = encodeURIComponent(cardIndex)
+  const pos_x = encodeURIComponent(posx)
+  const pos_y = encodeURIComponent(posy)
+
+  const response = await fetch(
+    `http://localhost:8000/block_figure/${match_id}/${player_name}/${other_player_name}/${card_index}/${pos_x}/${pos_y}`,
+    {
+      method : "PUT",
+      headers : {
+        "Content-Type" : "application/json"
+      }
+    }
+  )
+
+  if(!response.ok){
+    throw new Error(`HTPP error! status : ${response.status}`)
+  }
+
+  return response.json()
+}
+
+
+
+
+
