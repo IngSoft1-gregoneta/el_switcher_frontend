@@ -93,8 +93,6 @@ export default function MatchLayout({
         <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-[#e8e5da]">
           <PlayerTop
             player={playerTop}
-            selectedFigCards={selectedFigCards}
-            dispatchFigCards={dispatchFigCards}
             />
         </div>
       </div>
