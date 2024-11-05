@@ -28,6 +28,7 @@ export async function joinRoom(roomData) {
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(roomData.password),
     },
   );
 

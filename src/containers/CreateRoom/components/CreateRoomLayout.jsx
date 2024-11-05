@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIdStore } from "../../../zustand/store.js";
 import PropTypes from "prop-types";
-import clicksound from "../../assets/clicksound.wav"
-import entersound from "../../assets/entersound.wav"
+import clicksound from "../../assets/clicksound.wav";
+import entersound from "../../assets/entersound.wav";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons.jsx";
 import ModalInput from "../../../components/ModalInput.jsx";
 
@@ -26,14 +26,21 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
 
   const [name, setName] = useState("");
   const [players, setPlayers] = useState(2);
+  const [password, setPassword] = useState("");
   const [isOpen, setIsOpen] = useState(true);
   const [ownerName, setOwnerName] = useState(null);
 
   const handleRoomName = (event) => {
     let name = event.target.value;
     if (name !== "") {
-      setName(event.target.value);
+      setName(name);
     }
+  };
+
+  const handleRoomPassword = (event) => {
+    let password = event.target.value;
+    // TODO: hacer checkeos ?
+    setPassword(password);
   };
 
   const handlePlayerCount = (event) => {
@@ -46,6 +53,8 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
       room_name: name,
       players_expected: players,
       owner_name: ownerName,
+      // TODO: add this on handleCreateRoom
+      password: password,
     };
     if (typeof handleCreateRoom === "function" && formData.name !== "") {
       handleCreateRoom(formData);
@@ -55,11 +64,11 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
   };
 
   function clickplay() {
-    new Audio(clicksound).play()
+    new Audio(clicksound).play();
   }
 
   function enterplay() {
-    new Audio(entersound).play()
+    new Audio(entersound).play();
   }
 
   return (
@@ -72,6 +81,7 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
           handleClickCancelar={handleLeave}
           title="Nombre para partida"
           desc="Escriba el nombre con el cual quiera ser identificado la partida"
+          has_password={false}
         />
         <h1 className="mb-8 mt-4 text-center font-serif text-4xl font-bold">
           Crear Sala
@@ -104,10 +114,32 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
               placeholder="2-4 players"
             />
           </div>
-          <ButtonFilled type="submit" className="w-full" onClick={clickplay} onmouseenter={enterplay}>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium">
+              Contraseña
+            </label>
+            <input
+              onChange={handleRoomPassword}
+              id="password"
+              type="password"
+              placeholder="Deja en blanco para sala publica"
+              className="mt-1 block w-full border-gray-600 bg-cyan-50 p-3 shadow-sm focus:border-emerald-100 focus:ring-emerald-200 sm:text-sm"
+              value={password}
+            />
+          </div>
+          <ButtonFilled
+            type="submit"
+            className="w-full"
+            onClick={clickplay}
+            onmouseenter={enterplay}
+          >
             Crear
           </ButtonFilled>
-          <ButtonUnfilled onClick={handleLeave} onmouseenter={enterplay} className="w-full">
+          <ButtonUnfilled
+            onClick={handleLeave}
+            onmouseenter={enterplay}
+            className="w-full"
+          >
             Salir
           </ButtonUnfilled>
         </form>
