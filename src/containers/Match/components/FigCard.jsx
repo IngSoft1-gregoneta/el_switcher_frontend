@@ -10,6 +10,7 @@ export default function FigCard({
   figType,
   index,
   onSelected,
+  isBlocked,
   isSelected,
 }) {
   FigCard.propTypes = {
@@ -25,14 +26,18 @@ export default function FigCard({
 
   useEffect(() => {
     if (isSelected) {
-
       setCanReturn(true);
       animate(scope.current, {scale: 1.3,y: -30});
     } else {
       setSelectedStyle("");
       setCanReturn(false);
     }
-  }, [isSelected]);
+    if (isBlocked) {
+      animate(scope.current, { rotateY: 180 });
+    } else {
+      animate(scope.current, { rotateY: 0 });
+    }
+  }, [isSelected, isBlocked]);
 
   function clickplay() {
     new Audio(clicksound).play()
@@ -54,7 +59,7 @@ function Hoverend(){
       onHoverEnd={Hoverend}
       ref = {scope}
       onClick={() => {onSelected();clickplay();}}
-      src={images[`${figType}`]}
+      src={isBlocked ? images[`back`]: images[`${figType}`]}
       key={index}
       data-testid="fig-cards"
       className={`${className} ${selectedStyle}`}

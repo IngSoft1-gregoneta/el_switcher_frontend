@@ -20,6 +20,7 @@ const mapCards = (
         className={className}
         figType={card.fig_type}
         index={i}
+        isBlocked={card.is_blocked}
         isSelected={
           card.canBeSelected &&
           selectedFigCards &&
