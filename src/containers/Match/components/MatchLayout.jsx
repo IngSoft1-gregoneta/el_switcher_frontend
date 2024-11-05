@@ -98,13 +98,13 @@ export default function MatchLayout({
       </div>
 
       <div className="container col-span-1 row-span-1">
-      <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-2 shadow-lg text-[#e8e5da]">
+        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-2 shadow-lg text-[#e8e5da]">
             Turno del jugador : {playerWithTurn}
-            </div>
           <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
             <div className="flex h-fit w-fit flex-wrap items-center justify-center gap-2 md:flex-row">
               {movParcialDeck}
             </div>
+          </div>
         </div>
       </div>
 
