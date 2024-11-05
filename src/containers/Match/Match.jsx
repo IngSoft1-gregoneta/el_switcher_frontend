@@ -37,6 +37,7 @@ export default function Match() {
   const navigate = useNavigate();
   const {
     stateBoard,
+    blockedColor,
     statePlayerMe,
     stateOtherPlayers,
     stateWinner,
@@ -192,6 +193,7 @@ export default function Match() {
       stateOtherPlayers={stateOtherPlayers}
       usedMovCards={usedMovCards}
       handleLeaveMatch={handleLeaveMatch}
+      blockedColor={blockedColor}
       handlePassTurn={handlePassTurn}
       handleDiscardFigure={handleDiscardFigure}
       handleRevertMove={handleRevertMove}

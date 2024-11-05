@@ -13,6 +13,7 @@ export default function MatchLayout({
   statePlayerMe,
   stateOtherPlayers,
   usedMovCards,
+  blockedColor,
   handlePassTurn,
   handleLeaveMatch,
   handleDiscardFigure,
@@ -22,6 +23,7 @@ export default function MatchLayout({
     statePlayerMe: PropTypes.object,
     stateOtherPlayers: PropTypes.array,
     usedMovCards: PropTypes.array,
+    blockedColor: PropTypes.string,
     handlePassTurn: PropTypes.func,
     handleLeaveMatch: PropTypes.func,
     handleRevertMove: PropTypes.func,
@@ -74,7 +76,17 @@ export default function MatchLayout({
   const movCards = playerMe.mov_cards.map((card, i) => {
     return <MovCard card={card} key={i} index={i} />;
   });
-  
+
+  const displayBlockedColor = (blockedColor) => {
+    const colorImages = {
+      "Red": images[`A`],
+      "Yellow": images[`B`],
+      "Green": images[`C`],
+      "Blue": images[`D`],
+    };
+    console.log("Blocked color image path:", colorImages[blockedColor]);
+    return colorImages[blockedColor]; 
+  };
 
   return (
     <div className="grid h-screen w-screen grid-cols-4 grid-rows-4">
@@ -82,9 +94,15 @@ export default function MatchLayout({
         <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-[#e8e5da]">
           <h3 className="font-bold md:text-2xl">Tiempo restante</h3>
           <p className="m-2 text-2xl md:text-5xl">00:42</p>
-          <div className="align-center relative flex items-center justify-center object-center">
-            <img src={color_proh} className="z-10 h-14 w-14" />
-            <div className="absolute z-0 h-8 w-8 rounded bg-blue-600"></div>
+          <h3 className="m-4 font-bold text-2xl md:text-2x1">Color prohibido:</h3>
+          <div className="relative flex items-center justify-center object-center">
+            {(blockedColor && blockedColor !== "None") ? 
+              <div className="relative h-20 w-20">
+                <img src={displayBlockedColor(blockedColor)} className="md:absolute z-0 h-9/12 w-9/12 top-2 left-2" />
+              </div>
+            :
+              <div className="m-2 font-bold text-2xl">Ninguno</div>
+            }
           </div>
         </div>
       </div>
