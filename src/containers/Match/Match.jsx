@@ -15,6 +15,7 @@ import {
   makePartialMove,
   undoPartialMove,
   discardFigure,
+  blockFigure,
 } from "./services/MatchService.js";
 import { useEffect, useReducer } from "react";
 import { 
@@ -112,13 +113,24 @@ export default function Match() {
     if(!selectedFigCards.player || selectedFigCards.index == null) return;
 
     try {
-      await discardFigure(
-        room_id,
-        selectedFigCards.player,
-        selectedFigCards.index,
-        tile.x,
-        tile.y,
-      );
+      if(selectedFigCards.player != user_name){
+        await blockFigure(
+          room_id,
+          user_name, 
+          selectedFigCards.player,
+          selectedFigCards.index,
+          tile.x,
+          tile.y,
+        )
+      } else {
+        await discardFigure(
+          room_id,
+          selectedFigCards.player,
+          selectedFigCards.index,
+          tile.x,
+          tile.y,
+        );
+      }
       dispatchFigCards({ type: "deselect" });
       dispatchPositions({ type : "resetPositions"});
     } catch (error) {
