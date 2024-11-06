@@ -19,16 +19,18 @@ export async function createRoom(formData, userId) {
 
 export async function joinRoom(roomData) {
   const roomId = encodeURIComponent(roomData.room_id);
-  const playerName = encodeURIComponent(roomData.player_name);
   const userId = encodeURIComponent(roomData.user_id);
   const response = await fetch(
-    `http://localhost:8000/rooms/join/${roomId}/${playerName}/${userId}`,
+    `http://localhost:8000/rooms/join/${roomId}/${userId}`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(roomData.password),
+      body: JSON.stringify({
+        password: roomData.password,
+        player_name: roomData.player_name,
+      }),
     },
   );
 

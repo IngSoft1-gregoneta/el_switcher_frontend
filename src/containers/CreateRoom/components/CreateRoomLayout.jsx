@@ -49,17 +49,27 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (name === "") {
+      alert("Nombre vacio");
+      return;
+    }
+
+    if (password.length !== 0) {
+      if (password.length > 20 || password.length < 4) {
+        alert("Contraseña debe tener entre 4 y 20 caracteres");
+        return;
+      }
+    }
+
     const formData = {
       room_name: name,
       players_expected: players,
       owner_name: ownerName,
-      // TODO: add this on handleCreateRoom
-      password: password,
+      password: password || null,
     };
     if (typeof handleCreateRoom === "function" && formData.name !== "") {
       handleCreateRoom(formData);
-    } else if (formData.name === "") {
-      alert("Empty name");
     }
   };
 
