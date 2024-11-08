@@ -63,8 +63,8 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
   }
 
   return (
-    <div className="mx-auto mt-10 flex max-w-screen-lg flex-col items-center justify-center p-4">
-      <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
+    <div className="mx-auto pt-16 flex max-w-screen-lg flex-col items-center justify-center p-4">
+      <div className="mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
         <ModalInput
           isOpen={isOpen}
           setIsOpen={setIsOpen}

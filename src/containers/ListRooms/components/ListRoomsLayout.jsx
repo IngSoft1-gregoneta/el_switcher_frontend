@@ -125,7 +125,6 @@ export default function ListRoomsLayout({ rooms }) {
           <div
           style={{
             textAlign: "center", /* Centrado horizontal */
-            marginTop: "2rem", /* Separación desde arriba */
             fontFamily: "'Roboto', sans-serif",
             fontSize: "1.25rem", /* Tamaño de fuente */
             color: "#000" /* Color gris para el texto */

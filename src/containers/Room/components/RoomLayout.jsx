@@ -28,7 +28,7 @@ export default function RoomLayout({
   }
 
   return (
-    <div className="mx-auto mt-10 flex max-w-screen-lg flex-col items-center justify-center p-4">
+    <div className="mx-auto pt-16 flex max-w-screen-lg flex-col items-center justify-center p-4">
       <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
         <h1 className="mb-6 text-center font-serif text-3xl font-bold">Sala</h1>
         <div className="mb-4 border-b pb-4">
