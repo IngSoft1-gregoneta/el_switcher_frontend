@@ -12,6 +12,7 @@ const extendCard = (card, hasMeTurn, figsOnBoard) => {
 
 const useMatchData = (roomId, userName) => {
   const [stateBoard, setStateBoard] = useState(null);
+  const [blockedColor, setBlockedColor] = useState(null);
   const [statePlayerMe, setStatePlayerMe] = useState(null);
   const [stateOtherPlayers, setStateOtherPlayers] = useState(null);
   const [usedMovCards, setUsedMovCards] = useState([]);
@@ -20,6 +21,7 @@ const useMatchData = (roomId, userName) => {
 
   const updateMatch = useUpdateStore((state) => state.updateMatch);
   const setHaveITurn = useMatchStore((state) => state.setHaveITurn);
+  const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +53,9 @@ const useMatchData = (roomId, userName) => {
           },
         );
         console.log(matchData);
+        setMatchStarted(true);
         setStateBoard(matchData.board.tiles);
+        setBlockedColor(matchData.board.blocked_color != null ? matchData.board.blocked_color : null);
         setStatePlayerMe(meExtendVisibleCards);
         setStateOtherPlayers(otherPlayersExtendVisibleCards);
         setUsedMovCards(matchData.visible_mov_cards);
@@ -68,12 +72,13 @@ const useMatchData = (roomId, userName) => {
     setStatePlayerMe,
     setStateOtherPlayers,
     setStateWinner,
+    setBlockedColor,
     userName,
     roomId,
     updateMatch,
   ]);
 
-  return { stateBoard, statePlayerMe, stateOtherPlayers, stateWinner, usedMovCards, error };
+  return { stateBoard, blockedColor, statePlayerMe, stateOtherPlayers, stateWinner, usedMovCards, error };
 };
 
 export default useMatchData;

@@ -4,14 +4,13 @@ import PropTypes from "prop-types";
 import {useAnimate,motion } from "framer-motion";
 import clicksound from "../../assets/clicksound.wav"
 import entersound from "../../assets/entersound.wav"
-import {useParams } from "react-router-dom";
-import useMatchData from "../hooks/useMatchData.jsx";
 
 export default function FigCard({
   className,
   figType,
   index,
   onSelected,
+  isBlocked,
   isSelected,
 }) {
   FigCard.propTypes = {
@@ -23,20 +22,22 @@ export default function FigCard({
   };
   const [selectedStyle, setSelectedStyle] = useState("");
   const [canreturn, setCanReturn] = useState(false);
-  const {room_id, user_name} = useParams();
-  const {statePlayerMe} = useMatchData(room_id, user_name);
   const [scope, animate] = useAnimate()
 
   useEffect(() => {
     if (isSelected) {
-
       setCanReturn(true);
       animate(scope.current, {scale: 1.3,y: -30});
     } else {
       setSelectedStyle("");
       setCanReturn(false);
     }
-  }, [isSelected]);
+    if (isBlocked) {
+      animate(scope.current, { rotateY: 180 });
+    } else {
+      animate(scope.current, { rotateY: 0 });
+    }
+  }, [isSelected, isBlocked]);
 
   function clickplay() {
     new Audio(clicksound).play()
@@ -58,7 +59,7 @@ function Hoverend(){
       onHoverEnd={Hoverend}
       ref = {scope}
       onClick={() => {onSelected();clickplay();}}
-      src={images[`${figType}`]}
+      src={isBlocked ? images[`back`]: images[`${figType}`]}
       key={index}
       data-testid="fig-cards"
       className={`${className} ${selectedStyle}`}

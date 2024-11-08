@@ -13,12 +13,11 @@ import MatchLayout from "./components/MatchLayout";
 import { useBoardStore, useMovCardStore } from "../../zustand/store";
 import MovCard from "./components/MovCard";
 import Tile from "./components/Tile";
-import { useBoardInit } from "./hooks/useBoardInit";
 import BoardClass from "./logic/board";
-import { useMoveHighLights } from "./hooks/useMoveHighLights";
 import useMatchData from "./hooks/useMatchData";
 import Match from "./Match";
-
+import useInitBoard from "./hooks/useInitBoard";
+import useHighLightTiles from "./hooks/useHighLightTiles";
 // TODO : mover a test responses?
 const mockBoard = {
   tiles: [
@@ -78,9 +77,6 @@ describe("Match testing", () => {
     useBoardStore.setState({
       board: mockBoard,
     });
-    useMovCardStore.setState({
-      setSelectedMovCard: vi.fn(),
-    });
   });
 
   afterEach(() => {
@@ -96,10 +92,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -122,10 +114,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -150,10 +138,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -177,10 +161,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -203,10 +183,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -236,10 +212,6 @@ describe("Match testing", () => {
           statePlayerMe={mockRes.me}
           stateOtherPlayers={mockRes.other_players}
           usedMovCards={mockRes.visible_mov_cards}
-          selectedFigReducer={{
-            selectedFigCards: null,
-            dispatchFigCards: () => void 0,
-          }}
           handleLeaveMatch={() => void 0}
           handlePassTurn={() => void 0}
           handleDiscardFigure={() => void 0}
@@ -258,33 +230,13 @@ describe("Match testing", () => {
     expect(numberOfHighlightedTiles).toBe(4);
   });
   
-  it("Click on movCard should set state", () => {
-    const mockCard = { mock: "mockCard" };
-
-    const setMock = vi.fn();
-    useMovCardStore.setState({
-      setSelectedMovCard: setMock,
-    });
-
-    render(<MovCard card={mockCard} index={0} />);
-
-    const img = screen.getByTestId("me-mov-cards");
-    fireEvent.click(img);
-    expect(setMock).toBeCalledWith(null);
-  });
-
-  it("Double click on movCard should set state to null", () => {
-    const mockCard = { mock: "mockCard" };
-    render(<MovCard card={mockCard} index={0} />);
-
-    const img = screen.getByTestId("me-mov-cards");
-    fireEvent.click(img);
-    fireEvent.click(img);
-    const selectedMovCard = useMovCardStore.getState().selectedMovCard;
-    expect(selectedMovCard).toBe(null);
-  });
-
   it("First click on tile should set first position", () => {
+    const mockDispatch = vi.fn()
+
+    useBoardStore.setState({
+      dispatchPositions : mockDispatch,
+    })
+
     render(
       <Tile
         color={"bg-yellow-500"}
@@ -298,70 +250,20 @@ describe("Match testing", () => {
     const tile = screen.getByTestId("actual-tile");
     fireEvent.click(tile);
 
-    const firstPos = useBoardStore.getState().firstPos;
-    expect(firstPos).toStrictEqual({ pos_x: 0, pos_y: 0 });
-    useBoardStore.setState({ firstPos: null });
-  });
-
-  it("If there is a first position, tile click should set second position", () => {
-    useBoardStore.setState({ firstPos: { pos_x: 0, pos_y: 0 } });
-
-    render(
-      <Tile
-        color={"bg-yellow-500"}
-        posx={1}
-        posy={1}
-        figure={"fig"}
-        onClick={() => void 0}
-      />,
-    );
-
-    const tile = screen.getByTestId("actual-tile");
-    fireEvent.click(tile);
-
-    const firstPos = useBoardStore.getState().firstPos;
-    const secondPos = useBoardStore.getState().secondPos;
-    expect(firstPos).toStrictEqual({ pos_x: 0, pos_y: 0 });
-    expect(secondPos).toStrictEqual({ pos_x: 1, pos_y: 1 });
-
-    useBoardStore.setState({
-      firstPos: null,
-      secondPos: null,
-    });
-  });
-
-  it("Double click on the same first position tile should reset the move state to null", () => {
-    render(
-      <Tile
-        color={"bg-yellow-500"}
-        posx={0}
-        posy={0}
-        figure={"fig"}
-        onClick={() => void 0}
-      />,
-    );
-
-    const tile = screen.getByTestId("actual-tile");
-    fireEvent.click(tile);
-
-    const firstPos1 = useBoardStore.getState().firstPos;
-    expect(firstPos1).toStrictEqual({ pos_x: 0, pos_y: 0 });
-
-    fireEvent.click(tile);
-
-    const firstPos2 = useBoardStore.getState().firstPos;
-    expect(firstPos2).toStrictEqual(null);
-
-    useBoardStore.setState({
-      firstPos: null,
-      secondPos: null,
-    });
+    expect(mockDispatch).toHaveBeenCalledOnce
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type : "setTilePosition",
+      position : {
+        pos_x : 0,
+        pos_y : 0,
+      }
+    }) 
   });
 
   it("useBoardInit hook should not set the state if board is null", () => {
     const mockSetBoard = vi.fn();
 
-    renderHook(() => useBoardInit(null, mockSetBoard));
+    renderHook(() => useInitBoard(null, mockSetBoard));
 
     expect(mockSetBoard).toBeCalledTimes(0);
   });
@@ -371,9 +273,10 @@ describe("Match testing", () => {
     const mockBoardFromServer = testResponses.board.tiles;
     const expectedBoard = new BoardClass(mockBoardFromServer);
 
-    renderHook(() => useBoardInit(mockBoardFromServer, mockSetBoard));
+    renderHook(() => useInitBoard(mockBoardFromServer, mockSetBoard));
 
-    expect(mockSetBoard).toHaveBeenCalledWith(expectedBoard);
+    const board = useBoardStore.getState().board
+    expect(board).toStrictEqual(expectedBoard)
   });
 
   it("useMoveHighLights hook should not set the state if conditions are not met", () => {
@@ -382,7 +285,7 @@ describe("Match testing", () => {
     const mockSetHighlightedTiles = vi.fn();
 
     renderHook(() =>
-      useMoveHighLights(null, null, null, null, mockSetHighlightedTiles),
+        useHighLightTiles(null, null, null, null),
     );
 
     expect(mockSetHighlightedTiles).toBeCalledTimes(0);
@@ -395,7 +298,6 @@ describe("Match testing", () => {
     ];
     const mockDisableHighlights = vi.fn();
     const mockHighlightTiles = vi.fn();
-    const mockSetHighlightedTiles = vi.fn();
 
     const mockBoard = {
       disableHighlights: mockDisableHighlights,
@@ -403,57 +305,53 @@ describe("Match testing", () => {
     };
 
     const selectedMovCard = {
-      vectors: [
-        [1, 0],
-        [-1, 0],
-      ],
+      card : {
+        vectors: [
+          [1, 0],
+          [-1, 0],
+        ],
+      }
     };
-    const firstPos = [0, 0];
+    const firstPos = {pos_x : 0, pos_y : 0};
     const statePlayerMe = { has_turn: true };
 
     mockHighlightTiles.mockReturnValue(highlightedTilesMock);
 
     renderHook(() =>
-      useMoveHighLights(
+      useHighLightTiles(
+        {first_position : firstPos},
         selectedMovCard,
         mockBoard,
-        firstPos,
         statePlayerMe,
-        mockSetHighlightedTiles,
       ),
     );
 
-    expect(mockDisableHighlights).toHaveBeenCalled();
     expect(mockHighlightTiles).toHaveBeenCalledWith(
       firstPos,
-      selectedMovCard.vectors,
+      selectedMovCard.card.vectors,
     );
-    expect(mockSetHighlightedTiles).toHaveBeenCalledWith(highlightedTilesMock);
   });
 
   it("useMoveHighLights hook should not do anything if inputs are missing", () => {
     const statePlayerMe = { has_turn: true };
     const mockDisableHighlights = vi.fn();
     const mockHighlightTiles = vi.fn();
-    const mockSetHighlightedTiles = vi.fn();
     const mockBoard = {
       disableHighlights: mockDisableHighlights,
       highlightTiles: mockHighlightTiles,
     };
     renderHook(() =>
-      useMoveHighLights(
+      useHighLightTiles(
         null,
         mockBoard,
         [0, 0],
         statePlayerMe,
-        mockSetHighlightedTiles,
       ),
     );
     expect(mockDisableHighlights).not.toHaveBeenCalled();
     expect(mockHighlightTiles).not.toHaveBeenCalled();
-    expect(mockSetHighlightedTiles).not.toHaveBeenCalled();
     renderHook(() =>
-      useMoveHighLights(
+      useHighLightTiles(
         {
           vectors: [
             [1, 0],
@@ -463,14 +361,12 @@ describe("Match testing", () => {
         null,
         [0, 0],
         statePlayerMe,
-        mockSetHighlightedTiles,
       ),
     );
     expect(mockDisableHighlights).not.toHaveBeenCalled();
     expect(mockHighlightTiles).not.toHaveBeenCalled();
-    expect(mockSetHighlightedTiles).not.toHaveBeenCalled();
     renderHook(() =>
-      useMoveHighLights(
+      useHighLightTiles(
         {
           vectors: [
             [1, 0],
@@ -480,12 +376,10 @@ describe("Match testing", () => {
         mockBoard,
         null,
         statePlayerMe,
-        mockSetHighlightedTiles,
       ),
     );
     expect(mockDisableHighlights).not.toHaveBeenCalled();
     expect(mockHighlightTiles).not.toHaveBeenCalled();
-    expect(mockSetHighlightedTiles).not.toHaveBeenCalled();
   });
 
   it("useMatchData hook should return match data", async () => {
@@ -513,10 +407,6 @@ describe("Match testing", () => {
 
       expect(result.current.stateBoard).toEqual(testResponses.board.tiles);
 
-      // expect(result.current.statePlayerMe).toEqual(testResponses.me);
-      // expect(result.current.stateOtherPlayers).toEqual(
-      //   testResponses.other_players,
-      // );
       expect(result.current.usedMovCards).toEqual(
         testResponses.visible_mov_cards,
       );

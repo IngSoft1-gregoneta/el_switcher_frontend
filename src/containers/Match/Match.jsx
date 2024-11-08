@@ -1,5 +1,6 @@
 import {
   useBoardStore,
+  useFigCardStore,
   useIdStore,
   useMatchStore,
 } from "../../zustand/store.js";
@@ -14,74 +15,114 @@ import {
   makePartialMove,
   undoPartialMove,
   discardFigure,
+  blockFigure,
 } from "./services/MatchService.js";
-import { useEffect, useReducer, useRef } from "react";
-import { useMovCardStore } from "../../zustand/store.js";
-import { useBoardInit } from "./hooks/useBoardInit.jsx";
-import { useMoveHighLights } from "./hooks/useMoveHighLights.jsx";
-import Chat from "./components/Chat.jsx";
+import { useEffect, useReducer } from "react";
+import { 
+  setPositionReducer, 
+  setMovCardReducer, 
+  selectFigCardReducer, 
+} from "./services/Reducers.js";
+import useHighLightTiles from "./hooks/useHighLightTiles.jsx";
+import useSetFirstPos from "./hooks/useSetFirstPos.jsx";
+import useInitBoard from "./hooks/useInitBoard.jsx";
+import useSetSelectedFigCards from "./hooks/useSetSelectedFigCards.jsx";
 
-//TODO: a services?
-const selectFigCardReducer = (state, action) => {
-  if (action.type === "select_fig_card") {
-    console.log(state);
-    if (!state.index && !state.player)
-      return { index: action.index, player: action.player };
-    if (state.index === action.index && state.player === action.player)
-      return { index: null, player: null };
-    return { index: action.index, player: action.player };
-  }
-  if (action.type === "deselect") {
-    return { index: null, player: null };
-  }
-  throw Error("Unknown action: " + action.type);
-};
 
 export default function Match() {
   const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
   const userId = useIdStore((state) => state.userId);
   const setUserId = useIdStore((state) => state.setUserId);
-  const firstPos = useBoardStore((state) => state.firstPos);
-  const secondPos = useBoardStore((state) => state.secondPos);
-  const setFirstPos = useBoardStore((state) => state.setFirstPos);
-  const setSecondPos = useBoardStore((state) => state.setSecondPos);
-  const board = useBoardStore((state) => state.board);
-  const setBoard = useBoardStore((state) => state.setBoard);
-  const setHighlightedTiles = useBoardStore(
-    (state) => state.setHighlightedTiles,
-  );
-  const selectedMovCard = useMovCardStore((state) => state.selectedMovCard);
-  const setSelectedMovCard = useMovCardStore(
-    (state) => state.setSelectedMovCard,
-  );
   const { room_id, user_name, user_id } = useParams();
   const navigate = useNavigate();
   const {
     stateBoard,
+    blockedColor,
     statePlayerMe,
     stateOtherPlayers,
     stateWinner,
     usedMovCards,
     error,
   } = useMatchData(room_id, user_name);
+  const board = useBoardStore( state => state.board);
 
+  // Declare state reducers, initial state.
   const [selectedFigCards, dispatchFigCards] = useReducer(
     selectFigCardReducer,
     { selectedFigCard: null, player: null },
   );
+  const [positions, dispatchPositions] = useReducer(
+    setPositionReducer,
+    { first_position : null, second_position : null },
+  );
+  const [selectedMovCard, dispatchSelectedMovCard] = useReducer(
+    setMovCardReducer,
+    { card : null },
+  );
 
-  const resetMoveStateRef = useRef(() => {
-    setFirstPos(null);
-    setSecondPos(null);
-    setSelectedMovCard(null);
-    setHighlightedTiles(null);
-  });
+  // Set needed gobal state. Data needed by other components
+  useSetFirstPos(positions, statePlayerMe);
+  useInitBoard(stateBoard);
+  useSetSelectedFigCards(selectedFigCards);
+  useHighLightTiles(
+    positions, 
+    selectedMovCard, 
+    board, 
+    statePlayerMe
+  );
+
+  // Action dispatchers set to store for component event interaction
+  const setMovCardDispatch = useBoardStore( state => state.setMovCardDispatch );
+  setMovCardDispatch(dispatchSelectedMovCard);
+  const setPosDispatch = useBoardStore( state => state.setDispatchPositions );
+  setPosDispatch(dispatchPositions);
+  const setFigCardsDispatch = useFigCardStore( state => state.setFigCardsDispatch);
+  setFigCardsDispatch(dispatchFigCards);
+
+  useEffect(()=>{
+    if(!statePlayerMe?.has_turn) {
+      return;
+    }
+    if(!positions.first_position || !positions.second_position) {
+      return;
+    }
+
+    try {
+      makePartialMove(
+        room_id,
+        user_name,
+        selectedMovCard.card.index,
+        positions.first_position.pos_x,
+        positions.first_position.pos_y,
+        positions.second_position.pos_x,
+        positions.second_position.pos_y
+      );
+      dispatchPositions({type : "resetPositions"});
+      dispatchSelectedMovCard({type : "resetMovCard"});
+    } catch {
+      dispatchPositions({type : "resetPositions"});
+      dispatchSelectedMovCard({type : "resetMovCard"});
+    }
+  },[positions, selectedMovCard, statePlayerMe]);
 
   if (!userId) setUserId(user_id);
 
+
+  // Event handlers, leave, pass turn, discard figure, revert partial move
   const handleDiscardFigure = async (tile) => {
-    if (selectedFigCards.player && selectedFigCards.index !== null) {
-      try {
+    if(!selectedFigCards.player || selectedFigCards.index == null) return;
+
+    try {
+      if(selectedFigCards.player != user_name){
+        await blockFigure(
+          room_id,
+          user_name, 
+          selectedFigCards.player,
+          selectedFigCards.index,
+          tile.x,
+          tile.y,
+        )
+      } else {
         await discardFigure(
           room_id,
           selectedFigCards.player,
@@ -89,20 +130,22 @@ export default function Match() {
           tile.x,
           tile.y,
         );
-        dispatchFigCards({ type: "deselect" });
-        console.log("discarded?");
-      } catch (error) {
-        console.error(error);
       }
+      dispatchFigCards({ type: "deselect" });
+      dispatchPositions({ type : "resetPositions"});
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const handlePassTurn = async () => {
     try {
       await passTurn(room_id, user_name);
-      resetMoveStateRef.current();
+      dispatchPositions({type : "resetPositions"})
+      dispatchSelectedMovCard({type : "resetMovCard"});
     } catch (error) {
-      resetMoveStateRef.current();
+      dispatchPositions({type : "resetPositions"})
+      dispatchSelectedMovCard({type : "resetMovCard"});
       console.error(error);
     }
   };
@@ -116,24 +159,6 @@ export default function Match() {
       console.error(error);
     }
   };
-  const handlePartialMove = async (
-    roomID,
-    playerName,
-    cardIndex,
-    x1,
-    y1,
-    x2,
-    y2,
-  ) => {
-    try {
-      await makePartialMove(roomID, playerName, cardIndex, x1, y1, x2, y2);
-      resetMoveStateRef.current();
-    } catch (error) {
-      resetMoveStateRef.current();
-      // TODO avisar que no se pudo hacer el movimiento?
-      console.log(error);
-    }
-  };
 
   const handleRevertMove = async () => {
     try {
@@ -142,43 +167,6 @@ export default function Match() {
       console.log(error);
     }
   };
-
-  useBoardInit(stateBoard, setBoard);
-
-  useMoveHighLights(
-    selectedMovCard,
-    board,
-    firstPos,
-    statePlayerMe,
-    setHighlightedTiles,
-  );
-
-  useEffect(() => {
-    if (statePlayerMe?.has_turn && selectedMovCard != null) {
-      if (firstPos && secondPos) {
-        handlePartialMove(
-          room_id,
-          user_name,
-          selectedMovCard.index,
-          firstPos.pos_x,
-          firstPos.pos_y,
-          secondPos.pos_x,
-          secondPos.pos_y,
-        );
-        resetMoveStateRef.current();
-      }
-    } else {
-      resetMoveStateRef.current();
-    }
-  }, [
-    resetMoveStateRef,
-    room_id,
-    user_name,
-    firstPos,
-    secondPos,
-    statePlayerMe,
-    selectedMovCard,
-  ]);
 
   if (error) {
     return (
@@ -205,14 +193,10 @@ export default function Match() {
       statePlayerMe={statePlayerMe}
       stateOtherPlayers={stateOtherPlayers}
       usedMovCards={usedMovCards}
-      selectedFigReducer={{
-        selectedFigCards: selectedFigCards,
-        dispatchFigCards: dispatchFigCards,
-      }}
       handleLeaveMatch={handleLeaveMatch}
+      blockedColor={blockedColor}
       handlePassTurn={handlePassTurn}
       handleDiscardFigure={handleDiscardFigure}
-      handlePartialMove={handlePartialMove}
       handleRevertMove={handleRevertMove}
       >
       <Chat userId={user_id} />

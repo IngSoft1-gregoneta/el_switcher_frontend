@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import "../styles/styles.css";
 import Tile from "./Tile";
 import { useBoardStore } from "../../../zustand/store";
