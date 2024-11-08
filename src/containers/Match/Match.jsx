@@ -19,6 +19,7 @@ import { useEffect, useReducer, useRef } from "react";
 import { useMovCardStore } from "../../zustand/store.js";
 import { useBoardInit } from "./hooks/useBoardInit.jsx";
 import { useMoveHighLights } from "./hooks/useMoveHighLights.jsx";
+import Chat from "./components/Chat.jsx";
 
 //TODO: a services?
 const selectFigCardReducer = (state, action) => {
@@ -197,6 +198,7 @@ export default function Match() {
       </div>
     );
   }
+  
 
   return (
     <MatchLayout
@@ -212,6 +214,8 @@ export default function Match() {
       handleDiscardFigure={handleDiscardFigure}
       handlePartialMove={handlePartialMove}
       handleRevertMove={handleRevertMove}
-    />
+      >
+      <Chat userId={user_id} />
+    </MatchLayout>
   );
 }

@@ -4,9 +4,10 @@ import Board from "./Board";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 import PropTypes from "prop-types";
 import color_proh from "../assets/prohib.svg";
-import clicksound from "../../assets/clicksound.wav"
-import entersound from "../../assets/entersound.wav"
+import clicksound from "../../assets/clicksound.wav";
+import entersound from "../../assets/entersound.wav";
 import MovCard from "./MovCard";
+import Chat from './Chat'; // Importa tu componente Chat
 
 export default function MatchLayout({
   statePlayerMe,
@@ -17,6 +18,8 @@ export default function MatchLayout({
   handleDiscardFigure,
   selectedFigReducer,
   handleRevertMove,
+  roomId,
+  userId,
 }) {
   MatchLayout.propTypes = {
     statePlayerMe: PropTypes.object,
@@ -27,7 +30,10 @@ export default function MatchLayout({
     handleRevertMove: PropTypes.func,
     handleDiscardFigure: PropTypes.func,
     selectedFigReducer: PropTypes.object,
+    roomId: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired, 
   };
+
   const hasTurn = statePlayerMe.has_turn;
   const playerMe = statePlayerMe;
   const playerTop = stateOtherPlayers[0];
@@ -42,14 +48,12 @@ export default function MatchLayout({
     dispatchFigCards: dispatchFigCards,
   } = selectedFigReducer;
 
-  
   function clickplay() {
-    new Audio(clicksound).play()
+    new Audio(clicksound).play();
   }
   function enterplay() {
-    new Audio(entersound).play()
+    new Audio(entersound).play();
   }
-
 
   const backMovCard = (lengthToFill) => {
     return Array.from({ length: lengthToFill }, (_, i) => (
@@ -79,7 +83,6 @@ export default function MatchLayout({
   const movCards = playerMe.mov_cards.map((card, i) => {
     return <MovCard card={card} key={i} index={i} />;
   });
-  
 
   return (
     <div className="grid h-screen w-screen grid-cols-4 grid-rows-4">
@@ -91,7 +94,7 @@ export default function MatchLayout({
           <div className="absolute z-0 h-8 w-8 rounded bg-blue-600"></div>
         </div>
       </div>
-
+  
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <PlayerTop
           player={playerTop}
@@ -99,7 +102,7 @@ export default function MatchLayout({
           dispatchFigCards={dispatchFigCards}
         />
       </div>
-
+  
       <div className="container col-span-1 row-span-1">
         <div className="mt-2 flex flex-col justify-center text-center align-middle">
           <div className="font-bold">{playerWithTurn}</div>
@@ -110,7 +113,7 @@ export default function MatchLayout({
           </div>
         </div>
       </div>
-
+  
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
         {playerLeft && (
           <PlayerLeft
@@ -134,13 +137,12 @@ export default function MatchLayout({
           />
         )}
       </div>
-
       <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
           {movCards}
         </div>
       </div>
-
+  
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <PlayerMe
           player={playerMe}
@@ -148,21 +150,25 @@ export default function MatchLayout({
           dispatchFigCards={dispatchFigCards}
         />
       </div>
-
       <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
+        <h2 className="font-bold text-xl mb-2">Chat</h2>
+        <Chat userId={userId} />
+      </div>
+  
+      <div className="align-center col-span-4 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <div className="flex flex-col items-center justify-items-center">
           {hasTurn && (
             <ButtonFilled
-              onmouseenter={enterplay}
+              onMouseEnter={enterplay}
               className="mx-0 text-wrap px-1 py-2"
-              onClick={() => {handleRevertMove(); clickplay();}}
+              onClick={() => { handleRevertMove(); clickplay(); }}
             >
               Revertir Movimiento
             </ButtonFilled>
           )}
           {hasTurn && (
             <ButtonFilled
-              onmouseenter={enterplay}
+              onMouseEnter={enterplay}
               className="mx-0 text-wrap px-1 py-2"
               onClick={() => {
                 handlePassTurn();
@@ -173,11 +179,10 @@ export default function MatchLayout({
               Pasar turno
             </ButtonFilled>
           )}
-          {/* TODO: Should show modal asking you if you really want leave the match */}
           <ButtonUnfilled
-            onmouseenter={enterplay}
+            onMouseEnter={enterplay}
             className="mx-0 text-wrap px-1 py-2"
-            onClick={() => {handleLeaveMatch(); clickplay();}}
+            onClick={() => { handleLeaveMatch(); clickplay(); }}
           >
             Abandonar
           </ButtonUnfilled>
@@ -185,4 +190,4 @@ export default function MatchLayout({
       </div>
     </div>
   );
-}
+}  
