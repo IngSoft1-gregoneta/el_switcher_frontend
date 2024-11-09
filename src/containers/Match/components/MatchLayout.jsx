@@ -4,11 +4,12 @@ import Board from "./Board";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 import PropTypes from "prop-types";
 import color_proh from "../assets/prohib.svg";
-import clicksound from "../../assets/clicksound.wav";
-import entersound from "../../assets/entersound.wav";
+import clicksound from "../../assets/clicksound.wav"
+import entersound from "../../assets/entersound.wav"
 import MovCard from "./MovCard";
 import { useFigCardStore } from "../../../zustand/store";
-import Chat from './Chat';
+import Chat from "./Chat";
+
 export default function MatchLayout({
   statePlayerMe,
   stateOtherPlayers,
@@ -18,8 +19,6 @@ export default function MatchLayout({
   handleLeaveMatch,
   handleDiscardFigure,
   handleRevertMove,
-  roomId,
-  userId,
 }) {
   MatchLayout.propTypes = {
     statePlayerMe: PropTypes.object,
@@ -30,9 +29,7 @@ export default function MatchLayout({
     handleLeaveMatch: PropTypes.func,
     handleRevertMove: PropTypes.func,
     handleDiscardFigure: PropTypes.func,
-    selectedFigReducer: PropTypes.object,
-    roomId: PropTypes.string.isRequired,
-    userId: PropTypes.string.isRequired, 
+    //userId: PropTypes.string.isRequired,
   };
 
   const hasTurn = statePlayerMe.has_turn;
@@ -43,16 +40,16 @@ export default function MatchLayout({
   const playerWithTurn =
     stateOtherPlayers.filter((player) => player.has_turn)[0]?.player_name ||
     statePlayerMe.player_name;
-
-    const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
+  const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
 
   
   function clickplay() {
-    new Audio(clicksound).play();
+    new Audio(clicksound).play()
   }
   function enterplay() {
-    new Audio(entersound).play();
+    new Audio(entersound).play()
   }
+
 
   const backMovCard = (lengthToFill) => {
     return Array.from({ length: lengthToFill }, (_, i) => (
@@ -82,6 +79,7 @@ export default function MatchLayout({
   const movCards = playerMe.mov_cards.map((card, i) => {
     return <MovCard card={card} key={i} index={i} />;
   });
+
   const displayBlockedColor = (blockedColor) => {
     const colorImages = {
       "Red": images[`A`],
@@ -111,17 +109,15 @@ export default function MatchLayout({
           </div>
         </div>
       </div>
-  
+
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-[#e8e5da]">
           <PlayerTop
             player={playerTop}
-            selectedFigCards={selectedFigCards}
-            dispatchFigCards={dispatchFigCards}
             />
         </div>
       </div>
-  
+
       <div className="container col-span-1 row-span-1">
         <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-2 shadow-lg text-[#e8e5da]">
             Turno del jugador : {playerWithTurn}
@@ -132,14 +128,11 @@ export default function MatchLayout({
           </div>
         </div>
       </div>
-  
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
           {playerLeft && (
         <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-white">
             <PlayerLeft
             player={playerLeft}
-            selectedFigCards={selectedFigCards}
-            dispatchFigCards={dispatchFigCards}
             />
         </div>
         )}
@@ -154,12 +147,11 @@ export default function MatchLayout({
           <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-white">
           <PlayerRight
             player={playerRight}
-            selectedFigCards={selectedFigCards}
-            dispatchFigCards={dispatchFigCards}
           />
         </div>
         )}
       </div>
+
       <div className="container col-span-1 row-span-1 overflow-hidden">
         <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-1 shadow-lg text-white">
           <div className="mt-2 justify-center text-center align-middle">
@@ -170,12 +162,6 @@ export default function MatchLayout({
               {movCards}
             </div>
           </div>
-          </div>
-          </div>
-
-      <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <div className="flex h-fit w-full flex-col flex-wrap items-center justify-center gap-2 md:flex-row">
-          {movCards}
         </div>
       </div>
 
@@ -183,16 +169,13 @@ export default function MatchLayout({
         <div className="rounded-lg bg-[#d0ceba] bg-opacity-90 p-4 shadow-lg text-slate-900">
           <PlayerMe
             player={playerMe}
-            selectedFigCards={selectedFigCards}
-            dispatchFigCards={dispatchFigCards}
             />
         </div>
       </div>
       <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <h2 className="font-bold text-xl mb-2">Chat</h2>
-        <Chat userId={userId} />
+        <Chat />
       </div>
-  
       <div className="align-center col-span-4 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
         <div className="flex flex-col items-center justify-items-center">
           {hasTurn && (
@@ -205,7 +188,7 @@ export default function MatchLayout({
             </ButtonUnfilled>
           )}
           {hasTurn && (
-            <ButtonUnfilled
+           <ButtonUnfilled
               onmouseenter={enterplay}
               className="mx-0 text-wrap px-1 text-slate-900 py-2 bold"
               onClick={() => {
@@ -229,4 +212,4 @@ export default function MatchLayout({
       </div>
     </div>
   );
-}  
+}

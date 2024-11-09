@@ -199,7 +199,6 @@ export default function Match() {
       handleDiscardFigure={handleDiscardFigure}
       handleRevertMove={handleRevertMove}
       >
-      <Chat userId={user_id} />
     </MatchLayout>
   );
 }

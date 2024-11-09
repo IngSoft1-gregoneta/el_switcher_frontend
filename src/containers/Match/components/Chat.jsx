@@ -13,13 +13,38 @@ export default function ChatComponent() {
             setSocketUrl(`ws://localhost:8000/websocket/chat/${userId}`);
         }
     }, [userId]);
-    
+
     useEffect(() => {
         if (lastMessage) {
             try {
-                // Parsear el mensaje JSON recibido
                 const message = JSON.parse(lastMessage.data);
-                setMessages((prevMessages) => [...prevMessages, message]);
+
+                switch (message.event_type) {
+                    case "leave_match":
+                    case "end_turn":
+                    case "parcial_move":
+                    case "revert_move":
+                    case "discard_fig":
+                    case "block_fig":
+                        setMessages((prevMessages) => [
+                            ...prevMessages,
+                            { 
+                                content: message.content, 
+                                event: message.event_type
+                            }
+                        ]);
+                        break;
+                    default:
+                        // mensajes comunes (no de eventos)
+                        setMessages((prevMessages) => [
+                            ...prevMessages,
+                            {
+                                user_id: message.user_id, 
+                                content: message.content
+                            }
+                        ]);
+                        break;
+                }
             } catch (error) {
                 console.error("Error parsing message:", error);
             }
@@ -37,7 +62,13 @@ export default function ChatComponent() {
             <div className="messages">
                 {messages.map((msg, index) => (
                     <div key={index}>
-                        <strong>{msg.user_id === userId ? "Tú" : `Usuario ${msg.user_id}`}:</strong> {msg.content}
+                        {msg.event ? (
+                            <strong>{msg.content}</strong>
+                        ) : (
+                            <>
+                                <strong>{msg.user_id === userId ? "Tú" : `Usuario ${msg.user_id}`}:</strong> {msg.content}
+                            </>
+                        )}
                     </div>
                 ))}
             </div>
@@ -47,11 +78,12 @@ export default function ChatComponent() {
                 onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                         handleSendMessage(e.target.value);
-                        e.target.value = '';
+                        e.target.value = '';  // Limpiar el campo de entrada después de enviar el mensaje
                     }
                 }}
             />
         </div>
     );
 }
+
 
