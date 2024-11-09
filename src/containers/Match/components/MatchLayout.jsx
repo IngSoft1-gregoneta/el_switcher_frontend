@@ -40,10 +40,9 @@ export default function MatchLayout({
     statePlayerMe.player_name;
   const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
   const timerValue = useTimerStore((state) => state.Timer);
-  const savedTimer = localStorage.getItem("timer");
-  const initialTimer = savedTimer ? parseInt(savedTimer, 10) : 0;
-  const [currentTimer, setCurrentTimer] = useState(initialTimer);
-
+  const setTimerMessage = useTimerStore((state) => state.setTimerMessage);
+  const [currentTimer, setCurrentTimer] = useState(timerValue);
+  const storedTime = localStorage.getItem("remainingTime");
   
   function clickplay() {
     new Audio(clicksound).play()
@@ -53,25 +52,34 @@ export default function MatchLayout({
   }
 
   useEffect(() => {
+    console.log("here1")
+    const storedTime = localStorage.getItem("remainingTime");
+    if (storedTime && parseInt(storedTime, 10) > 0) {
+      setCurrentTimer(parseInt(storedTime, 10));
+    }
     if (timerValue && timerValue.startsWith("TIMER: STARTS")) {
+      console.log("here2")
       const totalTime = parseInt(timerValue.split(" ")[2], 10); 
-      localStorage.setItem("timer", totalTime.toString());
       setCurrentTimer(totalTime);
+      setTimerMessage(null);  
+      localStorage.setItem("remainingTime", totalTime);
     }
   }, [timerValue]);
 
   useEffect(() => {
     // Sincronizar el temporizador en localStorage cuando cambie el valor
-    localStorage.setItem("timer", currentTimer.toString());
 
     // Iniciar el temporizador
     if (currentTimer > 0) {
       const intervalId = setInterval(() => {
         setCurrentTimer((prevTimer) => {
           if (prevTimer > 0) {
-            return prevTimer - 1;
+            const newTime = prevTimer - 1;
+            localStorage.setItem("remainingTime", newTime);
+            return newTime;
           } else {
             clearInterval(intervalId);
+            localStorage.removeItem("remainingTime");
             return 0;
           }
         });
