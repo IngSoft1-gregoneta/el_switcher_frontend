@@ -58,7 +58,7 @@ export default function ChatComponent() {
     };
 
     return (
-        <div>
+        <div data-testid="chat-container">
             <div className="messages">
                 {messages.map((msg, index) => (
                     <div key={index}>
@@ -85,5 +85,6 @@ export default function ChatComponent() {
         </div>
     );
 }
+
 
 
