@@ -20,13 +20,19 @@ export default function JoinRoomModalLayout({
   const navigate = useNavigate();
 
   async function handleJoinRoom(input) {
-    const playerName = input.input;
+    let playerName = input;
+    let roomPassword = null;
+    if (roomPrivate){
+      playerName = input.input;
+      roomPassword = input.password;
+    }
+
     try {
       await joinRoom({
         room_id: roomId,
         player_name: playerName,
         user_id: userId,
-        password: input.password,
+        password: roomPassword,
       });
       navigate(`/room/${userId}/${roomId}/${playerName}`);
     } catch (error) {
