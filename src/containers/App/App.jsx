@@ -62,9 +62,9 @@ export default function App() {
         setMatchStarted(true);
         setUpdateMatch();
       }
-      if (lastMessage.data.startsWith("TIMER:")) { // Detecta mensajes del timer
-        const timerValue = lastMessage.data
-        setTimerMessage(timerValue); // Actualiza el estado con el valor del timer
+      if (lastMessage.data.startsWith("2024")) { // Detecta mensajes del timer
+        const timerValue = lastMessage.data   // En 2025 deja de  funcionar JAJA
+        setTimerMessage(timerValue);        // TODO: Arreglar
       }
     }
   }, [

@@ -4,9 +4,8 @@ import images from "../logic/bindImage";
 import Board from "./Board";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
 import PropTypes from "prop-types";
-import color_proh from "../assets/prohib.svg";
-import clicksound from "../../assets/clicksound.wav"
-import entersound from "../../assets/entersound.wav"
+import clicksound from "../../assets/clicksound.wav";
+import entersound from "../../assets/entersound.wav";
 import MovCard from "./MovCard";
 import { useFigCardStore, useTimerStore } from "../../../zustand/store";
 
@@ -38,56 +37,40 @@ export default function MatchLayout({
   const playerWithTurn =
     stateOtherPlayers.filter((player) => player.has_turn)[0]?.player_name ||
     statePlayerMe.player_name;
-  const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
+  const dispatchFigCards = useFigCardStore(
+    (state) => state.selectedFigCardsDispatch,
+  );
   const timerValue = useTimerStore((state) => state.Timer);
-  const setTimerMessage = useTimerStore((state) => state.setTimerMessage);
-  const [currentTimer, setCurrentTimer] = useState(timerValue);
-  const storedTime = localStorage.getItem("remainingTime");
-  
+  const [currentTimer, setCurrentTimer] = useState();
+
+
   function clickplay() {
-    new Audio(clicksound).play()
+    new Audio(clicksound).play();
   }
   function enterplay() {
-    new Audio(entersound).play()
+    new Audio(entersound).play();
   }
 
   useEffect(() => {
-    console.log("here1")
-    const storedTime = localStorage.getItem("remainingTime");
-    if (storedTime && parseInt(storedTime, 10) > 0) {
-      setCurrentTimer(parseInt(storedTime, 10));
-    }
-    if (timerValue && timerValue.startsWith("TIMER: STARTS")) {
-      console.log("here2")
-      const totalTime = parseInt(timerValue.split(" ")[2], 10); 
-      setCurrentTimer(totalTime);
-      setTimerMessage(null);  
-      localStorage.setItem("remainingTime", totalTime);
-    }
-  }, [timerValue]);
+    if (timerValue) {
+      const countdownInterval = setInterval(() => {
+        const currentTime = new Date().getTime();
+        const formattedDateString = timerValue.replace(" ", "T");
+        const timeWhenTurnStart = new Date(formattedDateString).getTime();
+        const diference =  currentTime - timeWhenTurnStart;
+        const seconds = Math.floor((diference / 1000) % 60);
+        var remainingTime = 120 - seconds 
+        if (remainingTime <= 0) {
+          remainingTime = 0;
+          clearInterval(countdownInterval);
+        }
 
-  useEffect(() => {
-    // Sincronizar el temporizador en localStorage cuando cambie el valor
-
-    // Iniciar el temporizador
-    if (currentTimer > 0) {
-      const intervalId = setInterval(() => {
-        setCurrentTimer((prevTimer) => {
-          if (prevTimer > 0) {
-            const newTime = prevTimer - 1;
-            localStorage.setItem("remainingTime", newTime);
-            return newTime;
-          } else {
-            clearInterval(intervalId);
-            localStorage.removeItem("remainingTime");
-            return 0;
-          }
-        });
+        setCurrentTimer(remainingTime);
       }, 1000);
 
-      return () => clearInterval(intervalId);
+      return () => clearInterval(countdownInterval);
     }
-  }, [currentTimer]); 
+  }, [currentTimer, timerValue]);
 
   const backMovCard = (lengthToFill) => {
     return Array.from({ length: lengthToFill }, (_, i) => (
@@ -120,45 +103,50 @@ export default function MatchLayout({
 
   const displayBlockedColor = (blockedColor) => {
     const colorImages = {
-      "Red": images[`A`],
-      "Yellow": images[`B`],
-      "Green": images[`C`],
-      "Blue": images[`D`],
+      Red: images[`A`],
+      Yellow: images[`B`],
+      Green: images[`C`],
+      Blue: images[`D`],
     };
     console.log("Blocked color image path:", colorImages[blockedColor]);
-    return colorImages[blockedColor]; 
+    return colorImages[blockedColor];
   };
 
   return (
     <div className="grid h-screen w-screen grid-cols-4 grid-rows-4">
       <div className="container col-span-1 row-span-1 flex flex-col items-center justify-center text-center">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-[#e8e5da]">
+        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-[#e8e5da] shadow-lg">
           <h3 className="font-bold md:text-2xl">Tiempo restante</h3>
-          <p className="m-2 text-2xl md:text-5xl">{currentTimer > 0 ? `${currentTimer} segundos` : "Tiempo agotado"}</p>
-          <h3 className="m-4 font-bold text-2xl md:text-2x1">Color prohibido:</h3>
+          <p className="m-2 text-2xl md:text-5xl">
+            {currentTimer > 0 ? `${currentTimer} segundos` : "Tiempo agotado"}
+          </p>
+          <h3 className="md:text-2x1 m-4 text-2xl font-bold">
+            Color prohibido:
+          </h3>
           <div className="relative flex items-center justify-center object-center">
-            {(blockedColor && blockedColor !== "None") ? 
+            {blockedColor && blockedColor !== "None" ? (
               <div className="relative h-20 w-20">
-                <img src={displayBlockedColor(blockedColor)} className="md:absolute z-0 h-9/12 w-9/12 top-2 left-2" />
+                <img
+                  src={displayBlockedColor(blockedColor)}
+                  className="h-9/12 left-2 top-2 z-0 w-9/12 md:absolute"
+                />
               </div>
-            :
-              <div className="m-2 font-bold text-2xl">Ninguno</div>
-            }
+            ) : (
+              <div className="m-2 text-2xl font-bold">Ninguno</div>
+            )}
           </div>
         </div>
       </div>
 
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-[#e8e5da]">
-          <PlayerTop
-            player={playerTop}
-            />
+        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-[#e8e5da] shadow-lg">
+          <PlayerTop player={playerTop} />
         </div>
       </div>
 
       <div className="container col-span-1 row-span-1">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-2 shadow-lg text-[#e8e5da]">
-            Turno del jugador : {playerWithTurn}
+        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-2 text-[#e8e5da] shadow-lg">
+          Turno del jugador : {playerWithTurn}
           <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
             <div className="flex h-fit w-fit flex-wrap items-center justify-center gap-2 md:flex-row">
               {movParcialDeck}
@@ -168,12 +156,10 @@ export default function MatchLayout({
       </div>
 
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
-          {playerLeft && (
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-white">
-            <PlayerLeft
-            player={playerLeft}
-            />
-        </div>
+        {playerLeft && (
+          <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-white shadow-lg">
+            <PlayerLeft player={playerLeft} />
+          </div>
         )}
       </div>
       <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
@@ -183,18 +169,16 @@ export default function MatchLayout({
       </div>
       <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
         {playerRight && (
-          <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-white">
-          <PlayerRight
-            player={playerRight}
-          />
-        </div>
+          <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-white shadow-lg">
+            <PlayerRight player={playerRight} />
+          </div>
         )}
       </div>
 
       <div className="container col-span-1 row-span-1 overflow-hidden">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-1 shadow-lg text-white">
+        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-1 text-white shadow-lg">
           <div className="mt-2 justify-center text-center align-middle">
-          Tus cartas de movimiento
+            Tus cartas de movimiento
           </div>
           <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
             <div className="flex h-fit w-fit flex-wrap items-center justify-center gap-2 md:flex-row">
@@ -203,12 +187,10 @@ export default function MatchLayout({
           </div>
         </div>
       </div>
-      
+
       <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <div className="rounded-lg bg-[#d0ceba] bg-opacity-90 p-4 shadow-lg text-slate-900">
-          <PlayerMe
-            player={playerMe}
-            />
+        <div className="rounded-lg bg-[#d0ceba] bg-opacity-90 p-4 text-slate-900 shadow-lg">
+          <PlayerMe player={playerMe} />
         </div>
       </div>
 
@@ -217,16 +199,19 @@ export default function MatchLayout({
           {hasTurn && (
             <ButtonUnfilled
               onmouseenter={enterplay}
-              className="mx-0 text-wrap px-1 py-2 text-slate-900 bold"
-              onClick={() => {handleRevertMove(); clickplay();}}
+              className="bold mx-0 text-wrap px-1 py-2 text-slate-900"
+              onClick={() => {
+                handleRevertMove();
+                clickplay();
+              }}
             >
               Revertir Movimiento
             </ButtonUnfilled>
           )}
           {hasTurn && (
-           <ButtonUnfilled
+            <ButtonUnfilled
               onmouseenter={enterplay}
-              className="mx-0 text-wrap px-1 text-slate-900 py-2 bold"
+              className="bold mx-0 text-wrap px-1 py-2 text-slate-900"
               onClick={() => {
                 handlePassTurn();
                 dispatchFigCards({ type: "deselect" });
@@ -239,8 +224,11 @@ export default function MatchLayout({
           {/* TODO: Should show modal asking you if you really want leave the match */}
           <ButtonFilled
             onmouseenter={enterplay}
-            className="mx-0 text-wrap px-1 py-2 text-[#D0CEBA] bold]"
-            onClick={() => {handleLeaveMatch(); clickplay();}}
+            className="bold] mx-0 text-wrap px-1 py-2 text-[#D0CEBA]"
+            onClick={() => {
+              handleLeaveMatch();
+              clickplay();
+            }}
           >
             Abandonar
           </ButtonFilled>
