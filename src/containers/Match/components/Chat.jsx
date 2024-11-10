@@ -3,7 +3,7 @@ import useWebSocket from 'react-use-websocket';
 import { useIdStore } from '../../../zustand/store';
 
 export default function ChatComponent() {
-    const userId = useIdStore((state) => state.userId);
+    const userId = useIdStore((state) => state.userId); 
     const [socketUrl, setSocketUrl] = useState(null);
     const [messages, setMessages] = useState([]);
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
@@ -66,7 +66,7 @@ export default function ChatComponent() {
                             <strong>{msg.content}</strong>
                         ) : (
                             <>
-                                <strong>{msg.user_id === userId ? "Tú" : `Usuario ${msg.user_id}`}:</strong> {msg.content}
+                                <strong>{msg.user_id === userId ? "Tú" : "Otro jugador"}:</strong> {msg.content}
                             </>
                         )}
                     </div>
@@ -78,7 +78,7 @@ export default function ChatComponent() {
                 onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                         handleSendMessage(e.target.value);
-                        e.target.value = '';  // Limpiar el campo de entrada después de enviar el mensaje
+                        e.target.value = '';  
                     }
                 }}
             />
