@@ -1,4 +1,5 @@
 import { PlayerLeft, PlayerMe, PlayerRight, PlayerTop } from "./PlayerViews";
+import { useState, useEffect } from "react";
 import images from "../logic/bindImage";
 import Board from "./Board";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
@@ -7,7 +8,7 @@ import color_proh from "../assets/prohib.svg";
 import clicksound from "../../assets/clicksound.wav"
 import entersound from "../../assets/entersound.wav"
 import MovCard from "./MovCard";
-import { useFigCardStore } from "../../../zustand/store";
+import { useFigCardStore, useTimerStore } from "../../../zustand/store";
 
 export default function MatchLayout({
   statePlayerMe,
@@ -38,7 +39,10 @@ export default function MatchLayout({
     stateOtherPlayers.filter((player) => player.has_turn)[0]?.player_name ||
     statePlayerMe.player_name;
   const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
-
+  const timerValue = useTimerStore((state) => state.Timer);
+  const setTimerMessage = useTimerStore((state) => state.setTimerMessage);
+  const [currentTimer, setCurrentTimer] = useState(timerValue);
+  const storedTime = localStorage.getItem("remainingTime");
   
   function clickplay() {
     new Audio(clicksound).play()
@@ -47,6 +51,43 @@ export default function MatchLayout({
     new Audio(entersound).play()
   }
 
+  useEffect(() => {
+    console.log("here1")
+    const storedTime = localStorage.getItem("remainingTime");
+    if (storedTime && parseInt(storedTime, 10) > 0) {
+      setCurrentTimer(parseInt(storedTime, 10));
+    }
+    if (timerValue && timerValue.startsWith("TIMER: STARTS")) {
+      console.log("here2")
+      const totalTime = parseInt(timerValue.split(" ")[2], 10); 
+      setCurrentTimer(totalTime);
+      setTimerMessage(null);  
+      localStorage.setItem("remainingTime", totalTime);
+    }
+  }, [timerValue]);
+
+  useEffect(() => {
+    // Sincronizar el temporizador en localStorage cuando cambie el valor
+
+    // Iniciar el temporizador
+    if (currentTimer > 0) {
+      const intervalId = setInterval(() => {
+        setCurrentTimer((prevTimer) => {
+          if (prevTimer > 0) {
+            const newTime = prevTimer - 1;
+            localStorage.setItem("remainingTime", newTime);
+            return newTime;
+          } else {
+            clearInterval(intervalId);
+            localStorage.removeItem("remainingTime");
+            return 0;
+          }
+        });
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [currentTimer]); 
 
   const backMovCard = (lengthToFill) => {
     return Array.from({ length: lengthToFill }, (_, i) => (
@@ -93,7 +134,7 @@ export default function MatchLayout({
       <div className="container col-span-1 row-span-1 flex flex-col items-center justify-center text-center">
         <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-[#e8e5da]">
           <h3 className="font-bold md:text-2xl">Tiempo restante</h3>
-          <p className="m-2 text-2xl md:text-5xl">00:42</p>
+          <p className="m-2 text-2xl md:text-5xl">{currentTimer > 0 ? `${currentTimer} segundos` : "Tiempo agotado"}</p>
           <h3 className="m-4 font-bold text-2xl md:text-2x1">Color prohibido:</h3>
           <div className="relative flex items-center justify-center object-center">
             {(blockedColor && blockedColor !== "None") ? 
