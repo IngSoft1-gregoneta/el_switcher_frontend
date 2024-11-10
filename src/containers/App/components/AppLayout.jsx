@@ -4,8 +4,9 @@ import { Link, useParams } from "react-router-dom";
 import ListRooms from "../../ListRooms/ListRooms.jsx";
 import { useIdStore } from "../../../zustand/store.js";
 import { ButtonFilled } from "../../../components/Buttons.jsx";
+import { useState } from "react";
 
-export default function AppLayout() {
+export default function AppLayout({toggleBackground , backgroundEnabled}) {
   const { user_id } = useParams();
   const setUserId = useIdStore((state) => state.setUserId);
   const userId = useIdStore((state) => state.userId);
@@ -32,6 +33,10 @@ function enterplay() {
             Crear Partida
           </ButtonFilled>
         </Link>
+          
+        <ButtonFilled onClick={toggleBackground}>
+          {backgroundEnabled ? 'Desactivar fondo animado' : 'Activar fondo animado'}
+        </ButtonFilled>
       </div>
     </div>
   );
