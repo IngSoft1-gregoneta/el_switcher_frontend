@@ -11,6 +11,7 @@ import {
   useUpdateStore,
   useIdStore,
   useMatchStore,
+  useTimerStore,
 } from "../../zustand/store.js";
 import Match from "../Match/Match.jsx";
 import Room from "../Room/Room.jsx";
@@ -24,6 +25,7 @@ export default function App() {
   const setUpdateRoom = useUpdateStore((state) => state.setUpdateRoom);
   const setUpdateMatch = useUpdateStore((state) => state.setUpdateMatch);
   const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
+  const setTimerMessage = useTimerStore((state) => state.setTimerMessage)
   const matchStarted = useMatchStore((state) => state.matchStarted);
 
   useEffect(() => {
@@ -60,6 +62,10 @@ export default function App() {
         setMatchStarted(true);
         setUpdateMatch();
       }
+      if (lastMessage.data.startsWith("2024")) { // Detecta mensajes del timer
+        const timerValue = lastMessage.data   // En 2025 deja de  funcionar JAJA
+        setTimerMessage(timerValue);        // TODO: Arreglar
+      }
     }
   }, [
     setMatchStarted,
@@ -67,6 +73,7 @@ export default function App() {
     lastMessage,
     setUpdateRoom,
     setUpdateList,
+    setTimerMessage,
   ]);
 
   return (

@@ -41,3 +41,8 @@ export const useFigCardStore = create((set) => ({
   setSelectedFigCards: (new_card) => set({ selectedFigCards: new_card }),
   setFigCardsDispatch: (dispatch) => set({ selectedFigCardsDispatch: dispatch }),
 }));
+
+export const useTimerStore = create((set) => ({
+  Timer: null,
+  setTimerMessage: (newMessage) => set({ Timer: newMessage }),
+}));

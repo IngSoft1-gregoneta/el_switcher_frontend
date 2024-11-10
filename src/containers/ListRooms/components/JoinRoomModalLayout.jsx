@@ -4,23 +4,37 @@ import { useNavigate } from "react-router-dom";
 import { useIdStore } from "../../../zustand/store";
 import ModalInput from "../../../components/ModalInput";
 
-export default function JoinRoomModalLayout({ roomId, isOpen, setIsOpen }) {
+export default function JoinRoomModalLayout({
+  roomId,
+  isOpen,
+  setIsOpen,
+  roomPrivate,
+}) {
   JoinRoomModalLayout.propTypes = {
     roomId: PropTypes.string,
     isOpen: PropTypes.bool,
     setIsOpen: PropTypes.func,
+    roomPrivate: PropTypes.bool,
   };
   const userId = useIdStore((state) => state.userId);
   const navigate = useNavigate();
 
-  async function handleJoinRoom(userName) {
+  async function handleJoinRoom(input) {
+    let playerName = input;
+    let roomPassword = null;
+    if (roomPrivate){
+      playerName = input.input;
+      roomPassword = input.password;
+    }
+
     try {
       await joinRoom({
         room_id: roomId,
-        player_name: userName,
+        player_name: playerName,
         user_id: userId,
+        password: roomPassword,
       });
-      navigate(`/room/${userId}/${roomId}/${userName}`);
+      navigate(`/room/${userId}/${roomId}/${playerName}`);
     } catch (error) {
       console.log(error);
       navigate("/failed_room");
@@ -36,6 +50,7 @@ export default function JoinRoomModalLayout({ roomId, isOpen, setIsOpen }) {
         handleClickCancelar={() => void 0}
         title="Unirse a la partida"
         desc="Escriba el nombre con el cual quiera ser identificado la partida"
+        has_password={roomPrivate}
       />
     </>
   );
