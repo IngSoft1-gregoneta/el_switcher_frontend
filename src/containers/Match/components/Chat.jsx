@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { useIdStore } from '../../../zustand/store';
+import { useParams } from "react-router-dom";
 
 export default function ChatComponent() {
     const userId = useIdStore((state) => state.userId); 
+    const { room_id, user_name, user_id } = useParams();
     const [socketUrl, setSocketUrl] = useState(null);
     const [messages, setMessages] = useState([]);
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
     useEffect(() => {
         if (userId) {
-            setSocketUrl(`ws://localhost:8000/websocket/chat/${userId}`);
+            setSocketUrl(`ws://localhost:8000/websocket/chat/${userId}/${user_name}`);
         }
     }, [userId]);
 
@@ -39,6 +41,7 @@ export default function ChatComponent() {
                         setMessages((prevMessages) => [
                             ...prevMessages,
                             {
+                                user_name: message.user_name,
                                 user_id: message.user_id, 
                                 content: message.content
                             }
@@ -66,7 +69,7 @@ export default function ChatComponent() {
                             <strong>{msg.content}</strong>
                         ) : (
                             <>
-                                <strong>{msg.user_id === userId ? "Tú" : "-"}:</strong> {msg.content}
+                                <strong>{msg.user_id === userId ? "Tú" : msg.user_name}:</strong> {msg.content}
                             </>
                         )}
                     </div>
