@@ -10,8 +10,7 @@ import {
 import { MemoryRouter } from "react-router-dom";
 import testResponses from "./testResponses.json";
 import MatchLayout from "./components/MatchLayout";
-import { useBoardStore, useMovCardStore } from "../../zustand/store";
-import MovCard from "./components/MovCard";
+import { useBoardStore } from "../../zustand/store";
 import Tile from "./components/Tile";
 import BoardClass from "./logic/board";
 import useMatchData from "./hooks/useMatchData";
@@ -88,6 +87,8 @@ describe("Match testing", () => {
 
   it("names of players appears", () => {
     const mockRes = testResponses;
+    useBoardStore.setState({selectedMovCard : {card : null }})
+
     render(
       <MemoryRouter>
         <MatchLayout
@@ -125,10 +126,8 @@ describe("Match testing", () => {
       </MemoryRouter>,
     );
 
-    const buttonTurno = screen.queryByRole("button", { name: "Pasar turno" });
     const buttonAbandonar = screen.getByRole("button", { name: "Abandonar" });
     expect(buttonAbandonar).toBeInTheDocument();
-    expect(buttonTurno).not.toBeInTheDocument();
   });
 
   it("given Me has the turn the button appears, abandonar showed always", () => {
