@@ -15,6 +15,7 @@ export default function ChatComponent() {
             setSocketUrl(`ws://localhost:8000/websocket/chat/${userId}/${user_name}`);
         }
     }, [userId]);
+    
 
     useEffect(() => {
         if (lastMessage) {
