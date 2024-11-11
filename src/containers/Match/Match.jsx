@@ -190,6 +190,7 @@ export default function Match() {
       </div>
     );
   }
+  
 
   return (
     <MatchLayout
@@ -201,6 +202,7 @@ export default function Match() {
       handlePassTurn={handlePassTurn}
       handleDiscardFigure={handleDiscardFigure}
       handleRevertMove={handleRevertMove}
-    />
+      >
+    </MatchLayout>
   );
 }

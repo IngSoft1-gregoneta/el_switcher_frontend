@@ -7,6 +7,8 @@ import clicksound from "../../assets/clicksound.wav";
 import entersound from "../../assets/entersound.wav";
 import MovCard from "./MovCard";
 import { useFigCardStore } from "../../../zustand/store";
+import { useFigCardStore, useTimerStore } from "../../../zustand/store";
+import Chat from "./Chat"
 import Timer from "./Timer";
 
 export default function MatchLayout({
@@ -28,7 +30,9 @@ export default function MatchLayout({
     handleLeaveMatch: PropTypes.func,
     handleRevertMove: PropTypes.func,
     handleDiscardFigure: PropTypes.func,
+    //userId: PropTypes.string.isRequired,
   };
+
   const hasTurn = statePlayerMe.has_turn;
   const playerMe = statePlayerMe;
   const playerTop = stateOtherPlayers[0];

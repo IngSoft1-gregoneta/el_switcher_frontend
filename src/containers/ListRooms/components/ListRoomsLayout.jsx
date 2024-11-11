@@ -15,6 +15,7 @@ export default function ListRoomsLayout({ rooms }) {
   const [roomPrivate, setRoomPrivate] = useState(false);
   const [filterName, setFilterName] = useState("");
   const [filterPlayers, setFilterPlayers] = useState("");
+  const [filterVisibility, setFilterVisibility] = useState(""); // Nuevo estado para el filtro de visibilidad
 
   function handleClickUnirse(id, is_private) {
     new Audio(clicksound).play();
@@ -33,7 +34,14 @@ export default function ListRoomsLayout({ rooms }) {
     const matchesPlayers = filterPlayers
       ? room.players_expected === parseInt(filterPlayers)
       : true;
-    return matchesName && matchesPlayers;
+    const matchesVisibility =
+      filterVisibility === ""
+        ? true
+        : filterVisibility === "private"
+        ? room.private
+        : !room.private;
+
+    return matchesName && matchesPlayers && matchesVisibility;
   });
 
   const hasFilteredRooms = filteredRooms && filteredRooms.length > 0;
@@ -60,6 +68,7 @@ export default function ListRoomsLayout({ rooms }) {
             className="game-input"
           />
           <select
+            aria-label="Filtrar por jugadores"
             value={filterPlayers}
             onChange={(e) => setFilterPlayers(e.target.value)}
             className="game-input"
@@ -68,6 +77,28 @@ export default function ListRoomsLayout({ rooms }) {
             <option value="2">2 jugadores</option>
             <option value="3">3 jugadores</option>
             <option value="4">4 jugadores</option>
+          </select>
+          {/* Nuevo filtro para seleccionar partidas públicas o privadas */}
+          <select
+            value={filterVisibility}
+            onChange={(e) => setFilterVisibility(e.target.value)}
+            style={{
+              border: "1px solid #ccc",
+              padding: "0.5rem 1rem",
+              fontFamily: "'Roboto', sans-serif",
+              backgroundColor: "#e3f9d7",
+              color: "#333",
+            }}
+          >
+            <option value="" style={{ fontFamily: "'Roboto', sans-serif" }}>
+              Todas las partidas
+            </option>
+            <option value="public" style={{ fontFamily: "'Roboto', sans-serif" }}>
+              Partidas públicas
+            </option>
+            <option value="private" style={{ fontFamily: "'Roboto', sans-serif" }}>
+              Partidas privadas
+            </option>
           </select>
         </div>
 
@@ -126,16 +157,17 @@ export default function ListRoomsLayout({ rooms }) {
           </div>
         ) : (
           <div
-            style={{
-              textAlign: "center", /* Centrado horizontal */
-              fontFamily: "'Roboto', sans-serif",
-              fontSize: "1.25rem", /* Tamaño de fuente */
-              color: "#333", /* Color gris para el texto */
-            }}
-          >
-            No hay salas disponibles
-          </div>
+          style={{
+            textAlign: "center",
+            fontFamily: "'Roboto', sans-serif",
+            fontSize: "1.25rem",
+            color: "#000"
+          }}
+        >
+          No hay salas disponibles
+        </div>
         )}
       </div>
     </>);
 }
+

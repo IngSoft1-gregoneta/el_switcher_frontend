@@ -18,6 +18,8 @@ import useMatchData from "./hooks/useMatchData";
 import Match from "./Match";
 import useInitBoard from "./hooks/useInitBoard";
 import useHighLightTiles from "./hooks/useHighLightTiles";
+import ChatComponent from "./components/Chat";
+
 // TODO : mover a test responses?
 const mockBoard = {
   tiles: [
@@ -381,6 +383,14 @@ describe("Match testing", () => {
     expect(mockDisableHighlights).not.toHaveBeenCalled();
     expect(mockHighlightTiles).not.toHaveBeenCalled();
   });
+
+  it('should render chat', () => {
+    render(<ChatComponent />);
+    const messagesContainer = screen.getByTestId('chat-container'); // Assuming the container has this test ID
+    expect(messagesContainer).toBeInTheDocument();
+  });
+
+  
 
   it("useMatchData hook should return match data", async () => {
     global.fetch = vi.fn();
