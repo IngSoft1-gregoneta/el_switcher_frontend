@@ -2,7 +2,7 @@ import Spinner from "../../../components/Spinner";
 import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons.jsx";
 import entersound from "../../assets/entersound.wav"
 import propTypes from "prop-types";
-
+import { useState, useEffect } from "react";
 export default function RoomLayout({
   roomData,
   isOwner,
@@ -22,49 +22,71 @@ export default function RoomLayout({
       </div>
     );
   }
-    
+
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   function enterplay() {
     new Audio(entersound).play()
   }
 
+  const handleMouseMove = (event) => {
+    setMousePosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  const cardOffset = {
+    x: mousePosition.x * 0.04,
+    y: mousePosition.y * 0.04,
+  };
+
   return (
-    <div className="mx-auto pt-16 flex max-w-screen-lg flex-col items-center justify-center p-4">
-      <div className="center mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
-        <h1 className="mb-6 text-center font-serif text-3xl font-bold">Sala</h1>
+
+    <div className="sala-container">
+      <div className="sala-card cursor-follow" style={{
+        transform: `translate(${cardOffset.x}px, ${cardOffset.y}px)`,
+      }}>
+        <h1 className="sala-header">Sala</h1>
         <div className="mb-4 border-b pb-4">
-          <h2 className="text-x2 font-semibold">
+          <h2 className="sala-subheader">
             Nombre de la sala: {roomData.room_name}
           </h2>
-          <h4 className="text=x2">Creador de la sala: {roomData.owner_name}</h4>
-          <span className="block">
+          <h4 className="sala-text">Creador de la sala: {roomData.owner_name}</h4>
+          <span className="sala-text">
             Jugadores esperados: {roomData.players_expected}
           </span>
         </div>
         <div>
-          <h4 className="mb-4 text-lg font-medium">Jugadores en la sala</h4>
-          <ul className="list-disc rounded bg-lime-100 p-4 pl-5">
+          <h4 className="sala-subheader">Jugadores en la sala</h4>
+          <ul className="sala-players">
             {roomData.players_names.map((player, index) => (
-              <li key={index} className="mb-2">
-                {player}
-              </li>
+              <li key={index}>{player}</li>
             ))}
           </ul>
         </div>
         <div className="mt-6">
           <ButtonUnfilled
             type="button"
-            onmouseenter={enterplay}
+            onMouseEnter={enterplay}
             onClick={() => handleLeaveRoom()}
-            className="w-full"
+            className="button-unfilled-sala"
           >
             Salir
           </ButtonUnfilled>
           {isOwner && (
             <ButtonFilled
               type="button"
-              onmouseenter={enterplay}
+              onMouseEnter={enterplay}
               onClick={() => handleStartMatch()}
-              className="w-full"
+              className="button-filled-sala"
             >
               Empezar
             </ButtonFilled>

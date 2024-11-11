@@ -51,50 +51,28 @@ export default function ListRoomsLayout({ rooms }) {
         roomPrivate={roomPrivate}
       />
       <div className="container mb-6 pb-4 pt-4">
-        {}
         <div className="mb-4 flex justify-between">
           <input
             type="text"
             placeholder="Filtrar por nombre de sala"
             value={filterName}
             onChange={(e) => setFilterName(e.target.value)}
-            style={{
-              border: "1px solid #ccc",
-              padding: "0.5rem 1rem",
-              fontFamily: "'Roboto', sans-serif",
-              backgroundColor: "#e3f9d7",
-              color: "#333",
-            }}
-            className="placeholder:text-[#333]"
+            className="game-input"
           />
           <select
             value={filterPlayers}
             onChange={(e) => setFilterPlayers(e.target.value)}
-            style={{
-              border: "1px solid #ccc",
-              padding: "0.5rem 1rem",
-              fontFamily: "'Roboto', sans-serif",
-              backgroundColor: "#e3f9d7",
-              color: "#333",
-            }}
+            className="game-input"
           >
-            <option value="" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              Filtrar por jugadores
-            </option>
-            <option value="2" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              2 jugadores
-            </option>
-            <option value="3" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              3 jugadores
-            </option>
-            <option value="4" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              4 jugadores
-            </option>
+            <option value="">Filtrar por jugadores</option>
+            <option value="2">2 jugadores</option>
+            <option value="3">3 jugadores</option>
+            <option value="4">4 jugadores</option>
           </select>
         </div>
 
         {hasFilteredRooms ? (
-          <div className="relative overflow-x-auto shadow-md">
+          <div className="relative overflow-x-auto shadow-md game-table">
             <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
               <thead className="bg-lime-200 text-xs uppercase text-gray-700">
                 <tr>
@@ -141,24 +119,23 @@ export default function ListRoomsLayout({ rooms }) {
                           </ButtonUnfilled>
                         </td>
                       </tr>
-                    ),
+                    )
                 )}
               </tbody>
             </table>
           </div>
         ) : (
           <div
-          style={{
-            textAlign: "center", /* Centrado horizontal */
-            fontFamily: "'Roboto', sans-serif",
-            fontSize: "1.25rem", /* Tamaño de fuente */
-            color: "#000" /* Color gris para el texto */
-          }}
-        >
-          No hay salas disponibles
-        </div>
+            style={{
+              textAlign: "center", /* Centrado horizontal */
+              fontFamily: "'Roboto', sans-serif",
+              fontSize: "1.25rem", /* Tamaño de fuente */
+              color: "#333", /* Color gris para el texto */
+            }}
+          >
+            No hay salas disponibles
+          </div>
         )}
       </div>
-    </>
-  );
+    </>);
 }

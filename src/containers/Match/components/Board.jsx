@@ -1,3 +1,4 @@
+
 import "../styles/styles.css";
 import Tile from "./Tile";
 import { useBoardStore } from "../../../zustand/store";
@@ -28,8 +29,8 @@ export default function Board({ handleDiscardFigure }) {
     return <Spinner />;
   } else {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-"> {/* Fondo del tablero */}
-        <div className="grid grid-cols-6 grid-rows-6 gap-1 md:gap-2 p-2 rounded-lg relative"> {/* Espaciado y bordes redondeados */}
+      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br p-8">
+        <div className="relative justify-center items-center grid grid-cols-6 grid-rows-6 gap-1 md:gap-1 p-2 rounded-xl bg-gradient-to-br from-blue-900 to-blue-700 shadow-[inset_-8px_-8px_16px_rgba(0,0,0,0.4),inset_8px_8px_16px_rgba(255,255,255,0.1)]">
           {board.tiles.map((row, rowIndex) =>
             row.map((ficha, colIndex) => {
               return (
@@ -46,9 +47,10 @@ export default function Board({ handleDiscardFigure }) {
               );
             }),
           )}
-          <div className="absolute inset-0 bg-gray-800 z-0 rounded-lg" /> {/* Fondo azul detrás del tablero */}
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 opacity-80 shadow-lg z-0" />
         </div>
       </div>
     );
   }
 }
+

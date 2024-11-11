@@ -18,10 +18,10 @@ import {
   blockFigure,
 } from "./services/MatchService.js";
 import { useEffect, useReducer } from "react";
-import { 
-  setPositionReducer, 
-  setMovCardReducer, 
-  selectFigCardReducer, 
+import {
+  setPositionReducer,
+  setMovCardReducer,
+  selectFigCardReducer,
 } from "./services/Reducers.js";
 import useHighLightTiles from "./hooks/useHighLightTiles.jsx";
 import useSetFirstPos from "./hooks/useSetFirstPos.jsx";
@@ -44,8 +44,8 @@ export default function Match() {
     usedMovCards,
     error,
   } = useMatchData(room_id, user_name);
-  const board = useBoardStore( state => state.board);
-
+  const board = useBoardStore(state => state.board);
+  const setSelectedMovCard = useBoardStore(state => state.setSelectedMovCard);
   // Declare state reducers, initial state.
   const [selectedFigCards, dispatchFigCards] = useReducer(
     selectFigCardReducer,
@@ -53,37 +53,41 @@ export default function Match() {
   );
   const [positions, dispatchPositions] = useReducer(
     setPositionReducer,
-    { first_position : null, second_position : null },
+    { first_position: null, second_position: null },
   );
   const [selectedMovCard, dispatchSelectedMovCard] = useReducer(
     setMovCardReducer,
-    { card : null },
+    { card: null },
   );
 
   // Set needed gobal state. Data needed by other components
+  useEffect(()=>{
+    setSelectedMovCard(selectedMovCard);
+  },[selectedMovCard])
+
   useSetFirstPos(positions, statePlayerMe);
   useInitBoard(stateBoard);
   useSetSelectedFigCards(selectedFigCards);
   useHighLightTiles(
-    positions, 
-    selectedMovCard, 
-    board, 
+    positions,
+    selectedMovCard,
+    board,
     statePlayerMe
   );
 
   // Action dispatchers set to store for component event interaction
-  const setMovCardDispatch = useBoardStore( state => state.setMovCardDispatch );
+  const setMovCardDispatch = useBoardStore(state => state.setMovCardDispatch);
   setMovCardDispatch(dispatchSelectedMovCard);
-  const setPosDispatch = useBoardStore( state => state.setDispatchPositions );
+  const setPosDispatch = useBoardStore(state => state.setDispatchPositions);
   setPosDispatch(dispatchPositions);
-  const setFigCardsDispatch = useFigCardStore( state => state.setFigCardsDispatch);
+  const setFigCardsDispatch = useFigCardStore(state => state.setFigCardsDispatch);
   setFigCardsDispatch(dispatchFigCards);
 
-  useEffect(()=>{
-    if(!statePlayerMe?.has_turn) {
+  useEffect(() => {
+    if (!statePlayerMe?.has_turn) {
       return;
     }
-    if(!positions.first_position || !positions.second_position) {
+    if (!positions.first_position || !positions.second_position) {
       return;
     }
 
@@ -97,26 +101,26 @@ export default function Match() {
         positions.second_position.pos_x,
         positions.second_position.pos_y
       );
-      dispatchPositions({type : "resetPositions"});
-      dispatchSelectedMovCard({type : "resetMovCard"});
+      dispatchPositions({ type: "resetPositions" });
+      dispatchSelectedMovCard({ type: "resetMovCard" });
     } catch {
-      dispatchPositions({type : "resetPositions"});
-      dispatchSelectedMovCard({type : "resetMovCard"});
+      dispatchPositions({ type: "resetPositions" });
+      dispatchSelectedMovCard({ type: "resetMovCard" });
     }
-  },[positions, selectedMovCard, statePlayerMe]);
+  }, [positions, selectedMovCard, statePlayerMe]);
 
   if (!userId) setUserId(user_id);
 
 
   // Event handlers, leave, pass turn, discard figure, revert partial move
   const handleDiscardFigure = async (tile) => {
-    if(!selectedFigCards.player || selectedFigCards.index == null) return;
+    if (!selectedFigCards.player || selectedFigCards.index == null) return;
 
     try {
-      if(selectedFigCards.player != user_name){
+      if (selectedFigCards.player != user_name) {
         await blockFigure(
           room_id,
-          user_name, 
+          user_name,
           selectedFigCards.player,
           selectedFigCards.index,
           tile.x,
@@ -132,7 +136,7 @@ export default function Match() {
         );
       }
       dispatchFigCards({ type: "deselect" });
-      dispatchPositions({ type : "resetPositions"});
+      dispatchPositions({ type: "resetPositions" });
     } catch (error) {
       console.error(error);
     }
@@ -141,11 +145,11 @@ export default function Match() {
   const handlePassTurn = async () => {
     try {
       await passTurn(room_id, user_name);
-      dispatchPositions({type : "resetPositions"})
-      dispatchSelectedMovCard({type : "resetMovCard"});
+      dispatchPositions({ type: "resetPositions" })
+      dispatchSelectedMovCard({ type: "resetMovCard" });
     } catch (error) {
-      dispatchPositions({type : "resetPositions"})
-      dispatchSelectedMovCard({type : "resetMovCard"});
+      dispatchPositions({ type: "resetPositions" })
+      dispatchSelectedMovCard({ type: "resetMovCard" });
       console.error(error);
     }
   };

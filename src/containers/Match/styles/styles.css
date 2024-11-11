@@ -1,40 +1,46 @@
 .tile {
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    height: auto;
-    margin: 2px;
-    transition: background-color 0.3s, transform 0.3s;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  margin: 2px;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.highlighted_tile{
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    height: auto;
-    margin: 2px;
-    border: solid 2px white;
-    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+.highlighted_tile {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  margin: 2px;
+  border: solid 2px white;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .tile:hover {
-    transform: scale(1.15);
-    cursor: pointer;
+  transform: scale(1.15);
+  cursor: pointer;
 }
 
 
 .mov_card_selected:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .mov_card.unavailable {
-    filter: grayscale(100%);
-    opacity: 0.5;
-    cursor: not-allowed;
+  filter: grayscale(100%);
+  opacity: 0.5;
+  cursor: not-allowed;
 }
-.selectedFigCards{
-    border: solid 5px black;
+
+.selectedFigCards {
+  border: solid 5px black;
 }
 
 .light {
-    border: solid 5px black;
+  border: solid 5px black;
+}
+
+
+#mv-cards {
+  position: relative;
 }

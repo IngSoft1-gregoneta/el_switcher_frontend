@@ -2,76 +2,371 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root { */
-/*   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
-/*   line-height: 1.5; */
-/*   font-weight: 400; */
-/**/
-/*   color-scheme: light dark; */
-/*   color: rgba(255, 255, 255, 0.87); */
-/*   background-color: #242424; */
-/**/
-/*   font-synthesis: none; */
-/*   text-rendering: optimizeLegibility; */
-/*   -webkit-font-smoothing: antialiased; */
-/*   -moz-osx-font-smoothing: grayscale; */
-/* } */
-/**/
-/* a { */
-/*   font-weight: 500; */
-/*   color: #646cff; */
-/*   text-decoration: inherit; */
-/* } */
-/**/
-/* a:hover { */
-/*   color: #535bf2; */
-/* } */
-/**/
-/* body { */
-/*   margin: 0; */
-/*   display: flex; */
-/*   place-items: center; */
-/*   min-width: 320px; */
-/*   min-height: 100vh; */
-/* } */
-/**/
-/* h1 { */
-/*   font-size: 3.2em; */
-/*   line-height: 1.1; */
-/* } */
-/**/
-/* button { */
-/*   border-radius: 8px; */
-/*   border: 1px solid transparent; */
-/*   padding: 0.6em 1.2em; */
-/*   font-size: 1em; */
-/*   font-weight: 500; */
-/*   font-family: inherit; */
-/*   background-color: #1a1a1a; */
-/*   cursor: pointer; */
-/*   transition: border-color 0.25s; */
-/* } */
-/**/
-/* button:hover { */
-/*   border-color: #646cff; */
-/* } */
-/**/
-/* button:focus, */
-/* button:focus-visible { */
-/*   outline: 4px auto -webkit-focus-ring-color; */
-/* } */
-/**/
-/* @media (prefers-color-scheme: light) { */
-/*   :root { */
-/*     color: #213547; */
-/*     background-color: #ffffff; */
-/*   } */
-/**/
-/*   a:hover { */
-/*     color: #747bff; */
-/*   } */
-/**/
-/*   button { */
-/*     background-color: #f9f9f9; */
-/*   } */
-/* } */
+
+/* Plastic-like theme with glossy, shiny effects */
+
+/* General Container */
+.container {
+  background-color: #f0f8ff;
+  /* Light blue background */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, #ffffff, #d4e2f0);
+  /* Glossy background */
+}
+
+/* Input and Select */
+.game-input {
+  border: 2px solid #ccc;
+  padding: 0.5rem 1rem;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(145deg, #ffffff, #f1f7ff);
+  /* Glossy effect */
+  color: #333;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.game-input:focus {
+  border-color: #78c2ad;
+  box-shadow: 0 0 8px rgba(120, 194, 173, 0.5);
+  outline: none;
+}
+
+.game-table {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-table th {
+  background-color: #f6f9ff;
+  color: #333;
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ccc;
+}
+
+.game-table tr:hover {
+  background-color: #f1f7ff;
+  cursor: pointer;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.game-table td {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.button-unfilled {
+  background: transparent;
+  border: 2px solid #66a1ff;
+  color: #66a1ff;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: inline-block;
+  text-align: center;
+  user-select: none;
+  outline: none;
+  margin: 2px;
+}
+
+.button-unfilled:hover {
+  background: linear-gradient(145deg, #66a1ff, #4d91e0);
+  border-color: #4d91e0;
+  color: white;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.button-unfilled:active {
+  background: linear-gradient(145deg, #66a1ff, #4178b8);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+.button-unfilled:disabled {
+  background: rgba(102, 161, 255, 0.3); /* Lightened blue */
+  border-color: rgba(102, 161, 255, 0.3); /* Matching border */
+  color: rgba(255, 255, 255, 0.6); /* Muted text color */
+  cursor: not-allowed; /* Disabled cursor */
+  box-shadow: none; /* No shadow */
+  opacity: 0.7; /* Slightly faded look */
+  transition: none; /* Disable transitions for a static appearance */
+}
+
+.button-danger-filled {
+  background: linear-gradient(145deg, #ff6666, #e05555);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: inline-block;
+  text-align: center;
+  user-select: none;
+  outline: none;
+  margin: 2px;
+}
+
+.button-danger-filled:hover {
+  background: linear-gradient(145deg, #e05555, #b84848);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.button-danger-filled:active {
+  background: linear-gradient(145deg, #d44b4b, #a63c3c);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.button-danger-filled:disabled {
+  background: #ffb3b3;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.no-rooms-message {
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.25rem;
+  color: #333;
+  font-weight: bold;
+  padding: 1rem;
+  background: linear-gradient(145deg, #f9f9f9, #e2e2e2);
+  border-radius: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .game-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .game-table {
+    padding: 10px;
+  }
+}
+
+.button-filled {
+  background: linear-gradient(145deg, #84e184, #66bb6a);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: inline-block;
+  text-align: center;
+  user-select: none;
+  outline: none;
+  margin: 2px;
+}
+
+.button-filled:hover {
+  background: linear-gradient(145deg, #7de07a, #558e54);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.button-filled:active {
+  background: linear-gradient(145deg, #84e184, #558e54);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.button-filled:disabled {
+  background: #b0e5b1;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.sala-container {
+  padding-top: 4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sala-card {
+  background-color: #e3f9d7;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.sala-card:hover {
+  transform: scale(1.03);
+}
+
+.sala-card .cursor-follow {
+  transition: transform 0.1s ease-out;
+  position: relative;
+  will-change: transform;
+}
+
+.sala-header {
+  font-family: 'Roboto', sans-serif;
+  font-size: 2.25rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  transition: all 0.3s ease;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.sala-header:hover {
+  transform: translateY(-6px);
+  text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.6);
+}
+
+.sala-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.sala-text:hover {
+  transform: translateY(-4px);
+  text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+  color: #34d399;
+}
+
+.sala-players {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.125rem;
+  color: #444;
+  padding: 1rem;
+  margin: 1rem 0;
+  text-align: left;
+  list-style-type: disc;
+  transition: all 0.3s ease;
+}
+
+.sala-players li {
+  padding: 0.25rem 0;
+  font-weight: medium;
+  color: #555;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.sala-players li:hover {
+  transform: translateY(-2px);
+  text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+  color: #34d399;
+}
+
+.button-unfilled-sala,
+.button-filled-sala {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button-unfilled-sala {
+  background-color: transparent;
+  border: 2px solid #2b6f2b;
+  color: #2b6f2b;
+  font-weight: 600;
+}
+
+.button-unfilled-sala:hover {
+  background-color: #2b6f2b;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.button-filled-sala {
+  background-color: #2b6f2b;
+  color: white;
+  font-weight: 600;
+  border: none;
+}
+
+.button-filled-sala:hover {
+  background-color: #1d5d1d;
+  transform: translateY(-2px);
+}
+
+/* Styles for MovCard */
+.mov-card {
+  background-image: linear-gradient(145deg, #84e184, #66bb6a); /* Initial gradient background */
+  background-size: 200% 200%; /* Ensures a smooth transition */
+  background-position: 100% 100%; /* Starts from one direction */
+  transition: background-position 0.5s ease, background-image 0.5s ease;
+  border-radius: 8px;
+  padding: 3px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.mov-card:hover {
+  background-image: linear-gradient(145deg, #7de07a, #558e54); /* On hover, change gradient */
+  background-position: 0% 0%; /* Change position for hover effect */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.mov-card:active {
+  background-image: linear-gradient(145deg, #84e184, #558e54); /* On active (click), change gradient */
+  background-position: 50% 50%; /* Adjust position for active effect */
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.mov-card:disabled {
+  background-image: linear-gradient(145deg, #b0e5b1, #b0e5b1); /* Dim the background on disabled state */
+  box-shadow: none;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
