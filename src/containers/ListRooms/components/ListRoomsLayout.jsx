@@ -75,6 +75,7 @@ export default function ListRoomsLayout({ rooms }) {
             className="placeholder:text-[#333]"
           />
           <select
+            aria-label="Filtrar por jugadores"
             value={filterPlayers}
             onChange={(e) => setFilterPlayers(e.target.value)}
             style={{
