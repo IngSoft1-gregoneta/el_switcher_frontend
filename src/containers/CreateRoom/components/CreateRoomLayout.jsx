@@ -83,7 +83,7 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
 
   return (
     <div className="mx-auto pt-16 flex max-w-screen-lg flex-col items-center justify-center p-4">
-      <div className="mx-auto w-full max-w-md items-center justify-center bg-lime-200 p-4 shadow-md">
+      <div className="mx-auto w-full max-w-md items-center justify-center rounded-lg bg-[#2f4550] bg-opacity-90 p-6 shadow-lg text-white">
         <ModalInput
           isOpen={isOpen}
           setIsOpen={setIsOpen}
@@ -93,24 +93,24 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
           desc="Escriba el nombre con el cual quiera ser identificado la partida"
           has_password={false}
         />
-        <h1 className="mb-8 mt-4 text-center font-serif text-4xl font-bold">
+        <h1 className="mb-8 mt-4 text-center font-serif text-4xl font-bold text-[#e8e5da]">
           Crear Sala
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-4 bg-lime-100 p-4">
+        <form onSubmit={handleSubmit} className="space-y-4 bg-[#3c5761] p-4 rounded-lg shadow-lg">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium">
+            <label htmlFor="name" className="block text-sm font-medium text-[#e8e5da]">
               Nombre de la sala
             </label>
             <input
               onChange={handleRoomName}
               id="name"
               type="text"
-              className="mt-1 block w-full border-gray-600 bg-cyan-50 p-3 shadow-sm focus:border-emerald-100 focus:ring-emerald-200 sm:text-sm"
+              className="mt-1 block w-full bg-cyan-50 p-3 border border-gray-600 rounded-lg shadow-sm text-black focus:ring-emerald-200 focus:border-emerald-100 sm:text-sm"
               value={name}
             />
           </div>
           <div>
-            <label htmlFor="playerCount" className="block text-sm font-medium">
+            <label htmlFor="playerCount" className="block text-sm font-medium text-[#e8e5da]">
               Cantidad de jugadores
             </label>
             <input
@@ -120,26 +120,26 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
               min={2}
               max={4}
               value={players}
-              className="mt-1 block w-full border-gray-600 bg-cyan-50 p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              placeholder="2-4 players"
+              className="mt-1 block w-full bg-cyan-50 p-3 border border-gray-600 rounded-lg shadow-sm text-black focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="2-4 jugadores"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium">
+            <label htmlFor="password" className="block text-sm font-medium text-[#e8e5da]">
               Contraseña
             </label>
             <input
               onChange={handleRoomPassword}
               id="password"
               type="password"
-              placeholder="Deja en blanco para sala publica"
-              className="mt-1 block w-full border-gray-600 bg-cyan-50 p-3 shadow-sm focus:border-emerald-100 focus:ring-emerald-200 sm:text-sm"
+              placeholder="Deja en blanco para sala pública"
+              className="mt-1 block w-full bg-cyan-50 p-3 border border-gray-600 rounded-lg shadow-sm text-black focus:ring-emerald-200 focus:border-emerald-100 sm:text-sm"
               value={password}
             />
           </div>
           <ButtonFilled
             type="submit"
-            className="w-full"
+            className="w-full mt-4"
             onClick={clickplay}
             onmouseenter={enterplay}
           >
@@ -148,7 +148,7 @@ export default function CreateRoomLayout({ handleCreateRoom }) {
           <ButtonUnfilled
             onClick={handleLeave}
             onmouseenter={enterplay}
-            className="w-full"
+            className="w-full mt-2"
           >
             Salir
           </ButtonUnfilled>

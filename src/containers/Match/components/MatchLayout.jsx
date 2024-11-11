@@ -7,7 +7,6 @@ import clicksound from "../../assets/clicksound.wav";
 import entersound from "../../assets/entersound.wav";
 import MovCard from "./MovCard";
 import { useFigCardStore } from "../../../zustand/store";
-import { useFigCardStore, useTimerStore } from "../../../zustand/store";
 import Chat from "./Chat"
 import Timer from "./Timer";
 
@@ -163,11 +162,11 @@ export default function MatchLayout({
           </div>
         </div>
       </div>
-      <div className="align-center bg-[#d0ceba] rounded-tl-lg lg:rounded-t-lg pl-2 col-span-3 lg:col-span-2 row-span-1 ml-2 flex flex-row items-center justify-left gap-4 text-center">
-        <div className="rounded-lg bg-[#d0ceba] p-4 shadow-lg text-sla0">
+      <div className="align-center rounded-tl-lg lg:rounded-t-lg pl-2 col-span-3 lg:col-span-2 row-span-1 ml-2 flex flex-row items-center justify-left gap-4 text-center">
+        <div className="rounded-lg bg-[#d0ceba] p-4 shadow-lg text-slate">
           <PlayerMe player={playerMe} />
         </div>
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col bg-[#d0ceba] p-4 shadow-lg rounded items-center justify-center">
           <ButtonUnfilled
             disabled={!hasTurn}
             onmouseenter={enterplay}
@@ -200,6 +199,9 @@ export default function MatchLayout({
             Abandonar
           </ButtonDangerFilled>
         </div>
+      </div>
+      <div className="col-span-1 p-2 row-span-1 hidden lg:block">
+        <Chat/>
       </div>
     </div>
   );

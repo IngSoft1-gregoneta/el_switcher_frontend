@@ -143,8 +143,7 @@ export function PlayerLeft({ player }) {
       <div className="flex h-fit flex-row items-center justify-center gap-2">
         {figCards}
       </div>
-      {/* falta que sea responsive en mobile */}
-      <div className="flex flex-grow basis-1/12 rotate-180 flex-col justify-between md:flex-row">
+      <div className="flex flex-row basis-1/12 rotate-180 flex-col justify-between md:flex-row">
         <div className="basis-1/6 font-bold">{player.player_name}</div>
         <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
           Tarjetas Figura: {player.deck_len}
