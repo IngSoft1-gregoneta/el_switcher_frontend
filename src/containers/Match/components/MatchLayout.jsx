@@ -1,13 +1,13 @@
 import { PlayerLeft, PlayerMe, PlayerRight, PlayerTop } from "./PlayerViews";
-import { useState, useEffect } from "react";
 import images from "../logic/bindImage";
 import Board from "./Board";
 import { ButtonDangerFilled, ButtonUnfilled } from "../../../components/Buttons";
 import PropTypes from "prop-types";
-import clicksound from "../../assets/clicksound.wav"
-import entersound from "../../assets/entersound.wav"
+import clicksound from "../../assets/clicksound.wav";
+import entersound from "../../assets/entersound.wav";
 import MovCard from "./MovCard";
-import { useFigCardStore, useTimerStore } from "../../../zustand/store";
+import { useFigCardStore } from "../../../zustand/store";
+import Timer from "./Timer";
 
 export default function MatchLayout({
   statePlayerMe,
@@ -38,55 +38,13 @@ export default function MatchLayout({
     stateOtherPlayers.filter((player) => player.has_turn)[0]?.player_name ||
     statePlayerMe.player_name;
   const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
-  const timerValue = useTimerStore((state) => state.Timer);
-  const setTimerMessage = useTimerStore((state) => state.setTimerMessage);
-  const [currentTimer, setCurrentTimer] = useState(timerValue);
-  const storedTime = localStorage.getItem("remainingTime");
 
   function clickplay() {
-    new Audio(clicksound).play()
+    new Audio(clicksound).play();
   }
   function enterplay() {
-    new Audio(entersound).play()
+    new Audio(entersound).play();
   }
-
-  useEffect(() => {
-    console.log("here1")
-    const storedTime = localStorage.getItem("remainingTime");
-    if (storedTime && parseInt(storedTime, 10) > 0) {
-      setCurrentTimer(parseInt(storedTime, 10));
-    }
-    if (timerValue && timerValue.startsWith("TIMER: STARTS")) {
-      console.log("here2")
-      const totalTime = parseInt(timerValue.split(" ")[2], 10);
-      setCurrentTimer(totalTime);
-      setTimerMessage(null);
-      localStorage.setItem("remainingTime", totalTime);
-    }
-  }, [timerValue]);
-
-  useEffect(() => {
-    // Sincronizar el temporizador en localStorage cuando cambie el valor
-
-    // Iniciar el temporizador
-    if (currentTimer > 0) {
-      const intervalId = setInterval(() => {
-        setCurrentTimer((prevTimer) => {
-          if (prevTimer > 0) {
-            const newTime = prevTimer - 1;
-            localStorage.setItem("remainingTime", newTime);
-            return newTime;
-          } else {
-            clearInterval(intervalId);
-            localStorage.removeItem("remainingTime");
-            return 0;
-          }
-        });
-      }, 1000);
-
-      return () => clearInterval(intervalId);
-    }
-  }, [currentTimer]);
 
   const backMovCard = (lengthToFill) => {
     return Array.from({ length: lengthToFill }, (_, i) => (
@@ -119,10 +77,10 @@ export default function MatchLayout({
 
   const displayBlockedColor = (blockedColor) => {
     const colorImages = {
-      "Red": images[`A`],
-      "Yellow": images[`B`],
-      "Green": images[`C`],
-      "Blue": images[`D`],
+      Red: images[`A`],
+      Yellow: images[`B`],
+      Green: images[`C`],
+      Blue: images[`D`],
     };
     console.log("Blocked color image path:", colorImages[blockedColor]);
     return colorImages[blockedColor];
@@ -132,36 +90,7 @@ export default function MatchLayout({
     <div className="grid h-screen w-screen grid-cols-5 grid-rows-5">
       <div className="col-span-1 row-span-2 flex flex-col  md:items-center justify-center text-center">
         <div className="md:rounded-br-lg lg:rounded-b-lg bg-gradient-to-br from-blue-400 to-blue-600 bg-opacity-90 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-[#f8f4e8]">
-          <div className="relative my-4 flex items-center justify-center">
-            <div className="h-24 w-24 md:h-32 md:w-32 relative">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tl from-green-400 to-yellow-400 animate-pulse"></div>
-              <svg className="absolute inset-0" viewBox="0 0 36 36">
-                <circle
-                  className="stroke-current text-gray-200"
-                  strokeWidth="3"
-                  fill="none"
-                  r="16"
-                  cx="18"
-                  cy="18"
-                />
-                <circle
-                  className="stroke-current text-red-500"
-                  strokeWidth="3"
-                  strokeDasharray="100"
-                  strokeDashoffset={(100 - (currentTimer / 120) * 100).toFixed(1)}
-                  fill="none"
-                  r="16"
-                  cx="18"
-                  cy="18"
-                  style={{ transition: "stroke-dashoffset 0.5s ease" }}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-2xl md:text-4xl font-extrabold text-[#f8f4e8]">
-                {currentTimer > 0 ? currentTimer : "⏰"}
-              </div>
-            </div>
-          </div>
-
+          <Timer/>
           <h3 className="m-4 font-bold text-xl md:text-3xl">Color prohibido:</h3>
           <div className="relative flex items-center justify-center">
             {(blockedColor && blockedColor !== "None") ? (
@@ -196,7 +125,6 @@ export default function MatchLayout({
           </div>
         </div>
       </div>
-
       <div className="align-center col-span-1 row-span-3 mb-2 flex flex-row items-center justify-center text-center">
         {playerLeft && (
           <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-white">
@@ -220,7 +148,6 @@ export default function MatchLayout({
           </div>
         )}
       </div>
-
       <div className="bg-white p-4 m-0 rounded-tr-lg row-span-1 col-span-2 max-w-[500px]">
         <div
           className="rounded-lg p-4 text-white bg-gradient-to-br from-[#1e79e7] to-[#1966c2] shadow-[20px_20px_60px_rgba(17,69,132,0.3),-20px_-20px_60px_rgba(39,157,255,0.3)]"
@@ -271,7 +198,6 @@ export default function MatchLayout({
           </ButtonDangerFilled>
         </div>
       </div>
-
     </div>
   );
 }
