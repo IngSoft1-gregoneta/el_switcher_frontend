@@ -33,10 +33,11 @@ function enterplay() {
             Crear Partida
           </ButtonFilled>
         </Link>
-          
-        <ButtonFilled onClick={toggleBackground}>
-          {backgroundEnabled ? 'Desactivar fondo animado' : 'Activar fondo animado'}
-        </ButtonFilled>
+        <div className="absolute bottom-2 right-2">
+          <ButtonFilled onClick={toggleBackground}>
+            {backgroundEnabled ? 'Desactivar fondo animado' : 'Activar fondo animado'}
+          </ButtonFilled>
+        </div>  
       </div>
     </div>
   );
