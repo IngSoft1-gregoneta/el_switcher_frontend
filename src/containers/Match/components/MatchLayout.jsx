@@ -9,6 +9,7 @@ import entersound from "../../assets/entersound.wav";
 import MovCard from "./MovCard";
 import { useFigCardStore, useTimerStore } from "../../../zustand/store";
 import Chat from "./Chat"
+import Timer from "./Timer";
 
 export default function MatchLayout({
   statePlayerMe,
@@ -43,9 +44,6 @@ export default function MatchLayout({
   const dispatchFigCards = useFigCardStore(
     (state) => state.selectedFigCardsDispatch,
   );
-  const timerValue = useTimerStore((state) => state.Timer);
-  const [currentTimer, setCurrentTimer] = useState();
-
 
   function clickplay() {
     new Audio(clicksound).play();
@@ -53,27 +51,6 @@ export default function MatchLayout({
   function enterplay() {
     new Audio(entersound).play();
   }
-
-  useEffect(() => {
-    if (timerValue) {
-      const countdownInterval = setInterval(() => {
-        const currentTime = new Date().getTime();
-        const formattedDateString = timerValue.replace(" ", "T");
-        const timeWhenTurnStart = new Date(formattedDateString).getTime();
-        const diference =  currentTime - timeWhenTurnStart;
-        const seconds = Math.floor((diference / 1000) % 60);
-        var remainingTime = 120 - seconds 
-        if (remainingTime <= 0) {
-          remainingTime = 0;
-          clearInterval(countdownInterval);
-        }
-
-        setCurrentTimer(remainingTime);
-      }, 1000);
-
-      return () => clearInterval(countdownInterval);
-    }
-  }, [currentTimer, timerValue]);
 
   const backMovCard = (lengthToFill) => {
     return Array.from({ length: lengthToFill }, (_, i) => (
@@ -119,10 +96,7 @@ export default function MatchLayout({
     <div className="grid h-screen w-screen grid-cols-4 grid-rows-4">
       <div className="container col-span-1 row-span-1 flex flex-col items-center justify-center text-center">
         <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-[#e8e5da] shadow-lg">
-          <h3 className="font-bold md:text-2xl">Tiempo restante</h3>
-          <p className="m-2 text-2xl md:text-5xl">
-            {currentTimer > 0 ? `${currentTimer} segundos` : "Tiempo agotado"}
-          </p>
+          <Timer />
           <h3 className="md:text-2x1 m-4 text-2xl font-bold">
             Color prohibido:
           </h3>
