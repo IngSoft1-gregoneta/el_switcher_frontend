@@ -5,7 +5,7 @@ import ListRooms from "../../ListRooms/ListRooms.jsx";
 import { useIdStore } from "../../../zustand/store.js";
 import { ButtonFilled } from "../../../components/Buttons.jsx";
 
-export default function AppLayout() {
+export default function AppLayout({toggleBackground , backgroundEnabled}) {
   const { user_id } = useParams();
   const setUserId = useIdStore((state) => state.setUserId);
   const userId = useIdStore((state) => state.userId);
@@ -32,6 +32,11 @@ function enterplay() {
             Crear Partida
           </ButtonFilled>
         </Link>
+        <div className="absolute bottom-2 right-2">
+          <ButtonFilled onClick={toggleBackground}>
+            {backgroundEnabled ? 'Desactivar fondo animado' : 'Activar fondo animado'}
+          </ButtonFilled>
+        </div>  
       </div>
     </div>
   );

@@ -26,7 +26,6 @@ export default function App() {
   const setUpdateMatch = useUpdateStore((state) => state.setUpdateMatch);
   const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
   const setTimerMessage = useTimerStore((state) => state.setTimerMessage);
-  const matchStarted = useMatchStore((state) => state.matchStarted);
 
   useEffect(() => {
     if (userId) {
@@ -64,8 +63,8 @@ export default function App() {
       }
       if (lastMessage.data.startsWith("2024")) {
         // Detecta mensajes del timer
-        const timerValue = lastMessage.data; // En 2025 deja de  funcionar JAJA
-        setTimerMessage(timerValue); // TODO: Arreglar
+        const timerValue = lastMessage.data;
+        setTimerMessage(timerValue);
         console.log("WS: ", timerValue);
       }
     }
@@ -78,44 +77,58 @@ export default function App() {
     setTimerMessage,
   ]);
 
+  const [backgroundEnabled, setBackgroundEnabled] = useState(true);
+
+  const toggleBackground = () => {
+    setBackgroundEnabled(!backgroundEnabled);
+  };
+
   return (
     <RoomProvider>
       {/* Background Container */}
-      <div className="fixed left-0 top-0 z-[-1] h-full w-full overflow-hidden">
-        {/* Background Color Gradient */}
-        <div className="absolute top-0 z-[-1] h-full w-full bg-gradient-to-t from-[#00b4ff] to-[#10347c]" />
-        {/* Nubes */}
-        <div
-          id="background-wrap"
-          className="absolute left-0 top-0 h-full w-full overflow-hidden"
-        >
-          <div className="cloud x1"></div>
-          <div className="cloud x2"></div>
-          <div className="cloud x3"></div>
-          <div className="cloud x4"></div>
-          <div className="cloud x5"></div>
+      <div className="fixed top-0 left-0 w-full h-full z-[-1] overflow-hidden">
+      {/* Background Color Gradient */}
+        <div className="absolute top-0 w-full h-full z-[-1] bg-gradient-to-t from-[#00b4ff] to-[#10347c]"/>
+          {/* Nubes */}
+          {backgroundEnabled && (
+          <div 
+              id="background-wrap" 
+              className="absolute top-0 left-0 w-full h-full overflow-hidden"
+            >
+            <div className="cloud x1"></div>
+            <div className="cloud x2"></div>
+            <div className="cloud x3"></div>
+            <div className="cloud x4"></div>
+            <div className="cloud x5"></div>
+          </div>
+          )}
         </div>
-      </div>
-      {/* Contenido */}
-      <div className="min-h-screen">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<GetId />} />
-            <Route path="/id/:user_id" element={<AppLayout />} />
-            <Route path="/create_room" element={<CreateRoom />} />
-            <Route
-              path="/room/:user_id/:room_id/:user_name"
-              element={<Room />}
-            />
-            <Route path="/failed_room" element={<RoomCreationFailed />} />
-            <Route
-              path="/match/:user_id/:room_id/:user_name"
-              element={<Match />}
-            />
-            <Route path="*" element={<NotFoundPageLayout />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
+        {/* Contenido */}
+        <div className="min-h-screen">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<GetId />} />
+              <Route 
+                path="/id/:user_id" 
+                element={<AppLayout backgroundEnabled={backgroundEnabled} toggleBackground={toggleBackground}/>} 
+              />
+              <Route path="/create_room" element={<CreateRoom />} />
+              <Route 
+                path="/room/:user_id/:room_id/:user_name" 
+                element={<Room />} 
+              />
+              <Route 
+                path="/failed_room" 
+                element={<RoomCreationFailed />} 
+              />
+              <Route 
+                path="/match/:user_id/:room_id/:user_name" 
+                element={<Match />} 
+              />
+              <Route path="*" element={<NotFoundPageLayout />} />
+            </Routes>
+          </BrowserRouter>
+          </div>
     </RoomProvider>
   );
 }
