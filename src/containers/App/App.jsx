@@ -25,7 +25,7 @@ export default function App() {
   const setUpdateRoom = useUpdateStore((state) => state.setUpdateRoom);
   const setUpdateMatch = useUpdateStore((state) => state.setUpdateMatch);
   const setMatchStarted = useMatchStore((state) => state.setMatchStarted);
-  const setTimerMessage = useTimerStore((state) => state.setTimerMessage)
+  const setTimerMessage = useTimerStore((state) => state.setTimerMessage);
 
   useEffect(() => {
     if (userId) {
@@ -63,8 +63,8 @@ export default function App() {
       }
       if (lastMessage.data.startsWith("2024")) {
         // Detecta mensajes del timer
-        const timerValue = lastMessage.data; // En 2025 deja de  funcionar JAJA
-        setTimerMessage(timerValue); // TODO: Arreglar
+        const timerValue = lastMessage.data;
+        setTimerMessage(timerValue);
         console.log("WS: ", timerValue);
       }
     }

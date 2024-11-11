@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import ListRooms from "../../ListRooms/ListRooms.jsx";
 import { useIdStore } from "../../../zustand/store.js";
 import { ButtonFilled } from "../../../components/Buttons.jsx";
-import { useState } from "react";
 
 export default function AppLayout({toggleBackground , backgroundEnabled}) {
   const { user_id } = useParams();
