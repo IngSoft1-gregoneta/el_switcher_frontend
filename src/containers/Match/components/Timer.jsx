@@ -37,16 +37,6 @@ export default function Timer() {
 
   return (
     <>
-      <h3 className="font-bold md:text-2xl">Tiempo restante</h3>
-      <p className="m-2 text-2xl md:text-5xl">
-        {currentTimer > 0 ? `${currentTimer} segundos` : "Tiempo agotado"}
-      </p>
-    </>
-
-  )
-
-  return (
-    <>
       <div className="relative my-4 flex items-center justify-center">
         <div className="h-24 w-24 md:h-32 md:w-32 relative">
           <div className="absolute inset-0 rounded-full bg-gradient-to-tl from-green-400 to-yellow-400 animate-pulse"></div>

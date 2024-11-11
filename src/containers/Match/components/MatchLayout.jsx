@@ -90,7 +90,7 @@ export default function MatchLayout({
     <div className="grid h-screen w-screen grid-cols-5 grid-rows-5">
       <div className="col-span-1 row-span-2 flex flex-col  md:items-center justify-center text-center">
         <div className="md:rounded-br-lg lg:rounded-b-lg bg-gradient-to-br from-blue-400 to-blue-600 bg-opacity-90 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-[#f8f4e8]">
-          <Timer/>
+          <Timer />
           <h3 className="m-4 font-bold text-xl md:text-3xl">Color prohibido:</h3>
           <div className="relative flex items-center justify-center">
             {(blockedColor && blockedColor !== "None") ? (
@@ -114,12 +114,11 @@ export default function MatchLayout({
           />
         </div>
       </div>
-
-      <div className="container col-span-2 lg:col-span-1 row-span-2">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-2 shadow-lg text-[#e8e5da]">
-          Turno del jugador : {playerWithTurn}
+      <div className="rounded-bl-lg bg-white p-4 col-span-2 lg:col-span-1 row-span-2">
+        <div className="rounded-lg bg-gradient-to-br w-full h-full from-cyan-400 via-blue-500 to-purple-500 bg-[length:200%_200%] animate-gradient-noticeable">
+          <p className="text-xl md:text-2xl p-2 text-center text-white font-bold mb-4">Turno del jugador: {playerWithTurn}</p>
           <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-            <div className="flex h-fit w-fit flex-wrap items-center justify-center gap-2 md:flex-row">
+            <div className="flex h-fit w-fit items-center justify-center gap-2 md:flex-row">
               {movParcialDeck}
             </div>
           </div>
