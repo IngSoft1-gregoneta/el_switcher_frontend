@@ -66,7 +66,7 @@ export default function ChatComponent() {
                             <strong>{msg.content}</strong>
                         ) : (
                             <>
-                                <strong>{msg.user_id === userId ? "Tú" : "Otro jugador"}:</strong> {msg.content}
+                                <strong>{msg.user_id === userId ? "Tú" : "-"}:</strong> {msg.content}
                             </>
                         )}
                     </div>
