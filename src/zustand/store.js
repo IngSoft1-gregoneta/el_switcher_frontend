@@ -27,6 +27,8 @@ export const useBoardStore = create((set) => ({
   highlightedTiles: null,
   dispatchPositions: null,
   dispatchMovCard : null,
+  selectedMovCard : null,
+  setSelectedMovCard : (mov_card) => set({selectedMovCard : mov_card}),
   setMovCardDispatch : (dispatch) => set({dispatchMovCard : dispatch}),
   setHighlightedTiles: (new_highlighted_tiles) =>
     set({ highlightedTiles: new_highlighted_tiles }),

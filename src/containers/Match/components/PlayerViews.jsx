@@ -65,9 +65,9 @@ export function PlayerMe({ player }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex basis-1/12 flex-col md:flex-row">
-        <div className="basis-1/6 font-bold">{player.player_name}</div>
+        <div className="basis-1/6 font-bold p-2 shadow-lg shadow-gray-500/50">{player.player_name}</div>
         <div className="basis-4/6" id="separator"></div>
-        <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
+        <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap p-2 shadow-lg shadow-gray-500/50">
           Tarjetas Figura: {player.deck_len}
         </div>
       </div>
@@ -143,8 +143,7 @@ export function PlayerLeft({ player }) {
       <div className="flex h-fit flex-row items-center justify-center gap-2">
         {figCards}
       </div>
-      {/* falta que sea responsive en mobile */}
-      <div className="flex flex-grow basis-1/12 rotate-180 flex-col justify-between md:flex-row">
+      <div className="flex flex-row basis-1/12 rotate-180 flex-col justify-between md:flex-row">
         <div className="basis-1/6 font-bold">{player.player_name}</div>
         <div className="basis-1/6 md:shrink-0 md:whitespace-nowrap">
           Tarjetas Figura: {player.deck_len}

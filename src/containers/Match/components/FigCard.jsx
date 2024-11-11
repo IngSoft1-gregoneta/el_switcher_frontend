@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import images from "../logic/bindImage";
 import PropTypes from "prop-types";
-import {useAnimate,motion } from "framer-motion";
+import { useAnimate, motion } from "framer-motion";
 import clicksound from "../../assets/clicksound.wav"
 import entersound from "../../assets/entersound.wav"
 
@@ -23,11 +23,11 @@ export default function FigCard({
   const [selectedStyle, setSelectedStyle] = useState("");
   const [canreturn, setCanReturn] = useState(false);
   const [scope, animate] = useAnimate()
-
   useEffect(() => {
     if (isSelected) {
+      setSelectedStyle("-translate-y-4 shadow-cyan-500/50")
       setCanReturn(true);
-      animate(scope.current, {scale: 1.3,y: -30});
+      animate(scope.current, { scale: 1.3, y: -30 });
     } else {
       setSelectedStyle("");
       setCanReturn(false);
@@ -41,25 +41,25 @@ export default function FigCard({
 
   function clickplay() {
     new Audio(clicksound).play()
-    }
-function Hoverstart(){
+  }
+  function Hoverstart() {
     new Audio(entersound).play()
-    if (!canreturn) animate(scope.current, {scale: 1.2, y: -30})
-}
-function Hoverend(){
-    if (!canreturn){
-      animate(scope.current, {scale: 1, y: 0})
+    if (!canreturn) animate(scope.current, { scale: 1.2, y: -30 })
+  }
+  function Hoverend() {
+    if (!canreturn) {
+      animate(scope.current, { scale: 1, y: 0 })
     }
-}
+  }
 
 
   return (
     <motion.img
       onHoverStart={Hoverstart}
       onHoverEnd={Hoverend}
-      ref = {scope}
-      onClick={() => {onSelected();clickplay();}}
-      src={isBlocked ? images[`back`]: images[`${figType}`]}
+      ref={scope}
+      onClick={() => { onSelected(); clickplay(); }}
+      src={isBlocked ? images[`back`] : images[`${figType}`]}
       key={index}
       data-testid="fig-cards"
       className={`${className} ${selectedStyle}`}

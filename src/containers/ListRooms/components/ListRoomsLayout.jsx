@@ -65,39 +65,18 @@ export default function ListRoomsLayout({ rooms }) {
             placeholder="Filtrar por nombre de sala"
             value={filterName}
             onChange={(e) => setFilterName(e.target.value)}
-            style={{
-              border: "1px solid #ccc",
-              padding: "0.5rem 1rem",
-              fontFamily: "'Roboto', sans-serif",
-              backgroundColor: "#e3f9d7",
-              color: "#333",
-            }}
-            className="placeholder:text-[#333]"
+            className="game-input"
           />
           <select
             aria-label="Filtrar por jugadores"
             value={filterPlayers}
             onChange={(e) => setFilterPlayers(e.target.value)}
-            style={{
-              border: "1px solid #ccc",
-              padding: "0.5rem 1rem",
-              fontFamily: "'Roboto', sans-serif",
-              backgroundColor: "#e3f9d7",
-              color: "#333",
-            }}
+            className="game-input"
           >
-            <option value="" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              Filtrar por jugadores
-            </option>
-            <option value="2" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              2 jugadores
-            </option>
-            <option value="3" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              3 jugadores
-            </option>
-            <option value="4" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              4 jugadores
-            </option>
+            <option value="">Filtrar por jugadores</option>
+            <option value="2">2 jugadores</option>
+            <option value="3">3 jugadores</option>
+            <option value="4">4 jugadores</option>
           </select>
           {/* Nuevo filtro para seleccionar partidas públicas o privadas */}
           <select
@@ -124,7 +103,7 @@ export default function ListRoomsLayout({ rooms }) {
         </div>
 
         {hasFilteredRooms ? (
-          <div className="relative overflow-x-auto shadow-md">
+          <div className="relative overflow-x-auto shadow-md game-table">
             <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
               <thead className="bg-lime-200 text-xs uppercase text-gray-700">
                 <tr>
@@ -171,7 +150,7 @@ export default function ListRoomsLayout({ rooms }) {
                           </ButtonUnfilled>
                         </td>
                       </tr>
-                    ),
+                    )
                 )}
               </tbody>
             </table>
@@ -189,7 +168,6 @@ export default function ListRoomsLayout({ rooms }) {
         </div>
         )}
       </div>
-    </>
-  );
+    </>);
 }
 

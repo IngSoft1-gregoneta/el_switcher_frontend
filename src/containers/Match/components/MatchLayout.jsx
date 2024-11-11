@@ -1,13 +1,12 @@
 import { PlayerLeft, PlayerMe, PlayerRight, PlayerTop } from "./PlayerViews";
-import { useState, useEffect } from "react";
 import images from "../logic/bindImage";
 import Board from "./Board";
-import { ButtonFilled, ButtonUnfilled } from "../../../components/Buttons";
+import { ButtonDangerFilled, ButtonUnfilled } from "../../../components/Buttons";
 import PropTypes from "prop-types";
 import clicksound from "../../assets/clicksound.wav";
 import entersound from "../../assets/entersound.wav";
 import MovCard from "./MovCard";
-import { useFigCardStore, useTimerStore } from "../../../zustand/store";
+import { useFigCardStore } from "../../../zustand/store";
 import Chat from "./Chat"
 import Timer from "./Timer";
 
@@ -41,9 +40,7 @@ export default function MatchLayout({
   const playerWithTurn =
     stateOtherPlayers.filter((player) => player.has_turn)[0]?.player_name ||
     statePlayerMe.player_name;
-  const dispatchFigCards = useFigCardStore(
-    (state) => state.selectedFigCardsDispatch,
-  );
+  const dispatchFigCards = useFigCardStore(state => state.selectedFigCardsDispatch);
 
   function clickplay() {
     new Audio(clicksound).play();
@@ -64,17 +61,17 @@ export default function MatchLayout({
 
   const movParcialDeck = usedMovCards
     ? [
-        ...usedMovCards.map((card, i) => {
-          return (
-            <img
-              src={images[`${card.mov_type}`]}
-              key={i}
-              className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
-            />
-          );
-        }),
-        ...backMovCard(3 - usedMovCards.length),
-      ]
+      ...usedMovCards.map((card, i) => {
+        return (
+          <img
+            src={images[`${card.mov_type}`]}
+            key={i}
+            className="aspect-[3/5] h-12 rounded-sm md:h-32 lg:h-36"
+          />
+        );
+      }),
+      ...backMovCard(3 - usedMovCards.length),
+    ]
     : backMovCard(3);
 
   const movCards = playerMe.mov_cards.map((card, i) => {
@@ -93,125 +90,118 @@ export default function MatchLayout({
   };
 
   return (
-    <div className="grid h-screen w-screen grid-cols-4 grid-rows-4">
-      <div className="container col-span-1 row-span-1 flex flex-col items-center justify-center text-center">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-[#e8e5da] shadow-lg">
+    <div className="grid h-screen w-screen grid-cols-5 grid-rows-5">
+      <div className="col-span-1 row-span-2 flex flex-col  md:items-center justify-center text-center">
+        <div className="md:rounded-br-lg lg:rounded-b-lg bg-gradient-to-br from-blue-400 to-blue-600 bg-opacity-90 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-[#f8f4e8]">
           <Timer />
-          <h3 className="md:text-2x1 m-4 text-2xl font-bold">
-            Color prohibido:
-          </h3>
-          <div className="relative flex items-center justify-center object-center">
-            {blockedColor && blockedColor !== "None" ? (
+          <h3 className="m-4 font-bold text-xl md:text-3xl">Color prohibido:</h3>
+          <div className="relative flex items-center justify-center">
+            {(blockedColor && blockedColor !== "None") ? (
               <div className="relative h-20 w-20">
                 <img
                   src={displayBlockedColor(blockedColor)}
-                  className="h-9/12 left-2 top-2 z-0 w-9/12 md:absolute"
+                  className="md:absolute z-0 h-full w-full rounded-full border-4 border-yellow-300 shadow-lg"
+                  alt="Blocked Color"
                 />
               </div>
             ) : (
-              <div className="m-2 text-2xl font-bold">Ninguno</div>
+              <div className="m-2 font-bold text-2xl">Ninguno</div>
             )}
           </div>
         </div>
       </div>
-
-      <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-[#e8e5da] shadow-lg">
-          <PlayerTop player={playerTop} />
+      <div className="align-center col-span-2 lg:col-span-3 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
+        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-[#e8e5da]">
+          <PlayerTop
+            player={playerTop}
+          />
         </div>
       </div>
-
-      <div className="container col-span-1 row-span-1">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-2 text-[#e8e5da] shadow-lg">
-          Turno del jugador : {playerWithTurn}
+      <div className="rounded-bl-lg bg-white p-4 col-span-2 lg:col-span-1 row-span-2">
+        <div className="rounded-lg bg-gradient-to-br w-full h-full from-cyan-400 via-blue-500 to-purple-500 bg-[length:200%_200%] animate-gradient-noticeable">
+          <p className="text-xl md:text-2xl p-2 text-center text-white font-bold mb-4">Turno del jugador: {playerWithTurn}</p>
           <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-            <div className="flex h-fit w-fit flex-wrap items-center justify-center gap-2 md:flex-row">
+            <div className="flex h-fit w-fit items-center justify-center gap-2 md:flex-row">
               {movParcialDeck}
             </div>
           </div>
         </div>
       </div>
-      <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
+      <div className="align-center col-span-1 row-span-3 mb-2 flex flex-row items-center justify-center text-center">
         {playerLeft && (
-          <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-white shadow-lg">
-            <PlayerLeft player={playerLeft} />
+          <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-white">
+            <PlayerLeft
+              player={playerLeft}
+            />
           </div>
         )}
       </div>
-      <div className="align-center col-span-2 row-span-2 flex items-center justify-center">
+      <div className="align-center col-span-3 row-span-3 flex items-center justify-center">
         <div className="aspect-square h-full max-h-[100%] w-full max-w-[100%] md:max-h-[90%] md:max-w-[90%]">
           <Board handleDiscardFigure={(tile) => handleDiscardFigure(tile)} />
         </div>
       </div>
-      <div className="align-center col-span-1 row-span-2 mb-2 flex flex-row items-center justify-center text-center">
+      <div className="align-center col-span-1 row-span-3 mb-2 flex flex-row items-center justify-center text-center">
         {playerRight && (
-          <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 text-white shadow-lg">
-            <PlayerRight player={playerRight} />
+          <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-4 shadow-lg text-white">
+            <PlayerRight
+              player={playerRight}
+            />
           </div>
         )}
       </div>
-
-      <div className="container col-span-1 row-span-1 overflow-hidden">
-        <div className="rounded-lg bg-[#2f4550] bg-opacity-90 p-1 text-white shadow-lg">
-          <div className="mt-2 justify-center text-center align-middle">
+      <div className="bg-white p-4 m-0 rounded-tr-lg row-span-1 col-span-2 max-w-[500px]">
+        <div
+          className="rounded-lg p-4 text-white bg-gradient-to-br from-[#1e79e7] to-[#1966c2] shadow-[20px_20px_60px_rgba(17,69,132,0.3),-20px_-20px_60px_rgba(39,157,255,0.3)]"
+        >
+          <div className="mb-4 text-left font-extrabold text-xl tracking-wide text-gray-200">
             Tus cartas de movimiento
           </div>
-          <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-            <div className="flex h-fit w-fit flex-wrap items-center justify-center gap-2 md:flex-row">
-              {movCards}
-            </div>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {movCards}
           </div>
         </div>
       </div>
-
-      <div className="align-center col-span-2 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <div className="rounded-lg bg-[#d0ceba] bg-opacity-90 p-4 text-slate-900 shadow-lg">
+      <div className="align-center rounded-tl-lg lg:rounded-t-lg pl-2 col-span-3 lg:col-span-2 row-span-1 ml-2 flex flex-row items-center justify-left gap-4 text-center">
+        <div className="rounded-lg bg-[#d0ceba] p-4 shadow-lg text-slate">
           <PlayerMe player={playerMe} />
         </div>
-      </div>
-      <div className="align-center col-span-1 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <h2 className="font-bold text-xl mb-2">Chat</h2>
-        <Chat />
-      </div>
-      <div className="align-center col-span-4 row-span-1 mb-2 flex flex-row items-center justify-center text-center">
-        <div className="flex flex-col items-center justify-items-center">
-          {hasTurn && (
-            <ButtonUnfilled
-              onmouseenter={enterplay}
-              className="bold mx-0 text-wrap px-1 py-2 text-slate-900"
-              onClick={() => {
-                handleRevertMove();
-                clickplay();
-              }}
-            >
-              Revertir Movimiento
-            </ButtonUnfilled>
-          )}
-          {hasTurn && (
-            <ButtonUnfilled
-              onmouseenter={enterplay}
-              className="bold mx-0 text-wrap px-1 py-2 text-slate-900"
-              onClick={() => {
-                handlePassTurn();
-                dispatchFigCards({ type: "deselect" });
-                clickplay();
-              }}
-            >
-              Pasar turno
-            </ButtonUnfilled>
-          )}
-          {/* TODO: Should show modal asking you if you really want leave the match */}
-          <ButtonFilled
+        <div className="flex flex-col bg-[#d0ceba] p-4 shadow-lg rounded items-center justify-center">
+          <ButtonUnfilled
+            disabled={!hasTurn}
             onmouseenter={enterplay}
-            className="bold] mx-0 text-wrap px-1 py-2 text-[#D0CEBA]"
+            className="px-1 py-2 text-slate-900 font-bold max-w-[200px]"
             onClick={() => {
-              handleLeaveMatch();
+              handleRevertMove();
               clickplay();
             }}
           >
+            Revertir Movimiento
+          </ButtonUnfilled>
+          <ButtonUnfilled
+            disabled={!hasTurn}
+            onmouseenter={enterplay}
+            className="px-1 py-2 text-slate-900 font-bold max-w-[200px]"
+            onClick={() => {
+              handlePassTurn();
+              dispatchFigCards({ type: "deselect" });
+              clickplay();
+            }}
+          >
+            Pasar turno
+          </ButtonUnfilled>
+          {/* TODO: Should show modal asking you if you really want to leave the match */}
+          <ButtonDangerFilled
+            onmouseenter={enterplay}
+            className="px-1 py-2 text-[#D0CEBA] font-bold max-w-[200px]"
+            onClick={() => { handleLeaveMatch(); clickplay(); }}
+          >
             Abandonar
-          </ButtonFilled>
+          </ButtonDangerFilled>
         </div>
+      </div>
+      <div className="col-span-1 p-2 row-span-1 hidden lg:block">
+        <Chat/>
       </div>
     </div>
   );

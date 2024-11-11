@@ -4,6 +4,7 @@ import bubble1 from "../../assets/bubblesound1.wav";
 import bubble2 from "../../assets/bubblesound2.wav";
 import bubble3 from "../../assets/bubblesound3.wav";
 import bubble4 from "../../assets/bubblesound4.wav";
+import { useRef } from "react";
 
 function inHighlighted(posx, posy, arroftiles = []) {
   if (arroftiles == null) return false;
@@ -13,12 +14,12 @@ function inHighlighted(posx, posy, arroftiles = []) {
 export default function Tile({ color, posx, posy, figure, onClick }) {
   const firstPos = useBoardStore((state) => state.firstPos);
   const highlightedTiles = useBoardStore((state) => state.highlightedTiles);
-  const audiolist = [bubble1,bubble2,bubble3,bubble4]
+  const audiolist = [bubble1, bubble2, bubble3, bubble4]
   const dispatchPositions = useBoardStore(state => state.dispatchPositions);
   const handleTileClick = () => {
-    
+
     onClick();
-    dispatchPositions({ type : "setTilePosition" , position : { pos_x : posx , pos_y : posy } })
+    dispatchPositions({ type: "setTilePosition", position: { pos_x: posx, pos_y: posy } })
     let n = Math.random(4)
     let audioselected = audiolist[n];
     new Audio(audioselected).play();
@@ -26,6 +27,11 @@ export default function Tile({ color, posx, posy, figure, onClick }) {
       return;
     }
   };
+
+  const originStyle =
+    "ring-4 ring-pink-500 border-2 border-red-400 shadow-xl transition duration-500 ease-in-out transform scale-105 z-30";
+  const lightStyle =
+    "ring-4 ring-indigo-500 border-2 border-blue-400 shadow-xl transition duration-500 ease-in-out transform scale-105 z-30";
 
   const getClassAttStyle = () => {
     switch (color) {
@@ -42,38 +48,34 @@ export default function Tile({ color, posx, posy, figure, onClick }) {
     }
   };
 
-  const lightStyle =
-    "ring-4 ring-indigo-500 border-2 border-blue-400 shadow-xl transition duration-500 ease-in-out transform scale-105 z-30";
-
   const highlight = !highlightedTiles
     ? ""
     : inHighlighted(posy, posx, highlightedTiles)
-    ? lightStyle
-    : "";
-
-  const originStyle =
-    "ring-4 ring-pink-500 border-2 border-red-400 shadow-xl transition duration-500 ease-in-out transform scale-105 z-30";
+      ? lightStyle
+      : "";
 
   const origin = !firstPos
     ? ""
     : firstPos.pos_x == posx && firstPos.pos_y == posy
-    ? originStyle
-    : "";
+      ? originStyle
+      : "";
 
   const classAttStyle = getClassAttStyle();
   const classAtt = figure === "None" ? "" : classAttStyle;
 
+  const rotation = useRef(`rotate-[${Math.floor(Math.random() * 10)}deg]`);
+
   return (
     <div className="align-center group relative flex h-8 w-8 items-center justify-center rounded object-center sm:h-16 sm:w-16">
-      <div data-testid="tile-background" className={`absolute inset-0 rounded-lg ${classAtt}`} />
-      <div data-testid="tile-highlight" className={`absolute inset-0 rounded-lg ${highlight}`} />
-      <div data-testid="tile-origin" className={`absolute inset-0 rounded-lg ${origin}`} />
+      <div data-testid="tile-background" className={`absolute inset-0 rounded-lg ${classAtt} ${rotation.current}`} />
+      <div data-testid="tile-highlight" className={`absolute inset-0 rounded-lg ${highlight} ${rotation.current}`} />
+      <div data-testid="tile-origin" className={`absolute inset-0 rounded-lg ${origin} ${rotation.current}`} />
       <div
         data-testid="actual-tile"
         onClick={handleTileClick}
-        className={`tile ${color} inset-0 z-40 m-1 min-h-[50px] min-w-[50px] rounded`}
+        className={`tile ${color} inset-0 z-40 m-1 min-h-[20px] min-w-[20px] rounded ${rotation.current}`}
       />
     </div>
   );
-  
+
 }
