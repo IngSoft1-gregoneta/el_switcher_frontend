@@ -58,7 +58,7 @@ describe("ListRoomsLayout tests", () => {
     );
 
     // filtrar por cantidad de jugadores
-    const playersFilter = screen.getByRole("combobox"); // Ajusta si es necesario para obtener el select correcto
+    const playersFilter = screen.getByLabelText("Filtrar por jugadores") // Ajusta si es necesario para obtener el select correcto
     fireEvent.change(playersFilter, { target: { value: "4" } });
 
     // verificar que solo la sala de estrategia está visible

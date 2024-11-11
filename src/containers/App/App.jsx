@@ -61,9 +61,11 @@ export default function App() {
         setMatchStarted(true);
         setUpdateMatch();
       }
-      if (lastMessage.data.startsWith("2024")) { // Detecta mensajes del timer
-        const timerValue = lastMessage.data   // En 2025 deja de  funcionar JAJA
-        setTimerMessage(timerValue);        // TODO: Arreglar
+      if (lastMessage.data.startsWith("2024")) {
+        // Detecta mensajes del timer
+        const timerValue = lastMessage.data; // En 2025 deja de  funcionar JAJA
+        setTimerMessage(timerValue); // TODO: Arreglar
+        console.log("WS: ", timerValue);
       }
     }
   }, [
@@ -89,7 +91,10 @@ export default function App() {
         <div className="absolute top-0 w-full h-full z-[-1] bg-gradient-to-t from-[#00b4ff] to-[#10347c]"/>
           {/* Nubes */}
           {backgroundEnabled && (
-            <div id="background-wrap" className="absolute top-0 left-0 w-full h-full overflow-hidden">
+          <div 
+              id="background-wrap" 
+              className="absolute top-0 left-0 w-full h-full overflow-hidden"
+            >
             <div className="cloud x1"></div>
             <div className="cloud x2"></div>
             <div className="cloud x3"></div>
@@ -103,11 +108,23 @@ export default function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<GetId />} />
-              <Route path="/id/:user_id" element={<AppLayout backgroundEnabled={backgroundEnabled} toggleBackground={toggleBackground}/>} />
+              <Route 
+                path="/id/:user_id" 
+                element={<AppLayout backgroundEnabled={backgroundEnabled} toggleBackground={toggleBackground}/>} 
+              />
               <Route path="/create_room" element={<CreateRoom />} />
-              <Route path="/room/:user_id/:room_id/:user_name" element={<Room />} />
-              <Route path="/failed_room" element={<RoomCreationFailed />} />
-              <Route path="/match/:user_id/:room_id/:user_name" element={<Match />} />
+              <Route 
+                path="/room/:user_id/:room_id/:user_name" 
+                element={<Room />} 
+              />
+              <Route 
+                path="/failed_room" 
+                element={<RoomCreationFailed />} 
+              />
+              <Route 
+                path="/match/:user_id/:room_id/:user_name" 
+                element={<Match />} 
+              />
               <Route path="*" element={<NotFoundPageLayout />} />
             </Routes>
           </BrowserRouter>
